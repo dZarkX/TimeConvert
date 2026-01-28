@@ -6,7 +6,10 @@
   const TIMEZONE_DATA = {
     'UTC': 0, 'GMT': 0,
     'CET': 1, 'CEST': 2, 'WET': 0, 'WEST': 1, 'EET': 2, 'EEST': 3, 'BST': 1, 'MSK': 3,
-    'EST': -5, 'EDT': -4, 'CST': -6, 'CDT': -5, 'MST': -7, 'MDT': -6, 'PST': -8, 'PDT': -7,
+    'EST': -5, 'EDT': -4, 'ET': -5, // ET = Eastern Time (use standard time offset)
+    'CST': -6, 'CDT': -5, 'CT': -6, // CT = Central Time
+    'MST': -7, 'MDT': -6, 'MT': -7, // MT = Mountain Time
+    'PST': -8, 'PDT': -7, 'PT': -8, // PT = Pacific Time
     'AKST': -9, 'AKDT': -8, 'HST': -10,
     'JST': 9, 'KST': 9, 'HKT': 8, 'SGT': 8, 'ICT': 7, 'PHT': 8,
     'AEST': 10, 'AEDT': 11, 'ACST': 9.5, 'ACDT': 10.5, 'AWST': 8, 'NZST': 12, 'NZDT': 13,
@@ -398,9 +401,22 @@
             highlightEnabled: true,
             showOriginal: true
           }, (items) => {
-            settings = { ...settings, ...items };
-            highlightEnabled = items.highlightEnabled;
-            resolve(settings);
+            try {
+              // Check if context is still valid inside callback
+              if (!isExtensionContextValid()) {
+                resolve(settings);
+                return;
+              }
+              if (chrome.runtime.lastError) {
+                resolve(settings);
+                return;
+              }
+              settings = { ...settings, ...items };
+              highlightEnabled = items.highlightEnabled;
+              resolve(settings);
+            } catch (e) {
+              resolve(settings);
+            }
           });
         } catch (e) {
           resolve(settings);
