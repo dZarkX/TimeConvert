@@ -192,4 +192,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   showDetectedTimezone();
   const settings = await loadSettings();
   applySettingsToUI(settings);
+  
+  // Show version from manifest
+  const versionEl = document.getElementById('versionNumber');
+  if (versionEl) {
+    const manifest = chrome.runtime.getManifest();
+    versionEl.textContent = 'v' + manifest.version;
+  }
 });

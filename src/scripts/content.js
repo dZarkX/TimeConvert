@@ -450,9 +450,11 @@
           try {
             // Check for chrome.runtime.lastError
             if (chrome.runtime?.lastError) {
+              console.log('[TZ Converter] Error loading settings:', chrome.runtime.lastError);
               resolve(settings);
               return;
             }
+            console.log('[TZ Converter] Loaded settings from storage:', items);
             settings = { ...settings, ...items };
             highlightEnabled = items.highlightEnabled;
             resolve(settings);
@@ -549,11 +551,14 @@
                 
               case 'SETTINGS_UPDATED':
                 loadSettings().then(() => {
+                  console.log('[TZ Converter] Settings updated:', settings.highlightColor, settings.highlightTextColor);
                   // Just update styles if highlights exist, otherwise rescan
                   const existingHighlights = document.querySelectorAll('.tz-converter-highlight');
+                  console.log('[TZ Converter] Found highlights:', existingHighlights.length);
                   if (existingHighlights.length > 0) {
                     if (highlightEnabled) {
                       updateHighlightStyles();
+                      console.log('[TZ Converter] Styles updated');
                     } else {
                       removeHighlights();
                     }
@@ -562,8 +567,10 @@
                     notifyBackground(newTimes);
                     applyHighlights();
                   }
+                  sendResponse({ success: true });
                 });
-                break;
+                return true; // Async response
+                
                 
               case 'SCROLL_TO_TIME':
                 const element = document.querySelector(`[data-tz-id="${message.timeId}"]`);

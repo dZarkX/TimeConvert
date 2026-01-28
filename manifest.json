@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "TimeZone Converter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Automatically detects and converts time zones on web pages to your local time",
   "author": "TimeConvert",
   
