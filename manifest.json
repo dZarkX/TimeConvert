@@ -1,14 +1,14 @@
 {
   "manifest_version": 3,
   "name": "TimeZone Converter",
-  "version": "1.0.4",
+  "version": "1.2.5",
   "description": "Automatically detects and converts time zones on web pages to your local time",
   "author": "TimeConvert",
   
   "permissions": [
-    "activeTab",
     "storage",
-    "scripting"
+    "scripting",
+    "contextMenus"
   ],
   
   "host_permissions": [
@@ -33,13 +33,14 @@
   },
   
   "background": {
-    "service_worker": "src/scripts/background.js",
-    "type": "module"
+    "service_worker": "src/scripts/background.js"
   },
   
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
+      "all_frames": true,
+      "match_about_blank": true,
       "js": ["src/scripts/content.js"],
       "css": ["src/styles/highlight.css"],
       "run_at": "document_idle"

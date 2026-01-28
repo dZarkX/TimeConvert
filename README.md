@@ -2,8 +2,10 @@
 
 A small browser extension that detects times on web pages and converts them to your preferred timezone.
 
-![Version](https://img.shields.io/badge/version-1.0.0-green)
+![Version](https://img.shields.io/badge/version-1.2.4-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
+
+GitHub: https://github.com/dZarkX/TimeConvert
 
 ## ✨ Features
 
@@ -127,7 +129,13 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 If you find this extension useful, consider supporting its development:
 
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Support-yellow?style=flat&logo=buy-me-a-coffee)](https://buymeacoffee.com)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Support-yellow?style=flat&logo=buy-me-a-coffee)](https://buymeacoffee.com/3mon)
+
+## 🗣️ Feedback / Issues
+
+If you have feedback or found a bug, please open an issue on GitHub:
+
+https://github.com/dZarkX/TimeConvert/issues
 
 ## 📄 License
 
@@ -140,15 +148,41 @@ MIT License - feel free to use and modify as you wish.
 
 ## 📝 Changelog
 
-### v1.0.0
-- Initial release
-- Auto-detection of times with timezone abbreviations
-- Popup with conversion list
-- Settings page with customization options
-- Highlight system with click-to-toggle
-- Support for 50+ timezone abbreviations
+### v1.2.4
+- Settings autosave (no manual Save button) + Restore Defaults moved to footer
+
+### v1.2.3
+- GitHub feedback link in popup + repo links
+
+### v1.2.1
+- Reduced permissions (removed activeTab)
+
+### v1.2.0
+- Added Privacy Policy page + sharper settings logo
+
+### v1.1.9
+- Low impact scan modes (auto / auto-light / manual)
+
+### v1.1.7
+- Date detection (ISO/EU/month-name) and safer matching order
+
+### v1.1.6
+- Tooltip-only mode: fixed double tooltip (native title vs custom tooltip)
+
+### v1.1.5
+- Auto convert + text-only highlight style compatibility fix
+
+### v1.1.4
+- Added Display Mode, Result Format options, Date Detection and Scan Mode UI
+
+### v1.1.0
+- Ignored sites UI and popup improvements
 
 ---
+
+## 🔒 Privacy Policy
+
+See: [privacy-policy.html](privacy-policy.html)
 
 Git setup (local)
 

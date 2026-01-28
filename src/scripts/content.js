@@ -2,6 +2,12 @@
 (function() {
   'use strict';
 
+  const DEBUG = false;
+
+  // Prevent double-injection (can happen with scripting.executeScript + content_scripts)
+  if (window.__tzConverterInjected) return;
+  window.__tzConverterInjected = true;
+
   // Timezone data (embedded to avoid module loading issues in content scripts)
   const TIMEZONE_DATA = {
     'UTC': 0, 'GMT': 0,
@@ -18,30 +24,118 @@
     'AST': 3, 'GST': 4, 'TRT': 3
   };
 
-  const TZ_ABBREVS = Object.keys(TIMEZONE_DATA).join('|');
-  
-  // Build comprehensive time pattern
-  const TIME_PATTERN = new RegExp(
-    `(?:` +
-      // 12-hour format: 5PM, 5:00PM, 5:00 PM, etc.
-      `(1[0-2]|0?[1-9])(?:[:.]([0-5][0-9]))?(?:[:.]([0-5][0-9]))?\\s*(AM|PM|am|pm|a\\.m\\.|p\\.m\\.)` +
-    `|` +
-      // 24-hour format: 17:00, 17:00:00
-      `([01]?[0-9]|2[0-3])[:.]([0-5][0-9])(?:[:.]([0-5][0-9]))?` +
-    `)` +
-    `\\s*` +
-    `(?:` +
-      // Timezone abbreviation
-      `(${TZ_ABBREVS})` +
-    `|` +
-      // UTC/GMT with offset: UTC+2, GMT-5:30
-      `(UTC|GMT)\\s*([+-])\\s*(\\d{1,2})(?::(\\d{2}))?` +
-    `|` +
-      // Plain UTC/GMT
-      `(UTC|GMT)` +
-    `)`,
-    'gi'
-  );
+  // Exclude UTC/GMT here so that the UTC/GMT+offset branch can match e.g. "UTC+2" fully.
+  // Escape special regex characters in timezone abbreviations
+  const TZ_ABBREVS = Object.keys(TIMEZONE_DATA)
+    .filter(k => k !== 'UTC' && k !== 'GMT')
+    .map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')) // Escape regex special chars
+    .join('|');
+
+  // Robust time pattern:
+  // - 12h: 4PM CET, 11.59pm CET, 4.30 p.m. GMT
+  // - 24h: 17:00 CET, 17.00 CET
+  // - UTC offsets: 10AM UTC-5, 15:00 UTC+2, 02:00 GMT+01:30
+  // Notes:
+  // - Some sites use NBSP/NNBSP between tokens.
+  // - Must avoid treating "pm"/"am" as a timezone.
+  const TIME_SEP = "[:.\\u2024\\u00B7]"; // : . ․ ·
+  const WS = "[\\s\\u00A0\\u202F]";
+  const AMPM = "(?:[AaPp]\\.?\\s*[Mm]\\.?)";
+
+  const MONTHS = {
+    jan: 1, january: 1,
+    feb: 2, february: 2,
+    mar: 3, march: 3,
+    apr: 4, april: 4,
+    may: 5,
+    jun: 6, june: 6,
+    jul: 7, july: 7,
+    aug: 8, august: 8,
+    sep: 9, sept: 9, september: 9,
+    oct: 10, october: 10,
+    nov: 11, november: 11,
+    dec: 12, december: 12
+  };
+
+  // Only match timezones we can actually convert:
+  // - Known abbreviations in TIMEZONE_DATA
+  // - UTC/GMT (optionally with an offset)
+  const TZ_PART = `(?:(?:UTC|GMT)(?:${WS}*[+-]${WS}*\\d{1,2}(?:(?::?\\d{2}))?)?|${TZ_ABBREVS})`;
+
+  // Build regex defensively: if a pattern ever becomes invalid (or some
+  // environments don't like named capture groups), fall back to a simpler one.
+  let TIME_PATTERN;
+  try {
+    TIME_PATTERN = new RegExp(
+      [
+        "\\b(?:",
+        // 12-hour time (requires AM/PM)
+        `(?<h12>1[0-2]|0?[1-9])(?:${TIME_SEP}(?<m12>[0-5]\\d))?(?:${TIME_SEP}(?<s12>[0-5]\\d))?${WS}*(?<ampm>${AMPM})`,
+        "|",
+        // 24-hour time
+        `(?<h24>[01]?\\d|2[0-3])(?:${TIME_SEP}(?<m24>[0-5]\\d))?(?:${TIME_SEP}(?<s24>[0-5]\\d))?`,
+        ")",
+        `${WS}*`,
+        `(?<tz>${TZ_PART})`,
+        "\\b"
+      ].join(""),
+      "gi"
+    );
+  } catch (e) {
+    // Fallback pattern: no named groups, fewer features.
+    // Groups:
+    //  1=h12 2=m12 3=s12 4=ampm 5=h24 6=m24 7=s24 8=tz
+    const fallback = [
+      "\\b(?:",
+      `(1[0-2]|0?[1-9])(?:${TIME_SEP}([0-5]\\d))?(?:${TIME_SEP}([0-5]\\d))?${WS}*(${AMPM})`,
+      "|",
+      `([01]?\\d|2[0-3])(?:${TIME_SEP}([0-5]\\d))?(?:${TIME_SEP}([0-5]\\d))?`,
+      ")",
+      `${WS}*`,
+      `(${TZ_PART})`,
+      "\\b"
+    ].join("");
+    TIME_PATTERN = new RegExp(fallback, "gi");
+    if (DEBUG) console.error('[TimeZone Converter] TIME_PATTERN build failed, using fallback:', e);
+  }
+
+  // Date+time pattern (enabled by setting). Supports:
+  // - ISO: 2026-01-28 14:30 UTC
+  // - EU: 28/01/2026 14:30 CET
+  // - Month name: Jan 28, 2026 2:30 PM CET
+  let DATE_TIME_PATTERN;
+  try {
+    const ISO_DATE = `(?<yIso>\\d{4})-(?<mIso>0?[1-9]|1[0-2])-(?<dIso>0?[1-9]|[12]\\d|3[01])`;
+    const EU_DATE = `(?<dEu>0?[1-9]|[12]\\d|3[01])\\/(?<mEu>0?[1-9]|1[0-2])\\/(?<yEu>\\d{4})`;
+    const MON_DATE = `(?<monName>Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t|tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)${WS}+(?<dMon>0?[1-9]|[12]\\d|3[01])(?:,)?${WS}+(?<yMon>\\d{4})`;
+
+    const DATE_PART = `(?:${ISO_DATE}|${EU_DATE}|${MON_DATE})`;
+    const TIME_PART = [
+      "\\b(?:",
+      // 12-hour time (requires AM/PM)
+      `(?<h12>1[0-2]|0?[1-9])(?:${TIME_SEP}(?<m12>[0-5]\\d))?(?:${TIME_SEP}(?<s12>[0-5]\\d))?${WS}*(?<ampm>${AMPM})`,
+      "|",
+      // 24-hour time
+      `(?<h24>[01]?\\d|2[0-3])(?:${TIME_SEP}(?<m24>[0-5]\\d))?(?:${TIME_SEP}(?<s24>[0-5]\\d))?`,
+      ")\\b"
+    ].join("");
+
+    DATE_TIME_PATTERN = new RegExp(
+      [
+        "\\b",
+        DATE_PART,
+        `${WS}*[T,\\-\\/\\.]?${WS}*`,
+        TIME_PART,
+        `${WS}*`,
+        `(?<tz>${TZ_PART})`,
+        "\\b"
+      ].join(""),
+      "gi"
+    );
+  } catch (e) {
+    DATE_TIME_PATTERN = null;
+    if (DEBUG) console.error('[TimeZone Converter] DATE_TIME_PATTERN build failed:', e);
+  }
 
   let foundTimes = [];
   let highlightEnabled = true;
@@ -49,9 +143,19 @@
     targetTimezone: 'auto',
     targetOffset: null,
     use24Hour: false,
+    autoConvertOnLoad: false,
+    displayMode: 'toggle',
+    resultIncludeUtcOffset: true,
+    resultIncludeDayOffset: true,
+    resultIncludeSourceTz: false,
+    enableDateDetection: false,
+    scanMode: 'auto',
     highlightColor: '#ffeb3b',
     highlightTextColor: '#000000',
-    showOriginal: true
+    showOriginal: true,
+    highlightTextOnly: false,
+    maxConversions: 25,
+    ignoredSites: []
   };
 
   // Get local timezone offset
@@ -69,87 +173,180 @@
 
   // Parse time match into structured object
   function parseMatch(match) {
+    const g = match.groups || {};
+
     const result = {
       original: match[0],
       hours: 0,
       minutes: 0,
       seconds: 0,
       timezone: null,
-      offset: null
+      offset: null,
+      date: null,
+      hasDate: false
     };
 
-    // 12-hour format
-    if (match[4]) {
-      result.hours = parseInt(match[1], 10);
-      result.minutes = match[2] ? parseInt(match[2], 10) : 0;
-      result.seconds = match[3] ? parseInt(match[3], 10) : 0;
-      const isPM = /pm|p\.m\./i.test(match[4]);
-      
-      if (isPM && result.hours !== 12) result.hours += 12;
-      else if (!isPM && result.hours === 12) result.hours = 0;
-    }
-    // 24-hour format
-    else if (match[5] !== undefined) {
-      result.hours = parseInt(match[5], 10);
-      result.minutes = match[6] ? parseInt(match[6], 10) : 0;
-      result.seconds = match[7] ? parseInt(match[7], 10) : 0;
+    // Date parsing (only present in DATE_TIME_PATTERN)
+    if (g.yIso || g.yEu || g.yMon) {
+      let year = null;
+      let month = null;
+      let day = null;
+
+      if (g.yIso) {
+        year = Number(g.yIso);
+        month = Number(g.mIso);
+        day = Number(g.dIso);
+      } else if (g.yEu) {
+        year = Number(g.yEu);
+        month = Number(g.mEu);
+        day = Number(g.dEu);
+      } else if (g.yMon) {
+        year = Number(g.yMon);
+        day = Number(g.dMon);
+        const key = String(g.monName || '').toLowerCase();
+        month = MONTHS[key] || null;
+      }
+
+      if (Number.isFinite(year) && Number.isFinite(month) && Number.isFinite(day)) {
+        result.hasDate = true;
+        // Store date parts; we will compute the correct target-local date later.
+        result.date = { year, month, day };
+      }
     }
 
-    // Timezone abbreviation
-    if (match[8]) {
-      result.timezone = match[8].toUpperCase();
-      result.offset = TIMEZONE_DATA[result.timezone];
+    // Support fallback regex (no named groups)
+    if (!match.groups) {
+      // 12h branch
+      if (match[4]) {
+        g.h12 = match[1];
+        g.m12 = match[2];
+        g.s12 = match[3];
+        g.ampm = match[4];
+        g.tz = match[8];
+      } else {
+        // 24h branch
+        g.h24 = match[5];
+        g.m24 = match[6];
+        g.s24 = match[7];
+        g.tz = match[8];
+      }
     }
-    // UTC/GMT with offset
-    else if (match[9]) {
-      const sign = match[10] === '-' ? -1 : 1;
-      const hours = match[11] ? parseInt(match[11], 10) : 0;
-      const minutes = match[12] ? parseInt(match[12], 10) / 60 : 0;
-      result.offset = sign * (hours + minutes);
-      result.timezone = `${match[9]}${match[10] || '+'}${hours}${match[12] ? ':' + match[12] : ''}`;
-    }
-    // Plain UTC/GMT
-    else if (match[13]) {
-      result.timezone = match[13].toUpperCase();
+
+    const tzRaw = (g.tz || "").trim();
+    if (!tzRaw) return result;
+
+    // Parse timezone
+    const tzUpper = tzRaw.toUpperCase().replace(/\s+/g, "");
+
+    // UTC/GMT (optional offset)
+    const utcMatch = tzUpper.match(/^(UTC|GMT)([+-])(\d{1,2})(?::?(\d{2}))?$/);
+    if (utcMatch) {
+      const sign = utcMatch[2] === "-" ? -1 : 1;
+      const hh = Number(utcMatch[3]);
+      const mm = utcMatch[4] ? Number(utcMatch[4]) : 0;
+      if (!Number.isFinite(hh) || !Number.isFinite(mm) || hh > 23 || mm > 59) return result;
+
+      result.offset = sign * (hh + mm / 60);
+      result.timezone = `${utcMatch[1]}${utcMatch[2]}${hh}${mm ? ':' + String(mm).padStart(2, '0') : ''}`;
+    } else if (tzUpper === "UTC" || tzUpper === "GMT") {
       result.offset = 0;
+      result.timezone = tzUpper;
+    } else if (Object.prototype.hasOwnProperty.call(TIMEZONE_DATA, tzUpper)) {
+      result.offset = TIMEZONE_DATA[tzUpper];
+      result.timezone = tzUpper;
+    } else {
+      // Unknown timezone token
+      return result;
+    }
+
+    // Parse time (12h or 24h)
+    if (g.h12) {
+      let hours = parseInt(g.h12, 10);
+      const minutes = g.m12 ? parseInt(g.m12, 10) : 0;
+      const seconds = g.s12 ? parseInt(g.s12, 10) : 0;
+      const isPM = /p/i.test(g.ampm || "");
+
+      if (isPM && hours !== 12) hours += 12;
+      if (!isPM && hours === 12) hours = 0;
+
+      result.hours = hours;
+      result.minutes = minutes;
+      result.seconds = seconds;
+      return result;
+    }
+
+    if (g.h24) {
+      result.hours = parseInt(g.h24, 10);
+      result.minutes = g.m24 ? parseInt(g.m24, 10) : 0;
+      result.seconds = g.s24 ? parseInt(g.s24, 10) : 0;
+      return result;
     }
 
     return result;
   }
 
-  // Convert time to target timezone
+  // Convert time to target timezone (minutes math; avoids local timezone/DST issues)
   function convertTime(parsed, targetOffset) {
     if (parsed.offset === null) return null;
 
-    const diffHours = targetOffset - parsed.offset;
-    let totalMinutes = parsed.hours * 60 + parsed.minutes + (diffHours * 60);
+    // If we have an explicit date, compute the exact target date/time.
+    if (parsed.hasDate && parsed.date && typeof parsed.date === 'object') {
+      const { year, month, day } = parsed.date;
+      const sourceOffsetMs = parsed.offset * 60 * 60 * 1000;
+      const targetOffsetMs = targetOffset * 60 * 60 * 1000;
 
-    let dayOffset = 0;
-    while (totalMinutes < 0) {
-      totalMinutes += 24 * 60;
-      dayOffset--;
+      // Interpret the provided Y-M-D + time as local time in the source timezone.
+      const sourceLocalUtcMillis = Date.UTC(year, month - 1, day, parsed.hours, parsed.minutes, parsed.seconds || 0);
+      const utcMillis = sourceLocalUtcMillis - sourceOffsetMs;
+      const targetLocalMillis = utcMillis + targetOffsetMs;
+
+      const targetDate = new Date(targetLocalMillis);
+
+      // Use UTC getters because targetLocalMillis encodes "target-local" time as UTC.
+      const hours = targetDate.getUTCHours();
+      const minutes = targetDate.getUTCMinutes();
+
+      return {
+        hours,
+        minutes,
+        seconds: 0,
+        dayOffset: 0,
+        date: targetDate
+      };
     }
-    while (totalMinutes >= 24 * 60) {
-      totalMinutes -= 24 * 60;
-      dayOffset++;
-    }
+
+    const diffMinutes = Math.round((targetOffset - parsed.offset) * 60);
+    const totalMinutes = (parsed.hours * 60) + parsed.minutes + diffMinutes;
+
+    const dayOffset = Math.floor(totalMinutes / 1440);
+    const normalized = ((totalMinutes % 1440) + 1440) % 1440;
 
     return {
-      hours: Math.floor(totalMinutes / 60),
-      minutes: Math.round(totalMinutes % 60),
-      seconds: parsed.seconds,
-      dayOffset
+      hours: Math.floor(normalized / 60),
+      minutes: normalized % 60,
+      seconds: 0,
+      dayOffset,
+      date: null
     };
   }
 
   // Format time for display
-  function formatTime(hours, minutes, use24Hour = false) {
-    if (use24Hour) {
-      return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+  function formatTime(hours, minutes, use24Hour = false, includeDate = false, date = null) {
+    const timeStr = use24Hour ? 
+      `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}` :
+      `${hours % 12 || 12}:${minutes.toString().padStart(2, '0')} ${hours >= 12 ? 'PM' : 'AM'}`;
+    
+    if (includeDate && date) {
+      const monthsShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const y = date.getUTCFullYear();
+      const m = date.getUTCMonth();
+      const d = date.getUTCDate();
+      const nowY = new Date().getFullYear();
+      const dateStr = `${monthsShort[m]} ${d}${y !== nowY ? `, ${y}` : ''}`;
+      return `${dateStr} ${timeStr}`;
     }
-    const period = hours >= 12 ? 'PM' : 'AM';
-    const displayHours = hours % 12 || 12;
-    return `${displayHours}:${minutes.toString().padStart(2, '0')} ${period}`;
+    
+    return timeStr;
   }
 
   // Format original time in user's preferred format
@@ -176,6 +373,31 @@
     if (dayOffset === 1) return ' (+1 day)';
     if (dayOffset === -1) return ' (-1 day)';
     return ` (${dayOffset > 0 ? '+' : ''}${dayOffset} days)`;
+  }
+
+  function buildConvertedString(parsed, converted, targetOffset) {
+    const parts = [];
+
+    const includeDate = !!(parsed?.hasDate && converted?.date);
+    parts.push(formatTime(converted.hours, converted.minutes, settings.use24Hour, includeDate, converted.date || null));
+
+    if (settings.resultIncludeUtcOffset !== false) {
+      parts.push(formatOffset(targetOffset));
+    }
+
+    if (settings.resultIncludeDayOffset !== false) {
+      const day = getDayOffsetText(converted.dayOffset);
+      if (day) parts.push(day);
+    }
+
+    let out = parts.join(' ');
+
+    if (settings.resultIncludeSourceTz) {
+      const tz = parsed?.timezone;
+      if (tz) out += ` (${tz})`;
+    }
+
+    return out;
   }
 
   // Create highlight element
@@ -212,107 +434,201 @@
     return wrapper;
   }
 
-  // Walk through text nodes and find times
-  function findTimesInNode(node, times) {
-    if (node.nodeType === Node.TEXT_NODE) {
-      const text = node.textContent;
-      let match;
-      TIME_PATTERN.lastIndex = 0;
+  // Walk text nodes and find times (TreeWalker is significantly faster than recursion)
+  function findTimesInNode(root, times) {
+    if (!root) return;
 
-      while ((match = TIME_PATTERN.exec(text)) !== null) {
-        const parsed = parseMatch(match);
-        if (parsed.offset !== null) {
-          const targetOffset = getTargetOffset();
-          const converted = convertTime(parsed, targetOffset);
-          
-          if (converted) {
-            const convertedStr = formatTime(converted.hours, converted.minutes, settings.use24Hour) + 
-                               ' ' + formatOffset(targetOffset) + 
-                               getDayOffsetText(converted.dayOffset);
-            
+    const SKIP_TAGS = new Set(['script', 'style', 'noscript', 'textarea', 'input', 'select', 'option']);
+
+    const walker = document.createTreeWalker(
+      root,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode: (node) => {
+          const text = node.nodeValue;
+          if (!text || text.length < 4) return NodeFilter.FILTER_REJECT;
+          if (!/\d/.test(text)) return NodeFilter.FILTER_REJECT;
+
+          const parent = node.parentElement;
+          if (!parent) return NodeFilter.FILTER_REJECT;
+
+          const tag = parent.tagName ? parent.tagName.toLowerCase() : '';
+          if (SKIP_TAGS.has(tag)) return NodeFilter.FILTER_REJECT;
+
+          // Skip our own highlights/popups
+          if (parent.closest('.tz-converter-highlight, #tz-conversion-popup')) return NodeFilter.FILTER_REJECT;
+
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      }
+    );
+
+    let nodeCount = 0;
+    const MAX_TEXT_NODES = 8000;
+
+    while (walker.nextNode()) {
+      if (++nodeCount > MAX_TEXT_NODES) break;
+
+      const node = walker.currentNode;
+      const text = node.nodeValue;
+      if (!text) continue;
+
+      try {
+        const usedRanges = [];
+
+        if (settings.enableDateDetection && DATE_TIME_PATTERN) {
+          DATE_TIME_PATTERN.lastIndex = 0;
+          let m;
+          while ((m = DATE_TIME_PATTERN.exec(text)) !== null) {
+            try {
+              const parsed = parseMatch(m);
+              if (parsed.offset === null) continue;
+
+              const targetOffset = getTargetOffset();
+              const converted = convertTime(parsed, targetOffset);
+              if (!converted) continue;
+
+              const convertedStr = buildConvertedString(parsed, converted, targetOffset);
+
+              const start = m.index;
+              const end = m.index + m[0].length;
+              usedRanges.push([start, end]);
+
+              times.push({
+                id: `tz-${Date.now()}-${times.length}`,
+                node,
+                start,
+                end,
+                original: m[0],
+                originalParsed: parsed,
+                converted: convertedStr,
+                convertedParsed: converted
+              });
+            } catch {
+              continue;
+            }
+          }
+        }
+
+        TIME_PATTERN.lastIndex = 0;
+        let match;
+        while ((match = TIME_PATTERN.exec(text)) !== null) {
+          try {
+            const parsed = parseMatch(match);
+            if (parsed.offset === null) continue;
+
+            const targetOffset = getTargetOffset();
+            const converted = convertTime(parsed, targetOffset);
+            if (!converted) continue;
+
+            const convertedStr = buildConvertedString(parsed, converted, targetOffset);
+
+            const start = match.index;
+            const end = match.index + match[0].length;
+
+            // Skip overlap with date-time matches
+            if (usedRanges.length > 0) {
+              let overlaps = false;
+              for (const [a, b] of usedRanges) {
+                if (start < b && end > a) { overlaps = true; break; }
+              }
+              if (overlaps) continue;
+            }
+
             times.push({
               id: `tz-${Date.now()}-${times.length}`,
-              node: node,
-              start: match.index,
-              end: match.index + match[0].length,
+              node,
+              start,
+              end,
               original: match[0],
               originalParsed: parsed,
               converted: convertedStr,
               convertedParsed: converted
             });
+          } catch (e) {
+            // Skip invalid matches
+            continue;
           }
         }
-      }
-    } else if (node.nodeType === Node.ELEMENT_NODE) {
-      // Skip script, style, and already processed elements
-      const tagName = node.tagName.toLowerCase();
-      if (['script', 'style', 'noscript', 'iframe', 'textarea', 'input'].includes(tagName)) {
-        return;
-      }
-      if (node.classList && node.classList.contains('tz-converter-highlight')) {
-        return;
-      }
-
-      for (const child of node.childNodes) {
-        findTimesInNode(child, times);
+      } catch (e) {
+        // Regex error - skip this text node
+        continue;
       }
     }
   }
 
+  // Check if current site is ignored
+  function isSiteIgnored() {
+    const hostname = window.location.hostname;
+    return settings.ignoredSites.some(site => {
+      return hostname === site || hostname.endsWith('.' + site);
+    });
+  }
+
   // Scan page for times
   function scanPage() {
-    foundTimes = [];
-    findTimesInNode(document.body, foundTimes);
-    return foundTimes;
+    try {
+      if (isSiteIgnored()) return [];
+      if (!document.body) return [];
+
+      foundTimes = [];
+      findTimesInNode(document.body, foundTimes);
+
+      if (settings.maxConversions > 0 && foundTimes.length > settings.maxConversions) {
+        foundTimes = foundTimes.slice(0, settings.maxConversions);
+      }
+
+      return foundTimes;
+    } catch (e) {
+      if (DEBUG) console.error('[TimeZone Converter] Scan error:', e);
+      return [];
+    }
+  }
+
+  let suppressMutationsCount = 0;
+
+  function withSuppressedMutations(fn) {
+    suppressMutationsCount++;
+    try {
+      fn();
+    } finally {
+      // Let the MutationObserver flush before re-enabling
+      setTimeout(() => {
+        suppressMutationsCount = Math.max(0, suppressMutationsCount - 1);
+      }, 0);
+    }
   }
 
   // Apply highlights to found times
   function applyHighlights() {
     if (!highlightEnabled) return;
 
-    // Process in reverse order to maintain correct positions
-    const sortedTimes = [...foundTimes].sort((a, b) => {
-      if (a.node === b.node) {
-        return b.start - a.start;
-      }
-      return 0;
-    });
-
-    // Group by node
     const nodeGroups = new Map();
-    for (const time of sortedTimes) {
-      if (!nodeGroups.has(time.node)) {
-        nodeGroups.set(time.node, []);
-      }
-      nodeGroups.get(time.node).push(time);
+    for (const t of foundTimes) {
+      if (!t.node || !t.node.parentNode) continue;
+      if (!nodeGroups.has(t.node)) nodeGroups.set(t.node, []);
+      nodeGroups.get(t.node).push(t);
     }
 
-    // Process each node
-    for (const [node, times] of nodeGroups) {
-      if (!node || !node.parentNode) continue;
+    withSuppressedMutations(() => {
+      for (const [node, times] of nodeGroups) {
+        if (!node || !node.parentNode) continue;
+        const text = node.nodeValue;
+        if (!text) continue;
 
-      // Sort times by position (descending) for this node
-      times.sort((a, b) => b.start - a.start);
+        times.sort((a, b) => a.start - b.start);
 
-      for (const time of times) {
-        try {
-          // Re-check if node is still valid
-          if (!time.node || !time.node.parentNode || !time.node.textContent) continue;
-          
-          const text = time.node.textContent;
-          
-          // Verify the time text is still at expected position
-          const expectedText = text.substring(time.start, time.end);
-          if (expectedText !== time.original) continue;
-          
-          const before = text.substring(0, time.start);
-          const timeText = text.substring(time.start, time.end);
-          const after = text.substring(time.end);
+        let lastIndex = 0;
+        const fragment = document.createDocumentFragment();
 
-          const fragment = document.createDocumentFragment();
-          
-          if (before) {
-            fragment.appendChild(document.createTextNode(before));
+        for (const time of times) {
+          if (time.start < lastIndex) continue;
+
+          const expected = text.substring(time.start, time.end);
+          if (expected !== time.original) continue;
+
+          if (time.start > lastIndex) {
+            fragment.appendChild(document.createTextNode(text.substring(lastIndex, time.start)));
           }
 
           const highlight = document.createElement('span');
@@ -320,32 +636,35 @@
           highlight.dataset.tzOriginal = time.original;
           highlight.dataset.tzConverted = time.converted;
           highlight.dataset.tzId = time.id;
-          highlight.textContent = timeText;
-          highlight.title = `Click to see: ${time.converted}`;
-          // Use setProperty with important to override CSS
-          highlight.style.setProperty('background-color', settings.highlightColor, 'important');
-          highlight.style.setProperty('color', settings.highlightTextColor, 'important');
-          
-          fragment.appendChild(highlight);
-
-          if (after) {
-            fragment.appendChild(document.createTextNode(after));
+          highlight.dataset.tzShowConverted = 'false';
+          highlight.textContent = expected;
+          if (settings.displayMode === 'toggle') {
+            highlight.title = `Click to see: ${time.converted}`;
           }
+          applyHighlightStyle(highlight, false);
 
-          time.node.parentNode.replaceChild(fragment, time.node);
-        } catch (e) {
-          // Silently ignore errors - node may have been modified
+          fragment.appendChild(highlight);
+          lastIndex = time.end;
         }
+
+        if (lastIndex < text.length) {
+          fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
+        }
+
+        node.parentNode.replaceChild(fragment, node);
       }
-    }
+    });
   }
 
   // Remove all highlights
   function removeHighlights() {
     const highlights = document.querySelectorAll('.tz-converter-highlight');
-    highlights.forEach(el => {
-      const text = document.createTextNode(el.textContent);
-      el.parentNode.replaceChild(text, el);
+
+    withSuppressedMutations(() => {
+      highlights.forEach(el => {
+        const original = el.dataset.tzOriginal || el.textContent;
+        el.replaceWith(document.createTextNode(original));
+      });
     });
   }
 
@@ -353,8 +672,13 @@
   function updateHighlightStyles() {
     const highlights = document.querySelectorAll('.tz-converter-highlight');
     highlights.forEach(el => {
-      el.style.setProperty('background-color', settings.highlightColor, 'important');
-      el.style.setProperty('color', settings.highlightTextColor, 'important');
+      const isConverted = el.dataset.tzShowConverted === 'true';
+      applyHighlightStyle(el, isConverted);
+
+      // Avoid native browser tooltip when using custom tooltip mode
+      if (settings.displayMode === 'tooltip') {
+        el.removeAttribute('title');
+      }
     });
   }
 
@@ -362,34 +686,162 @@
   const CONVERTED_BG_COLOR = '#4CAF50';
   const CONVERTED_TEXT_COLOR = '#ffffff';
 
-  // Toggle highlight for a specific time
-  function toggleTimeDisplay(element) {
-    const original = element.dataset.tzOriginal;
-    const converted = element.dataset.tzConverted;
-    const isShowingConverted = element.dataset.tzShowConverted === 'true';
+  function applyHighlightStyle(element, isConverted) {
+    if (!element) return;
 
-    if (isShowingConverted) {
-      // Switch back to original - use user's custom colors
-      element.textContent = original;
-      element.dataset.tzShowConverted = 'false';
-      element.title = `Click to see: ${converted}`;
-      element.style.setProperty('background-color', settings.highlightColor, 'important');
+    if (isConverted) {
+      if (settings.highlightTextOnly) {
+        element.style.setProperty('background-color', 'transparent', 'important');
+        element.style.setProperty('color', CONVERTED_BG_COLOR, 'important');
+      } else {
+        element.style.setProperty('background-color', CONVERTED_BG_COLOR, 'important');
+        element.style.setProperty('color', CONVERTED_TEXT_COLOR, 'important');
+      }
+      return;
+    }
+
+    if (settings.highlightTextOnly) {
+      element.style.setProperty('background-color', 'transparent', 'important');
       element.style.setProperty('color', settings.highlightTextColor, 'important');
     } else {
-      // Switch to converted - use fixed green color
+      element.style.setProperty('background-color', settings.highlightColor, 'important');
+      element.style.setProperty('color', settings.highlightTextColor, 'important');
+    }
+  }
+
+  function setTimeDisplay(element, showConverted) {
+    const original = element.dataset.tzOriginal;
+    const converted = element.dataset.tzConverted;
+
+    if (!original || !converted) return;
+
+    if (showConverted) {
       element.textContent = converted;
       element.dataset.tzShowConverted = 'true';
-      element.title = `Click to see original: ${original}`;
-      element.style.setProperty('background-color', CONVERTED_BG_COLOR, 'important');
-      element.style.setProperty('color', CONVERTED_TEXT_COLOR, 'important');
+      if (settings.displayMode === 'toggle') {
+        element.title = `Click to see original: ${original}`;
+      } else {
+        element.removeAttribute('title');
+      }
+      applyHighlightStyle(element, true);
+    } else {
+      element.textContent = original;
+      element.dataset.tzShowConverted = 'false';
+      if (settings.displayMode === 'toggle') {
+        element.title = `Click to see: ${converted}`;
+      } else {
+        element.removeAttribute('title');
+      }
+      applyHighlightStyle(element, false);
     }
+  }
+
+  function applyAutoConvertIfEnabled() {
+    if (!settings.autoConvertOnLoad) return;
+    if (settings.displayMode !== 'toggle') return;
+    const highlights = document.querySelectorAll('.tz-converter-highlight');
+    highlights.forEach(el => {
+      if (el.dataset.tzShowConverted !== 'true') {
+        setTimeDisplay(el, true);
+      } else {
+        applyHighlightStyle(el, true);
+      }
+    });
+  }
+
+  let tooltipEl = null;
+
+  function ensureTooltip() {
+    if (tooltipEl) return tooltipEl;
+    const el = document.createElement('div');
+    el.id = 'tz-converter-tooltip';
+    el.style.position = 'fixed';
+    el.style.zIndex = '2147483647';
+    el.style.pointerEvents = 'none';
+    el.style.maxWidth = '320px';
+    el.style.padding = '8px 10px';
+    el.style.borderRadius = '8px';
+    el.style.fontSize = '12px';
+    el.style.lineHeight = '1.35';
+    el.style.boxShadow = '0 10px 25px rgba(0,0,0,0.18)';
+    el.style.background = 'rgba(17, 24, 39, 0.92)';
+    el.style.color = '#fff';
+    el.style.display = 'none';
+    el.style.whiteSpace = 'normal';
+    document.documentElement.appendChild(el);
+    tooltipEl = el;
+    return tooltipEl;
+  }
+
+  function positionTooltip(x, y) {
+    if (!tooltipEl || tooltipEl.style.display === 'none') return;
+    const margin = 12;
+    const rect = tooltipEl.getBoundingClientRect();
+    let left = x + margin;
+    let top = y + margin;
+
+    if (left + rect.width + margin > window.innerWidth) {
+      left = Math.max(margin, x - rect.width - margin);
+    }
+    if (top + rect.height + margin > window.innerHeight) {
+      top = Math.max(margin, y - rect.height - margin);
+    }
+
+    tooltipEl.style.left = `${left}px`;
+    tooltipEl.style.top = `${top}px`;
+  }
+
+  function showTooltipFor(el, clientX, clientY) {
+    if (!el) return;
+    const original = el.dataset.tzOriginal || el.textContent;
+    const converted = el.dataset.tzConverted;
+    if (!converted) return;
+
+    const tip = ensureTooltip();
+    tip.textContent = `${original} → ${converted}`;
+    tip.style.display = 'block';
+    // Need one frame to measure size correctly
+    requestAnimationFrame(() => positionTooltip(clientX, clientY));
+  }
+
+  function hideTooltip() {
+    if (!tooltipEl) return;
+    tooltipEl.style.display = 'none';
+  }
+
+  // Toggle highlight for a specific time
+  function toggleTimeDisplay(element) {
+    const isShowingConverted = element.dataset.tzShowConverted === 'true';
+
+    setTimeDisplay(element, !isShowingConverted);
   }
 
   // Handle click on highlights
   document.addEventListener('click', (e) => {
     if (e.target.classList && e.target.classList.contains('tz-converter-highlight')) {
-      toggleTimeDisplay(e.target);
+      if (settings.displayMode === 'toggle') {
+        toggleTimeDisplay(e.target);
+      }
     }
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!tooltipEl || tooltipEl.style.display === 'none') return;
+    positionTooltip(e.clientX, e.clientY);
+  });
+
+  document.addEventListener('mouseover', (e) => {
+    const t = e.target;
+    if (!t || !t.classList || !t.classList.contains('tz-converter-highlight')) return;
+    if (settings.displayMode !== 'tooltip') return;
+    showTooltipFor(t, e.clientX, e.clientY);
+  });
+
+  document.addEventListener('mouseout', (e) => {
+    const t = e.target;
+    if (!t || !t.classList || !t.classList.contains('tz-converter-highlight')) return;
+    if (settings.displayMode !== 'tooltip') return;
+    hideTooltip();
   });
 
   // Flag to track if extension context has been invalidated
@@ -442,10 +894,20 @@
           targetTimezone: 'auto',
           targetOffset: null,
           use24Hour: false,
+          autoConvertOnLoad: false,
+          displayMode: 'toggle',
+          resultIncludeUtcOffset: true,
+          resultIncludeDayOffset: true,
+          resultIncludeSourceTz: false,
+          enableDateDetection: false,
+          scanMode: 'auto',
           highlightColor: '#ffeb3b',
           highlightTextColor: '#000000',
           highlightEnabled: true,
-          showOriginal: true
+          showOriginal: true,
+          highlightTextOnly: false,
+          maxConversions: 25,
+          ignoredSites: []
         }, (items) => {
           // Check flag first (fastest)
           if (contextInvalidated) {
@@ -455,11 +917,9 @@
           try {
             // Check for chrome.runtime.lastError
             if (chrome.runtime?.lastError) {
-              console.log('[TZ Converter] Error loading settings:', chrome.runtime.lastError);
               resolve(settings);
               return;
             }
-            console.log('[TZ Converter] Loaded settings from storage:', items);
             settings = { ...settings, ...items };
             highlightEnabled = items.highlightEnabled;
             resolve(settings);
@@ -475,12 +935,12 @@
     });
   }
 
-  // Send times to background script
+  // Send times to background script (fire-and-forget, don't block on errors)
   function notifyBackground(times) {
     if (contextInvalidated || !isExtensionContextValid()) return;
-    
+
     try {
-      chrome.runtime.sendMessage({
+      const message = {
         type: 'TIMES_FOUND',
         data: {
           count: times.length,
@@ -488,38 +948,70 @@
             id: t.id,
             original: t.original,
             converted: t.converted,
-            timezone: t.originalParsed.timezone
+            timezone: t.originalParsed?.timezone || null
           }))
         }
-      }).catch(() => {
-        contextInvalidated = true;
+      };
+
+      chrome.runtime.sendMessage(message, (response) => {
+        // Silently handle errors - background script might not be ready
+        if (chrome.runtime?.lastError) {
+          // This is normal if background script isn't loaded yet
+          return;
+        }
       });
     } catch (e) {
+      // If sendMessage throws, mark context as invalid
       contextInvalidated = true;
     }
   }
 
+  // Publish status to the page (for debugging test page)
+  function publishStatus(detail) {
+    try {
+      const d = detail && typeof detail === 'object' ? detail : {};
+      // Dataset fallback (works without CustomEvent listener)
+      document.documentElement.dataset.tzConverterReady = d.ready ? '1' : '0';
+      if (typeof d.count === 'number') document.documentElement.dataset.tzConverterCount = String(d.count);
+      if (d.phase) document.documentElement.dataset.tzConverterPhase = String(d.phase);
+
+      // Event (nice for test page UI)
+      window.dispatchEvent(new CustomEvent('tz-converter:status', { detail: d }));
+    } catch {
+      // ignore
+    }
+  }
+
+  // Message listener flag to prevent duplicate listeners
+  let messageListenerAdded = false;
+
   // Initialize
   async function init() {
     await loadSettings();
-    
-    // Initial scan
-    const times = scanPage();
-    
-    if (times.length > 0) {
+
+    // Initial scan (depends on scanMode)
+    if (settings.scanMode !== 'manual') {
+      const times = scanPage();
       notifyBackground(times);
-      
-      if (highlightEnabled) {
+      publishStatus({ ready: true, phase: 'init-scan', count: times.length });
+
+      if (highlightEnabled && times.length > 0) {
         applyHighlights();
+        applyAutoConvertIfEnabled();
       }
+    } else {
+      foundTimes = [];
+      notifyBackground([]);
+      publishStatus({ ready: true, phase: 'manual-mode', count: 0 });
     }
 
-    // Listen for messages from popup/background
-    if (!contextInvalidated && isExtensionContextValid()) {
+    // Listen for messages from popup/background (only add once)
+    if (!contextInvalidated && !messageListenerAdded && isExtensionContextValid()) {
+      messageListenerAdded = true;
       try {
         chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           // Check if context is still valid before processing
-          if (contextInvalidated) return;
+          if (contextInvalidated) return false;
           
           try {
             switch (message.type) {
@@ -530,52 +1022,94 @@
                   converted: t.converted,
                   timezone: t.originalParsed.timezone
                 }))});
-                break;
+                return true;
+                
+              case 'CONVERT_SELECTION':
+                // Handle manual conversion of selected text
+                try {
+                  convertSelectedText(message.selectedText);
+                  sendResponse({ success: true });
+                } catch (e) {
+                  sendResponse({ success: false, error: e.message });
+                }
+                return true;
                 
               case 'RESCAN':
-                removeHighlights();
+                if (highlightEnabled) removeHighlights();
                 loadSettings().then(() => {
                   const newTimes = scanPage();
                   notifyBackground(newTimes);
-                  if (highlightEnabled) {
+                  publishStatus({ ready: true, phase: 'rescan', count: newTimes.length });
+                  if (highlightEnabled && newTimes.length > 0) {
                     applyHighlights();
+                    applyAutoConvertIfEnabled();
                   }
-                  sendResponse({ times: newTimes.length });
+                  // Update observer after settings changes
+                  stopObserver();
+                  if (settings.scanMode === 'auto') startObserver();
+                  try {
+                    sendResponse({ times: newTimes.length });
+                  } catch (e) {
+                    // Response already sent or context invalidated
+                  }
                 });
                 return true; // Async response
                 
               case 'TOGGLE_HIGHLIGHTS':
                 highlightEnabled = message.enabled;
                 if (highlightEnabled) {
-                  applyHighlights();
+                  if (settings.scanMode === 'manual') {
+                    // Manual mode: do not autoscan, only style/update existing highlights
+                    if (foundTimes.length > 0) {
+                      applyHighlights();
+                      applyAutoConvertIfEnabled();
+                    }
+                    publishStatus({ ready: true, phase: 'toggle-on', count: foundTimes.length });
+                  } else {
+                    // Rescan to ensure positions are correct before applying highlights
+                    const newTimes = scanPage();
+                    notifyBackground(newTimes);
+                    publishStatus({ ready: true, phase: 'toggle-on', count: newTimes.length });
+                    if (newTimes.length > 0) {
+                      applyHighlights();
+                      applyAutoConvertIfEnabled();
+                    }
+                  }
                 } else {
                   removeHighlights();
+                  publishStatus({ ready: true, phase: 'toggle-off', count: foundTimes.length });
                 }
                 sendResponse({ success: true });
-                break;
+                return true;
                 
               case 'SETTINGS_UPDATED':
                 loadSettings().then(() => {
-                  console.log('[TZ Converter] Settings updated:', settings.highlightColor, settings.highlightTextColor);
+                  // Update observer after settings changes
+                  stopObserver();
+                  if (settings.scanMode === 'auto') startObserver();
+
                   // Just update styles if highlights exist, otherwise rescan
                   const existingHighlights = document.querySelectorAll('.tz-converter-highlight');
-                  console.log('[TZ Converter] Found highlights:', existingHighlights.length);
                   if (existingHighlights.length > 0) {
                     if (highlightEnabled) {
                       updateHighlightStyles();
-                      console.log('[TZ Converter] Styles updated');
+                      applyAutoConvertIfEnabled();
                     } else {
                       removeHighlights();
                     }
-                  } else if (highlightEnabled) {
+                  } else if (highlightEnabled && settings.scanMode !== 'manual') {
                     const newTimes = scanPage();
                     notifyBackground(newTimes);
                     applyHighlights();
+                    applyAutoConvertIfEnabled();
                   }
-                  sendResponse({ success: true });
+                  try {
+                    sendResponse({ success: true });
+                  } catch (e) {
+                    // Response already sent or context invalidated
+                  }
                 });
                 return true; // Async response
-                
                 
               case 'SCROLL_TO_TIME':
                 const element = document.querySelector(`[data-tz-id="${message.timeId}"]`);
@@ -587,62 +1121,226 @@
                   }, 1500);
                 }
                 sendResponse({ success: !!element });
-                break;
+                return true;
             }
           } catch (e) {
             contextInvalidated = true;
+            return false;
           }
+          return false;
         });
       } catch (e) {
         contextInvalidated = true;
       }
     }
 
-    // Observe DOM changes for dynamic content
-    const observer = new MutationObserver((mutations) => {
-      // Skip if context is invalidated
-      if (contextInvalidated) return;
-      
-      let shouldRescan = false;
-      
-      for (const mutation of mutations) {
-        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-          for (const node of mutation.addedNodes) {
-            if (node.nodeType === Node.ELEMENT_NODE && 
-                !node.classList?.contains('tz-converter-highlight')) {
-              shouldRescan = true;
-              break;
-            }
-          }
-        }
-        if (shouldRescan) break;
+    // Observe DOM changes for dynamic content (auto mode only)
+    let rescanTimeout = null;
+    let observer = null;
+
+    const stopObserver = () => {
+      if (observer) {
+        try { observer.disconnect(); } catch {}
+        observer = null;
       }
-      
-      if (shouldRescan) {
-        // Debounce rescan
-        clearTimeout(window.tzConverterRescanTimeout);
-        window.tzConverterRescanTimeout = setTimeout(() => {
+      if (rescanTimeout) {
+        try { clearTimeout(rescanTimeout); } catch {}
+        rescanTimeout = null;
+      }
+    };
+
+    const startObserver = () => {
+      if (observer) return;
+      if (!document.body) return;
+      if (settings.scanMode !== 'auto') return;
+
+      observer = new MutationObserver((mutations) => {
+        if (contextInvalidated) return;
+        if (settings.scanMode !== 'auto') return;
+        if (suppressMutationsCount > 0) return;
+
+        let shouldRescan = false;
+
+        for (const mutation of mutations) {
+          if (mutation.type !== 'childList' || mutation.addedNodes.length === 0) continue;
+
+          for (const node of mutation.addedNodes) {
+            if (node.nodeType !== Node.ELEMENT_NODE) continue;
+
+            // Ignore our own injected UI/highlights
+            if (node.closest?.('.tz-converter-highlight, #tz-conversion-popup')) continue;
+
+            shouldRescan = true;
+            break;
+          }
+
+          if (shouldRescan) break;
+        }
+
+        if (!shouldRescan) return;
+
+        if (rescanTimeout) clearTimeout(rescanTimeout);
+        rescanTimeout = setTimeout(() => {
           if (contextInvalidated) return;
-          removeHighlights();
+          if (settings.scanMode !== 'auto') return;
+
+          if (highlightEnabled) removeHighlights();
           const times = scanPage();
           notifyBackground(times);
-          if (highlightEnabled) {
+          publishStatus({ ready: true, phase: 'mutation-rescan', count: times.length });
+          if (highlightEnabled && times.length > 0) {
             applyHighlights();
+            applyAutoConvertIfEnabled();
           }
-        }, 500);
-      }
-    });
+        }, 800);
+      });
 
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+    };
+
+    // Start observer only in full auto mode
+    if (settings.scanMode === 'auto') {
+      startObserver();
+    }
   }
 
-  // Start when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
+  // Convert selected text manually
+  function convertSelectedText(selectedText) {
+    const trimmedText = selectedText.trim();
+    
+    // Test if the selected text matches our time pattern
+    TIME_PATTERN.lastIndex = 0;
+    const match = TIME_PATTERN.exec(trimmedText);
+    
+    if (match) {
+      const parsed = parseMatch(match);
+      
+      if (parsed.offset !== null) {
+        const targetOffset = getTargetOffset();
+        const converted = convertTime(parsed, targetOffset);
+        
+        if (converted) {
+          const convertedStr = formatTime(converted.hours, converted.minutes, settings.use24Hour, converted.date, converted.date) + 
+                             ' ' + formatOffset(targetOffset) + 
+                             getDayOffsetText(converted.dayOffset);
+          
+          // Show conversion result in a temporary popup
+          showConversionPopup(trimmedText, convertedStr);
+          return;
+        }
+      }
+    }
+    
+    // Show error if no valid time found
+    showConversionPopup(trimmedText, 'No valid time with timezone found');
+  }
+
+  // Escape HTML to prevent XSS
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // Show conversion result popup
+  function showConversionPopup(original, converted) {
+    // Remove existing popup if any
+    const existingPopup = document.getElementById('tz-conversion-popup');
+    if (existingPopup) {
+      existingPopup.remove();
+    }
+    
+    const popup = document.createElement('div');
+    popup.id = 'tz-conversion-popup';
+    popup.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: white;
+      border: 2px solid #4CAF50;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 10000;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 14px;
+      max-width: 300px;
+      animation: tz-slideIn 0.3s ease-out;
+    `;
+    
+    popup.innerHTML = `
+      <div style="display: flex; align-items: center; margin-bottom: 8px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#4CAF50" style="margin-right: 8px;">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        <strong>Time Conversion</strong>
+      </div>
+      <div style="margin-bottom: 4px; color: #666;">Original:</div>
+      <div style="background: #f5f5f5; padding: 8px; border-radius: 4px; margin-bottom: 12px; font-family: monospace;">${escapeHtml(original)}</div>
+      <div style="margin-bottom: 4px; color: #666;">Converted:</div>
+      <div style="background: #e8f5e8; padding: 8px; border-radius: 4px; font-family: monospace; color: #2e7d32;">${escapeHtml(converted)}</div>
+      <button id="tz-popup-close" style="
+        margin-top: 12px;
+        background: #4CAF50;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+      ">Close</button>
+    `;
+    
+    // Add animation styles
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes tz-slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(100%);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+    `;
+    document.head.appendChild(style);
+    
+    document.body.appendChild(popup);
+    
+    // Handle close button
+    const closeBtn = popup.querySelector('#tz-popup-close');
+    closeBtn.addEventListener('click', () => {
+      popup.remove();
+    });
+    
+    // Auto-remove after 10 seconds
+    setTimeout(() => {
+      if (popup.parentNode) {
+        popup.remove();
+      }
+    }, 10000);
+  }
+
+  // Start when DOM is ready - wrap in try-catch for safety
+  try {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        try {
+          init();
+        } catch (e) {
+          if (DEBUG) console.error('[TimeZone Converter] Init error:', e);
+        }
+      });
+    } else {
+      init();
+    }
+  } catch (e) {
+    if (DEBUG) console.error('[TimeZone Converter] Setup error:', e);
   }
 })();

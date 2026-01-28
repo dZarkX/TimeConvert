@@ -36,6 +36,9 @@ build/
 *.tmp
 *.temp
 
+# Local debug helpers
+test/test-debug.js
+
 # Node (if added later)
 node_modules/
 package-lock.json
