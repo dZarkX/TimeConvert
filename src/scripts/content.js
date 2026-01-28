@@ -322,14 +322,9 @@
           highlight.dataset.tzId = time.id;
           highlight.textContent = timeText;
           highlight.title = `Click to see: ${time.converted}`;
-          highlight.style.cssText = `
-            background-color: ${settings.highlightColor};
-            color: ${settings.highlightTextColor};
-            padding: 1px 4px;
-            border-radius: 3px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-          `;
+          // Use setProperty with important to override CSS
+          highlight.style.setProperty('background-color', settings.highlightColor, 'important');
+          highlight.style.setProperty('color', settings.highlightTextColor, 'important');
           
           fragment.appendChild(highlight);
 
@@ -358,8 +353,8 @@
   function updateHighlightStyles() {
     const highlights = document.querySelectorAll('.tz-converter-highlight');
     highlights.forEach(el => {
-      el.style.backgroundColor = settings.highlightColor;
-      el.style.color = settings.highlightTextColor;
+      el.style.setProperty('background-color', settings.highlightColor, 'important');
+      el.style.setProperty('color', settings.highlightTextColor, 'important');
     });
   }
 
