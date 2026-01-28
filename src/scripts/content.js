@@ -354,6 +354,15 @@
     });
   }
 
+  // Update highlight styles without removing them
+  function updateHighlightStyles() {
+    const highlights = document.querySelectorAll('.tz-converter-highlight');
+    highlights.forEach(el => {
+      el.style.backgroundColor = settings.highlightColor;
+      el.style.color = settings.highlightTextColor;
+    });
+  }
+
   // Toggle highlight for a specific time
   function toggleTimeDisplay(element) {
     const original = element.dataset.tzOriginal;
@@ -381,7 +390,12 @@
   // Check if extension context is still valid
   function isExtensionContextValid() {
     try {
-      return typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id;
+      // Check multiple conditions to ensure context is valid
+      if (typeof chrome === 'undefined') return false;
+      if (!chrome.runtime) return false;
+      // Accessing chrome.runtime.id will throw if context is invalidated
+      const id = chrome.runtime.id;
+      return !!id;
     } catch (e) {
       return false;
     }
@@ -390,38 +404,47 @@
   // Load settings from storage
   function loadSettings() {
     return new Promise((resolve) => {
-      if (isExtensionContextValid() && chrome.storage) {
-        try {
-          chrome.storage.sync.get({
-            targetTimezone: 'auto',
-            targetOffset: null,
-            use24Hour: false,
-            highlightColor: '#ffeb3b',
-            highlightTextColor: '#000000',
-            highlightEnabled: true,
-            showOriginal: true
-          }, (items) => {
-            try {
-              // Check if context is still valid inside callback
-              if (!isExtensionContextValid()) {
-                resolve(settings);
-                return;
-              }
-              if (chrome.runtime.lastError) {
-                resolve(settings);
-                return;
-              }
-              settings = { ...settings, ...items };
-              highlightEnabled = items.highlightEnabled;
-              resolve(settings);
-            } catch (e) {
-              resolve(settings);
-            }
-          });
-        } catch (e) {
+      try {
+        // Early exit if context is invalid
+        if (!isExtensionContextValid()) {
           resolve(settings);
+          return;
         }
-      } else {
+        
+        if (!chrome.storage || !chrome.storage.sync) {
+          resolve(settings);
+          return;
+        }
+        
+        chrome.storage.sync.get({
+          targetTimezone: 'auto',
+          targetOffset: null,
+          use24Hour: false,
+          highlightColor: '#ffeb3b',
+          highlightTextColor: '#000000',
+          highlightEnabled: true,
+          showOriginal: true
+        }, (items) => {
+          try {
+            // Check if context is still valid inside callback
+            if (!isExtensionContextValid()) {
+              resolve(settings);
+              return;
+            }
+            // Check for chrome.runtime.lastError
+            if (chrome.runtime && chrome.runtime.lastError) {
+              resolve(settings);
+              return;
+            }
+            settings = { ...settings, ...items };
+            highlightEnabled = items.highlightEnabled;
+            resolve(settings);
+          } catch (e) {
+            resolve(settings);
+          }
+        });
+      } catch (e) {
+        // Extension context invalidated - use default settings
         resolve(settings);
       }
     });
@@ -507,10 +530,17 @@
               
             case 'SETTINGS_UPDATED':
               loadSettings().then(() => {
-                removeHighlights();
-                const newTimes = scanPage();
-                notifyBackground(newTimes);
-                if (highlightEnabled) {
+                // Just update styles if highlights exist, otherwise rescan
+                const existingHighlights = document.querySelectorAll('.tz-converter-highlight');
+                if (existingHighlights.length > 0) {
+                  if (highlightEnabled) {
+                    updateHighlightStyles();
+                  } else {
+                    removeHighlights();
+                  }
+                } else if (highlightEnabled) {
+                  const newTimes = scanPage();
+                  notifyBackground(newTimes);
                   applyHighlights();
                 }
               });
