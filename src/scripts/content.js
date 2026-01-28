@@ -390,16 +390,27 @@
   // Flag to track if extension context has been invalidated
   let contextInvalidated = false;
 
-  // Check if extension context is still valid
+  // Check if extension context is still valid - using a safer method
   function isExtensionContextValid() {
     if (contextInvalidated) return false;
+    
+    // Simple check without accessing properties that throw uncatchable errors
+    if (typeof chrome === 'undefined') {
+      contextInvalidated = true;
+      return false;
+    }
+    if (!chrome.runtime) {
+      contextInvalidated = true;
+      return false;
+    }
+    
+    // Use getURL which returns empty string if context is invalid but doesn't throw
     try {
-      if (typeof chrome === 'undefined' || !chrome.runtime) {
+      const url = chrome.runtime.getURL('');
+      if (!url) {
         contextInvalidated = true;
         return false;
       }
-      // This will throw if context is invalidated
-      void chrome.runtime.id;
       return true;
     } catch (e) {
       contextInvalidated = true;
