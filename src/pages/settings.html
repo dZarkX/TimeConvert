@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TimeZone Converter - Settings</title>
+  <link rel="stylesheet" href="../styles/settings.css">
+</head>
+<body>
+  <div class="settings-container">
+    <!-- Header -->
+    <header class="settings-header">
+      <div class="header-content">
+        <img src="../icons/icon48.png" alt="TimeZone Converter" class="logo">
+        <div class="header-text">
+          <h1>TimeZone Converter</h1>
+          <p>Settings & Configuration</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="settings-main">
+      <!-- Timezone Settings -->
+      <section class="settings-section">
+        <h2 class="section-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          Timezone Settings
+        </h2>
+        
+        <div class="setting-group">
+          <label class="setting-label">Target Timezone</label>
+          <p class="setting-description">Choose how times should be converted</p>
+          
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="timezoneMode" value="auto" checked>
+              <span class="radio-custom"></span>
+              <span class="radio-text">
+                <strong>Auto-detect</strong>
+                <small>Use your system timezone</small>
+              </span>
+            </label>
+            
+            <label class="radio-option">
+              <input type="radio" name="timezoneMode" value="manual">
+              <span class="radio-custom"></span>
+              <span class="radio-text">
+                <strong>Manual selection</strong>
+                <small>Choose a specific timezone</small>
+              </span>
+            </label>
+          </div>
+          
+          <div class="manual-timezone-select" id="manualTimezoneSelect" style="display: none;">
+            <label class="setting-label">Select Timezone</label>
+            <select id="timezoneSelect" class="select-input">
+              <optgroup label="UTC">
+                <option value="0">UTC (UTC+0)</option>
+              </optgroup>
+              <optgroup label="Europe">
+                <option value="0">GMT - Greenwich Mean Time (UTC+0)</option>
+                <option value="1">CET - Central European Time (UTC+1)</option>
+                <option value="2">CEST - Central European Summer Time (UTC+2)</option>
+                <option value="2">EET - Eastern European Time (UTC+2)</option>
+                <option value="3">EEST - Eastern European Summer Time (UTC+3)</option>
+                <option value="1">BST - British Summer Time (UTC+1)</option>
+                <option value="3">MSK - Moscow Standard Time (UTC+3)</option>
+              </optgroup>
+              <optgroup label="North America">
+                <option value="-5">EST - Eastern Standard Time (UTC-5)</option>
+                <option value="-4">EDT - Eastern Daylight Time (UTC-4)</option>
+                <option value="-6">CST - Central Standard Time (UTC-6)</option>
+                <option value="-5">CDT - Central Daylight Time (UTC-5)</option>
+                <option value="-7">MST - Mountain Standard Time (UTC-7)</option>
+                <option value="-6">MDT - Mountain Daylight Time (UTC-6)</option>
+                <option value="-8">PST - Pacific Standard Time (UTC-8)</option>
+                <option value="-7">PDT - Pacific Daylight Time (UTC-7)</option>
+                <option value="-10">HST - Hawaii Standard Time (UTC-10)</option>
+              </optgroup>
+              <optgroup label="Asia">
+                <option value="9">JST - Japan Standard Time (UTC+9)</option>
+                <option value="9">KST - Korea Standard Time (UTC+9)</option>
+                <option value="8">CST - China Standard Time (UTC+8)</option>
+                <option value="8">HKT - Hong Kong Time (UTC+8)</option>
+                <option value="8">SGT - Singapore Time (UTC+8)</option>
+                <option value="5.5">IST - India Standard Time (UTC+5:30)</option>
+                <option value="7">ICT - Indochina Time (UTC+7)</option>
+              </optgroup>
+              <optgroup label="Australia & Pacific">
+                <option value="10">AEST - Australian Eastern Standard Time (UTC+10)</option>
+                <option value="11">AEDT - Australian Eastern Daylight Time (UTC+11)</option>
+                <option value="8">AWST - Australian Western Standard Time (UTC+8)</option>
+                <option value="12">NZST - New Zealand Standard Time (UTC+12)</option>
+              </optgroup>
+              <optgroup label="South America">
+                <option value="-3">BRT - Brasília Time (UTC-3)</option>
+                <option value="-3">ART - Argentina Time (UTC-3)</option>
+                <option value="-5">PET - Peru Time (UTC-5)</option>
+                <option value="-5">COT - Colombia Time (UTC-5)</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+        
+        <div class="setting-group">
+          <label class="setting-label">Time Format</label>
+          <div class="toggle-setting">
+            <span class="toggle-text">Use 24-hour format</span>
+            <label class="toggle">
+              <input type="checkbox" id="use24Hour">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+        
+        <div class="current-timezone-info">
+          <span class="info-label">Your detected timezone:</span>
+          <span class="info-value" id="detectedTimezone">Loading...</span>
+        </div>
+      </section>
+
+      <!-- Appearance Settings -->
+      <section class="settings-section">
+        <h2 class="section-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+          </svg>
+          Appearance
+        </h2>
+        
+        <div class="setting-group">
+          <label class="setting-label">Highlight Colors</label>
+          <p class="setting-description">Customize how detected times appear on pages</p>
+          
+          <div class="color-settings">
+            <div class="color-picker-group">
+              <label>Background Color</label>
+              <div class="color-input-wrapper">
+                <input type="color" id="highlightColor" value="#ffeb3b">
+                <input type="text" id="highlightColorText" value="#ffeb3b" class="color-text-input">
+              </div>
+            </div>
+            
+            <div class="color-picker-group">
+              <label>Text Color</label>
+              <div class="color-input-wrapper">
+                <input type="color" id="highlightTextColor" value="#000000">
+                <input type="text" id="highlightTextColorText" value="#000000" class="color-text-input">
+              </div>
+            </div>
+          </div>
+          
+          <div class="preview-box">
+            <span class="preview-label">Preview:</span>
+            <span class="preview-highlight" id="highlightPreview">5:00 PM CET</span>
+          </div>
+        </div>
+        
+        <div class="setting-group">
+          <label class="setting-label">Highlight Behavior</label>
+          <div class="toggle-setting">
+            <span class="toggle-text">Enable highlighting on pages</span>
+            <label class="toggle">
+              <input type="checkbox" id="highlightEnabled" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+        
+        <div class="setting-group">
+          <label class="setting-label">Color Presets</label>
+          <div class="color-presets">
+            <button class="preset-btn" data-bg="#ffeb3b" data-text="#000000" title="Yellow">
+              <span style="background: #ffeb3b; color: #000000;">Aa</span>
+            </button>
+            <button class="preset-btn" data-bg="#4CAF50" data-text="#ffffff" title="Green">
+              <span style="background: #4CAF50; color: #ffffff;">Aa</span>
+            </button>
+            <button class="preset-btn" data-bg="#2196F3" data-text="#ffffff" title="Blue">
+              <span style="background: #2196F3; color: #ffffff;">Aa</span>
+            </button>
+            <button class="preset-btn" data-bg="#9C27B0" data-text="#ffffff" title="Purple">
+              <span style="background: #9C27B0; color: #ffffff;">Aa</span>
+            </button>
+            <button class="preset-btn" data-bg="#FF5722" data-text="#ffffff" title="Orange">
+              <span style="background: #FF5722; color: #ffffff;">Aa</span>
+            </button>
+            <button class="preset-btn" data-bg="#607D8B" data-text="#ffffff" title="Gray">
+              <span style="background: #607D8B; color: #ffffff;">Aa</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Support Section -->
+      <section class="settings-section">
+        <h2 class="section-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+          Support
+        </h2>
+        
+        <div class="setting-group">
+          <label class="setting-label">Donate Link</label>
+          <p class="setting-description">Configure your Buy Me a Coffee or other donation link</p>
+          <input type="url" id="donateUrl" class="text-input" placeholder="https://buymeacoffee.com/yourusername">
+        </div>
+        
+        <div class="support-buttons">
+          <a href="https://buymeacoffee.com/3mon" target="_blank" class="support-btn coffee-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/>
+            </svg>
+            Buy Me a Coffee
+          </a>
+        </div>
+      </section>
+
+      <!-- About Section -->
+      <section class="settings-section">
+        <h2 class="section-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          About
+        </h2>
+        
+        <div class="about-info">
+          <p><strong>TimeZone Converter</strong> v1.0.0</p>
+          <p>Automatically detects and converts time zones on web pages to your local time.</p>
+          <p class="about-features">
+            <strong>Features:</strong>
+            <ul>
+              <li>Auto-detection of times with timezone abbreviations</li>
+              <li>Support for 12-hour and 24-hour formats</li>
+              <li>50+ timezone abbreviations supported</li>
+              <li>Click to toggle between original and converted time</li>
+              <li>Customizable highlight colors</li>
+            </ul>
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="settings-footer">
+      <button id="resetBtn" class="btn btn-secondary">Reset to Defaults</button>
+      <button id="saveBtn" class="btn btn-primary">Save Settings</button>
+    </footer>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast">
+      <span class="toast-message"></span>
+    </div>
+  </div>
+
+  <script src="settings.js"></script>
+</body>
+</html>

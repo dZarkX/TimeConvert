@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TimeZone Converter - Test Page</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background-color: #f5f5f5;
+    }
+    
+    h1 {
+      color: #4CAF50;
+      margin-bottom: 10px;
+    }
+    
+    .subtitle {
+      color: #666;
+      margin-bottom: 40px;
+    }
+    
+    section {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    h2 {
+      color: #333;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #4CAF50;
+    }
+    
+    p {
+      margin-bottom: 12px;
+    }
+    
+    .example {
+      background: #f8f9fa;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 12px 0;
+      border-left: 4px solid #4CAF50;
+    }
+    
+    .note {
+      background: #fff3cd;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 12px 0;
+      font-size: 14px;
+    }
+    
+    code {
+      background: #e9ecef;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'SF Mono', Monaco, monospace;
+    }
+    
+    ul {
+      margin-left: 24px;
+      margin-bottom: 12px;
+    }
+    
+    li {
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🕐 TimeZone Converter - Test Page</h1>
+  <p class="subtitle">This page contains various time formats for testing the extension</p>
+
+  <section>
+    <h2>12-Hour Format with Timezone Abbreviations</h2>
+    <p>The update will be live at <strong>4PM CET</strong> and the new Winter Campaign will follow at <strong>5PM CET</strong>.</p>
+    <p>Join us for the webinar at <strong>10:00 AM EST</strong> tomorrow!</p>
+    <p>The server maintenance is scheduled for <strong>3:30 PM PST</strong>.</p>
+    <p>Don't miss the live stream starting at <strong>8PM GMT</strong>!</p>
+    <div class="example">
+      <strong>Gaming Event:</strong> The tournament begins at <strong>2PM PDT</strong> and finals at <strong>9PM PDT</strong>.
+    </div>
+  </section>
+
+  <section>
+    <h2>24-Hour Format</h2>
+    <p>Meeting scheduled for <strong>14:00 CET</strong> in the main conference room.</p>
+    <p>The train departs at <strong>09:30 GMT</strong> from platform 5.</p>
+    <p>Server restart at <strong>03:00 UTC</strong> - expect 15 minutes downtime.</p>
+    <div class="example">
+      <strong>Flight Info:</strong> Departure <strong>18:45 CEST</strong>, Arrival <strong>22:30 BST</strong>
+    </div>
+  </section>
+
+  <section>
+    <h2>UTC Offset Format</h2>
+    <p>The conference call is at <strong>15:00 UTC+2</strong>.</p>
+    <p>Release scheduled for <strong>10AM UTC-5</strong>.</p>
+    <p>Maintenance window: <strong>02:00 UTC+0</strong> to <strong>04:00 UTC+0</strong>.</p>
+    <div class="example">
+      <strong>Global Meeting:</strong> <strong>9:00 AM UTC-8</strong> (West Coast) / <strong>12:00 PM UTC-5</strong> (East Coast) / <strong>18:00 UTC+1</strong> (Europe)
+    </div>
+  </section>
+
+  <section>
+    <h2>Various Timezone Abbreviations</h2>
+    <ul>
+      <li>Tokyo Office: <strong>9:00 AM JST</strong></li>
+      <li>Sydney Office: <strong>11:00 AM AEST</strong></li>
+      <li>Moscow Office: <strong>10:00 AM MSK</strong></li>
+      <li>Dubai Office: <strong>11:00 AM GST</strong></li>
+      <li>São Paulo Office: <strong>6:00 AM BRT</strong></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Mixed Content</h2>
+    <p>
+      Our global launch event kicks off at <strong>10AM PST</strong> with the keynote presentation. 
+      European viewers can tune in at <strong>19:00 CET</strong>. 
+      For our friends in Asia, that's <strong>2AM JST</strong> the next day - we know it's late, 
+      but the replay will be available at <strong>9AM JST</strong>!
+    </p>
+    <div class="note">
+      <strong>Note:</strong> All times are subject to change. Check back at <strong>6PM UTC</strong> for final confirmation.
+    </div>
+  </section>
+
+  <section>
+    <h2>Edge Cases</h2>
+    <p>Midnight test: <strong>12:00 AM EST</strong> and <strong>12:00 PM EST</strong></p>
+    <p>With seconds: <strong>14:30:45 UTC</strong></p>
+    <p>Alternative format: <strong>5 PM CET</strong> (space before PM)</p>
+    <p>Lowercase: <strong>3pm pst</strong></p>
+    <p>With dots: <strong>4.30 p.m. GMT</strong></p>
+  </section>
+
+  <section>
+    <h2>No Timezone (Should NOT be highlighted)</h2>
+    <p>The meeting is at 3:00 PM (no timezone specified).</p>
+    <p>Wake up at 7:00 AM tomorrow.</p>
+    <p>The store opens at 9:00.</p>
+  </section>
+
+  <section>
+    <h2>Real-World Examples</h2>
+    <div class="example">
+      <strong>📺 Twitch Stream:</strong><br>
+      "Going live at <strong>8PM CET</strong>! Join me for some gaming fun. VOD will be available after the stream ends around <strong>11PM CET</strong>."
+    </div>
+    <div class="example">
+      <strong>🎮 Game Update:</strong><br>
+      "Patch 2.5 drops <strong>10AM PST</strong> / <strong>7PM CET</strong> / <strong>3AM JST</strong> (Jan 29). Servers will be down for approximately 2 hours."
+    </div>
+    <div class="example">
+      <strong>📧 Email:</strong><br>
+      "Please submit your reports by <strong>5:00 PM EST</strong> on Friday. The review meeting is scheduled for Monday at <strong>9:00 AM EST</strong>."
+    </div>
+  </section>
+
+  <footer style="text-align: center; margin-top: 40px; color: #666; font-size: 14px;">
+    <p>TimeZone Converter Extension - Test Page</p>
+    <p>If the extension is working, times with timezone abbreviations should be highlighted!</p>
+  </footer>
+</body>
+</html>
