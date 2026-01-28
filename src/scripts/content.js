@@ -387,16 +387,22 @@
     }
   });
 
+  // Flag to track if extension context has been invalidated
+  let contextInvalidated = false;
+
   // Check if extension context is still valid
   function isExtensionContextValid() {
+    if (contextInvalidated) return false;
     try {
-      // Check multiple conditions to ensure context is valid
-      if (typeof chrome === 'undefined') return false;
-      if (!chrome.runtime) return false;
-      // Accessing chrome.runtime.id will throw if context is invalidated
-      const id = chrome.runtime.id;
-      return !!id;
+      if (typeof chrome === 'undefined' || !chrome.runtime) {
+        contextInvalidated = true;
+        return false;
+      }
+      // This will throw if context is invalidated
+      void chrome.runtime.id;
+      return true;
     } catch (e) {
+      contextInvalidated = true;
       return false;
     }
   }
@@ -404,14 +410,14 @@
   // Load settings from storage
   function loadSettings() {
     return new Promise((resolve) => {
+      // Quick check using flag
+      if (contextInvalidated) {
+        resolve(settings);
+        return;
+      }
+      
       try {
-        // Early exit if context is invalid
-        if (!isExtensionContextValid()) {
-          resolve(settings);
-          return;
-        }
-        
-        if (!chrome.storage || !chrome.storage.sync) {
+        if (!isExtensionContextValid() || !chrome.storage?.sync) {
           resolve(settings);
           return;
         }
@@ -425,14 +431,14 @@
           highlightEnabled: true,
           showOriginal: true
         }, (items) => {
+          // Check flag first (fastest)
+          if (contextInvalidated) {
+            resolve(settings);
+            return;
+          }
           try {
-            // Check if context is still valid inside callback
-            if (!isExtensionContextValid()) {
-              resolve(settings);
-              return;
-            }
             // Check for chrome.runtime.lastError
-            if (chrome.runtime && chrome.runtime.lastError) {
+            if (chrome.runtime?.lastError) {
               resolve(settings);
               return;
             }
@@ -440,11 +446,12 @@
             highlightEnabled = items.highlightEnabled;
             resolve(settings);
           } catch (e) {
+            contextInvalidated = true;
             resolve(settings);
           }
         });
       } catch (e) {
-        // Extension context invalidated - use default settings
+        contextInvalidated = true;
         resolve(settings);
       }
     });
@@ -452,7 +459,7 @@
 
   // Send times to background script
   function notifyBackground(times) {
-    if (!isExtensionContextValid()) return;
+    if (contextInvalidated || !isExtensionContextValid()) return;
     
     try {
       chrome.runtime.sendMessage({
@@ -467,10 +474,10 @@
           }))
         }
       }).catch(() => {
-        // Extension context may be invalidated
+        contextInvalidated = true;
       });
     } catch (e) {
-      // Extension context invalidated
+      contextInvalidated = true;
     }
   }
 
@@ -490,82 +497,89 @@
     }
 
     // Listen for messages from popup/background
-    if (isExtensionContextValid()) {
-      chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-        // Check if context is still valid before processing
-        if (!isExtensionContextValid()) return;
-        
-        try {
-          switch (message.type) {
-            case 'GET_TIMES':
-              sendResponse({ times: foundTimes.map(t => ({
-                id: t.id,
-                original: t.original,
-                converted: t.converted,
-                timezone: t.originalParsed.timezone
-              }))});
-              break;
-              
-            case 'RESCAN':
-              removeHighlights();
-              loadSettings().then(() => {
-                const newTimes = scanPage();
-                notifyBackground(newTimes);
-                if (highlightEnabled) {
-                  applyHighlights();
-                }
-                sendResponse({ times: newTimes.length });
-              });
-              return true; // Async response
-              
-            case 'TOGGLE_HIGHLIGHTS':
-              highlightEnabled = message.enabled;
-              if (highlightEnabled) {
-                applyHighlights();
-              } else {
+    if (!contextInvalidated && isExtensionContextValid()) {
+      try {
+        chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+          // Check if context is still valid before processing
+          if (contextInvalidated) return;
+          
+          try {
+            switch (message.type) {
+              case 'GET_TIMES':
+                sendResponse({ times: foundTimes.map(t => ({
+                  id: t.id,
+                  original: t.original,
+                  converted: t.converted,
+                  timezone: t.originalParsed.timezone
+                }))});
+                break;
+                
+              case 'RESCAN':
                 removeHighlights();
-              }
-              sendResponse({ success: true });
-              break;
-              
-            case 'SETTINGS_UPDATED':
-              loadSettings().then(() => {
-                // Just update styles if highlights exist, otherwise rescan
-                const existingHighlights = document.querySelectorAll('.tz-converter-highlight');
-                if (existingHighlights.length > 0) {
-                  if (highlightEnabled) {
-                    updateHighlightStyles();
-                  } else {
-                    removeHighlights();
-                  }
-                } else if (highlightEnabled) {
+                loadSettings().then(() => {
                   const newTimes = scanPage();
                   notifyBackground(newTimes);
+                  if (highlightEnabled) {
+                    applyHighlights();
+                  }
+                  sendResponse({ times: newTimes.length });
+                });
+                return true; // Async response
+                
+              case 'TOGGLE_HIGHLIGHTS':
+                highlightEnabled = message.enabled;
+                if (highlightEnabled) {
                   applyHighlights();
+                } else {
+                  removeHighlights();
                 }
-              });
-              break;
-              
-            case 'SCROLL_TO_TIME':
-              const element = document.querySelector(`[data-tz-id="${message.timeId}"]`);
-              if (element) {
-                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                element.style.animation = 'tz-pulse 0.5s ease-in-out 3';
-                setTimeout(() => {
-                  element.style.animation = '';
-                }, 1500);
-              }
-              sendResponse({ success: !!element });
-              break;
+                sendResponse({ success: true });
+                break;
+                
+              case 'SETTINGS_UPDATED':
+                loadSettings().then(() => {
+                  // Just update styles if highlights exist, otherwise rescan
+                  const existingHighlights = document.querySelectorAll('.tz-converter-highlight');
+                  if (existingHighlights.length > 0) {
+                    if (highlightEnabled) {
+                      updateHighlightStyles();
+                    } else {
+                      removeHighlights();
+                    }
+                  } else if (highlightEnabled) {
+                    const newTimes = scanPage();
+                    notifyBackground(newTimes);
+                    applyHighlights();
+                  }
+                });
+                break;
+                
+              case 'SCROLL_TO_TIME':
+                const element = document.querySelector(`[data-tz-id="${message.timeId}"]`);
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  element.style.animation = 'tz-pulse 0.5s ease-in-out 3';
+                  setTimeout(() => {
+                    element.style.animation = '';
+                  }, 1500);
+                }
+                sendResponse({ success: !!element });
+                break;
+            }
+          } catch (e) {
+            contextInvalidated = true;
           }
-        } catch (e) {
-          // Extension context may be invalidated
-        }
-      });
+        });
+      } catch (e) {
+        contextInvalidated = true;
+      }
     }
 
     // Observe DOM changes for dynamic content
     const observer = new MutationObserver((mutations) => {
+      // Skip if context is invalidated
+      if (contextInvalidated) return;
+      
       let shouldRescan = false;
       
       for (const mutation of mutations) {
@@ -585,6 +599,7 @@
         // Debounce rescan
         clearTimeout(window.tzConverterRescanTimeout);
         window.tzConverterRescanTimeout = setTimeout(() => {
+          if (contextInvalidated) return;
           removeHighlights();
           const times = scanPage();
           notifyBackground(times);
