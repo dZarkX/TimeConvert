@@ -15,10 +15,9 @@
   }
 }
 
-/* Base highlight style */
+/* Base highlight style - colors are set via inline styles from settings */
 .tz-converter-highlight {
-  background-color: #ffeb3b !important;
-  color: #000000 !important;
+  /* Default colors as fallback - will be overridden by inline styles */
   padding: 1px 4px !important;
   border-radius: 3px !important;
   cursor: pointer !important;
@@ -35,12 +34,6 @@
 .tz-converter-highlight:hover {
   filter: brightness(0.95) !important;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
-}
-
-/* When showing converted time */
-.tz-converter-highlight[data-tz-show-converted="true"] {
-  background-color: #4CAF50 !important;
-  color: #ffffff !important;
 }
 
 /* Tooltip style (optional, for future use) */
