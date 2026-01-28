@@ -358,6 +358,10 @@
     });
   }
 
+  // Colors for converted time display (fixed green with white text)
+  const CONVERTED_BG_COLOR = '#4CAF50';
+  const CONVERTED_TEXT_COLOR = '#ffffff';
+
   // Toggle highlight for a specific time
   function toggleTimeDisplay(element) {
     const original = element.dataset.tzOriginal;
@@ -365,13 +369,19 @@
     const isShowingConverted = element.dataset.tzShowConverted === 'true';
 
     if (isShowingConverted) {
+      // Switch back to original - use user's custom colors
       element.textContent = original;
       element.dataset.tzShowConverted = 'false';
       element.title = `Click to see: ${converted}`;
+      element.style.setProperty('background-color', settings.highlightColor, 'important');
+      element.style.setProperty('color', settings.highlightTextColor, 'important');
     } else {
+      // Switch to converted - use fixed green color
       element.textContent = converted;
       element.dataset.tzShowConverted = 'true';
       element.title = `Click to see original: ${original}`;
+      element.style.setProperty('background-color', CONVERTED_BG_COLOR, 'important');
+      element.style.setProperty('color', CONVERTED_TEXT_COLOR, 'important');
     }
   }
 
