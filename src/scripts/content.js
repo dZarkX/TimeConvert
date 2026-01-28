@@ -375,23 +375,36 @@
     }
   });
 
+  // Check if extension context is still valid
+  function isExtensionContextValid() {
+    try {
+      return typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id;
+    } catch (e) {
+      return false;
+    }
+  }
+
   // Load settings from storage
   function loadSettings() {
     return new Promise((resolve) => {
-      if (typeof chrome !== 'undefined' && chrome.storage) {
-        chrome.storage.sync.get({
-          targetTimezone: 'auto',
-          targetOffset: null,
-          use24Hour: false,
-          highlightColor: '#ffeb3b',
-          highlightTextColor: '#000000',
-          highlightEnabled: true,
-          showOriginal: true
-        }, (items) => {
-          settings = { ...settings, ...items };
-          highlightEnabled = items.highlightEnabled;
+      if (isExtensionContextValid() && chrome.storage) {
+        try {
+          chrome.storage.sync.get({
+            targetTimezone: 'auto',
+            targetOffset: null,
+            use24Hour: false,
+            highlightColor: '#ffeb3b',
+            highlightTextColor: '#000000',
+            highlightEnabled: true,
+            showOriginal: true
+          }, (items) => {
+            settings = { ...settings, ...items };
+            highlightEnabled = items.highlightEnabled;
+            resolve(settings);
+          });
+        } catch (e) {
           resolve(settings);
-        });
+        }
       } else {
         resolve(settings);
       }
@@ -400,7 +413,9 @@
 
   // Send times to background script
   function notifyBackground(times) {
-    if (typeof chrome !== 'undefined' && chrome.runtime) {
+    if (!isExtensionContextValid()) return;
+    
+    try {
       chrome.runtime.sendMessage({
         type: 'TIMES_FOUND',
         data: {
@@ -415,6 +430,8 @@
       }).catch(() => {
         // Extension context may be invalidated
       });
+    } catch (e) {
+      // Extension context invalidated
     }
   }
 
@@ -434,62 +451,69 @@
     }
 
     // Listen for messages from popup/background
-    if (typeof chrome !== 'undefined' && chrome.runtime) {
+    if (isExtensionContextValid()) {
       chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-        switch (message.type) {
-          case 'GET_TIMES':
-            sendResponse({ times: foundTimes.map(t => ({
-              id: t.id,
-              original: t.original,
-              converted: t.converted,
-              timezone: t.originalParsed.timezone
-            }))});
-            break;
-            
-          case 'RESCAN':
-            removeHighlights();
-            loadSettings().then(() => {
-              const newTimes = scanPage();
-              notifyBackground(newTimes);
+        // Check if context is still valid before processing
+        if (!isExtensionContextValid()) return;
+        
+        try {
+          switch (message.type) {
+            case 'GET_TIMES':
+              sendResponse({ times: foundTimes.map(t => ({
+                id: t.id,
+                original: t.original,
+                converted: t.converted,
+                timezone: t.originalParsed.timezone
+              }))});
+              break;
+              
+            case 'RESCAN':
+              removeHighlights();
+              loadSettings().then(() => {
+                const newTimes = scanPage();
+                notifyBackground(newTimes);
+                if (highlightEnabled) {
+                  applyHighlights();
+                }
+                sendResponse({ times: newTimes.length });
+              });
+              return true; // Async response
+              
+            case 'TOGGLE_HIGHLIGHTS':
+              highlightEnabled = message.enabled;
               if (highlightEnabled) {
                 applyHighlights();
+              } else {
+                removeHighlights();
               }
-              sendResponse({ times: newTimes.length });
-            });
-            return true; // Async response
-            
-          case 'TOGGLE_HIGHLIGHTS':
-            highlightEnabled = message.enabled;
-            if (highlightEnabled) {
-              applyHighlights();
-            } else {
-              removeHighlights();
-            }
-            sendResponse({ success: true });
-            break;
-            
-          case 'SETTINGS_UPDATED':
-            loadSettings().then(() => {
-              removeHighlights();
-              const newTimes = scanPage();
-              notifyBackground(newTimes);
-              if (highlightEnabled) {
-                applyHighlights();
+              sendResponse({ success: true });
+              break;
+              
+            case 'SETTINGS_UPDATED':
+              loadSettings().then(() => {
+                removeHighlights();
+                const newTimes = scanPage();
+                notifyBackground(newTimes);
+                if (highlightEnabled) {
+                  applyHighlights();
+                }
+              });
+              break;
+              
+            case 'SCROLL_TO_TIME':
+              const element = document.querySelector(`[data-tz-id="${message.timeId}"]`);
+              if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                element.style.animation = 'tz-pulse 0.5s ease-in-out 3';
+                setTimeout(() => {
+                  element.style.animation = '';
+                }, 1500);
               }
-            });
-            break;
-            
-          case 'SCROLL_TO_TIME':
-            const element = document.querySelector(`[data-tz-id="${message.timeId}"]`);
-            if (element) {
-              element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              element.style.animation = 'tz-pulse 0.5s ease-in-out 3';
-              setTimeout(() => {
-                element.style.animation = '';
-              }, 1500);
-            }
-            sendResponse({ success: !!element });
-            break;
+              sendResponse({ success: !!element });
+              break;
+          }
+        } catch (e) {
+          // Extension context may be invalidated
         }
       });
     }
