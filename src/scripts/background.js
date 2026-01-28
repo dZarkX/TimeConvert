@@ -48,8 +48,7 @@ chrome.runtime.onInstalled.addListener((details) => {
       highlightTextColor: '#000000',
       highlightEnabled: true,
       showOriginal: true,
-      autoConvert: false,
-      donateUrl: 'https://buymeacoffee.com/3mon'
+      autoConvert: false
     });
     
     // Open settings page on first install

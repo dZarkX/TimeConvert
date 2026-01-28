@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     return new Promise((resolve) => {
       chrome.storage.sync.get({
         highlightEnabled: true,
-        donateUrl: 'https://buymeacoffee.com/3mon',
         use24Hour: false
       }, resolve);
     });
@@ -192,10 +191,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   highlightToggle.checked = settings.highlightEnabled;
   
   // Set donate link
-  if (settings.donateUrl) {
-    donateLink.href = settings.donateUrl;
-    donateLink.target = '_blank';
-  }
+  donateLink.href = 'https://buymeacoffee.com/3mon';
+  donateLink.target = '_blank';
   
   // Load times
   const times = await getTimes();

@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const highlightTextColorText = document.getElementById('highlightTextColorText');
   const highlightEnabled = document.getElementById('highlightEnabled');
   const highlightPreview = document.getElementById('highlightPreview');
-  const donateUrl = document.getElementById('donateUrl');
   const detectedTimezone = document.getElementById('detectedTimezone');
   const presetBtns = document.querySelectorAll('.preset-btn');
   const saveBtn = document.getElementById('saveBtn');
@@ -25,8 +24,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     use24Hour: false,
     highlightColor: '#ffeb3b',
     highlightTextColor: '#000000',
-    highlightEnabled: true,
-    donateUrl: 'https://buymeacoffee.com/3mon'
+    highlightEnabled: true
   };
 
   // Show detected timezone
@@ -95,9 +93,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Highlight enabled
     highlightEnabled.checked = settings.highlightEnabled;
     
-    // Donate URL
-    donateUrl.value = settings.donateUrl || '';
-    
     // Update preview
     updatePreview();
   }
@@ -112,8 +107,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       use24Hour: use24Hour.checked,
       highlightColor: highlightColor.value,
       highlightTextColor: highlightTextColor.value,
-      highlightEnabled: highlightEnabled.checked,
-      donateUrl: donateUrl.value
+      highlightEnabled: highlightEnabled.checked
     };
   }
 
