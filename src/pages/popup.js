@@ -14,9 +14,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   const rescanBtn = document.getElementById('rescanBtn');
   const settingsBtn = document.getElementById('settingsBtn');
   const supportBtn = document.getElementById('supportBtn');
+  const kofiBtn = document.getElementById('kofiBtn');
   const githubBtn = document.getElementById('githubBtn');
 
   const SUPPORT_URL = 'https://buymeacoffee.com/3mon';
+  const KOFI_URL = 'https://ko-fi.com/3mon_';
   const GITHUB_URL = 'https://github.com/dZarkX/TimeConvert';
 
   // Load settings
@@ -410,6 +412,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   supportBtn?.addEventListener('click', () => {
     try {
       chrome.tabs.create({ url: SUPPORT_URL });
+    } catch {
+      // ignore
+    }
+  });
+
+  kofiBtn?.addEventListener('click', () => {
+    try {
+      chrome.tabs.create({ url: KOFI_URL });
     } catch {
       // ignore
     }

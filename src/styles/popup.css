@@ -428,6 +428,16 @@ body {
   gap: var(--spacing-sm);
 }
 
+.support-row {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.support-row .support-btn {
+  width: auto;
+  flex: 1;
+}
+
 .support-btn {
   width: 100%;
   display: inline-flex;
@@ -445,10 +455,19 @@ body {
   transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition);
 }
 
+.kofi-btn {
+  background-color: #29abe0;
+  color: #ffffff;
+}
+
 .support-btn:hover {
   background-color: #e5c700;
   transform: translateY(-1px);
   box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+
+.kofi-btn:hover {
+  background-color: #1f94c3;
 }
 
 .support-btn:active {
