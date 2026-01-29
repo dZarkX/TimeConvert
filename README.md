@@ -2,7 +2,7 @@
 
 A small browser extension that detects times on web pages and converts them to your preferred timezone.
 
-![Version](https://img.shields.io/badge/version-1.2.4-green)
+![Version](https://img.shields.io/badge/version-1.2.7-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 GitHub: https://github.com/dZarkX/TimeConvert
@@ -148,7 +148,7 @@ MIT License - feel free to use and modify as you wish.
 
 ## 📝 Changelog
 
-### v1.2.4
+### v1.2.7
 - Settings autosave (no manual Save button) + Restore Defaults moved to footer
 
 ### v1.2.3
