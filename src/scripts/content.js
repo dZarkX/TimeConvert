@@ -4,6 +4,57 @@
 
   const DEBUG = false;
 
+  // Import NLP and domain timezone modules
+  // Note: These are included as separate files to keep the code organized
+  // In a production build, these would be bundled together
+  const NLP_PARSER = {
+    parseRelativeTime: function(text) {
+      // Basic implementation - will be enhanced
+      const lowerText = text.toLowerCase();
+      if (lowerText.includes('in 2 hours') || lowerText.includes('in 2hrs')) return { offset: 120, confidence: 0.8 };
+      if (lowerText.includes('in 1 hour') || lowerText.includes('in 1hr')) return { offset: 60, confidence: 0.8 };
+      if (lowerText.includes('tomorrow')) return { offset: 24 * 60, confidence: 0.9 };
+      if (lowerText.includes('yesterday')) return { offset: -24 * 60, confidence: 0.9 };
+      if (lowerText.includes('next week')) return { offset: 7 * 24 * 60, confidence: 0.7 };
+      if (lowerText.includes('end of day') || lowerText.includes('eod')) return { offset: 18 * 60, confidence: 0.7 };
+      if (lowerText.includes('noon')) return { offset: 12 * 60, confidence: 0.8 };
+      if (lowerText.includes('morning')) return { offset: 9 * 60, confidence: 0.6 };
+      if (lowerText.includes('afternoon')) return { offset: 15 * 60, confidence: 0.6 };
+      return null;
+    },
+    convertToAbsoluteTime: function(relativeTime, baseDate) {
+      if (!relativeTime) return null;
+      const result = new Date(baseDate);
+      result.setTime(result.getTime() + (relativeTime.offset * 60 * 1000));
+      return result;
+    },
+    containsRelativeTime: function(text) {
+      const lowerText = text.toLowerCase();
+      return /(?:in\s+\d+\s+(?:hour|hr|day|week)|tomorrow|yesterday|end\s+of\s+day|noon|morning|afternoon)/i.test(lowerText);
+    }
+  };
+
+  const DOMAIN_TZ = {
+    getTimezoneFromDomain: function(url) {
+      try {
+        if (!url) return null;
+        let domain = url.replace(/^https?:\/\//i, '').replace(/^www\./i, '').split('/')[0].toLowerCase();
+        const domainMap = {
+          '.pl': 'Europe/Warsaw', '.de': 'Europe/Berlin', '.fr': 'Europe/Paris', '.it': 'Europe/Rome',
+          '.es': 'Europe/Madrid', '.uk': 'Europe/London', '.nl': 'Europe/Amsterdam',
+          '.jp': 'Asia/Tokyo', '.kr': 'Asia/Seoul', '.cn': 'Asia/Shanghai',
+          '.au': 'Australia/Sydney', '.br': 'America/Sao_Paulo', '.ca': 'America/Toronto'
+        };
+        const tldMatch = domain.match(/(\.[a-z]{2,3})$/);
+        if (tldMatch && domainMap[tldMatch[1]]) return domainMap[tldMatch[1]];
+        return null;
+      } catch (e) { return null; }
+    },
+    getContextTimezone: function(url) {
+      return this.getTimezoneFromDomain(url);
+    }
+  };
+
   // Prevent double-injection (can happen with scripting.executeScript + content_scripts)
   if (window.__tzConverterInjected) return;
   window.__tzConverterInjected = true;
@@ -155,7 +206,10 @@
     showOriginal: true,
     highlightTextOnly: false,
     maxConversions: 25,
-    ignoredSites: []
+    ignoredSites: [],
+    // NEW: NLP and context detection settings
+    enableNlpDetection: false,
+    enableContextTimezone: false
   };
 
   // Get local timezone offset
@@ -576,6 +630,12 @@
       foundTimes = [];
       findTimesInNode(document.body, foundTimes);
 
+      // NEW: Check for relative time expressions if NLP detection is enabled
+      if (settings.enableNlpDetection) {
+        const relativeTimes = findRelativeTimesInNode(document.body);
+        foundTimes.push(...relativeTimes);
+      }
+
       if (settings.maxConversions > 0 && foundTimes.length > settings.maxConversions) {
         foundTimes = foundTimes.slice(0, settings.maxConversions);
       }
@@ -587,7 +647,287 @@
     }
   }
 
+  // NEW: Find relative time expressions using NLP
+  function findRelativeTimesInNode(root) {
+    const walker = document.createTreeWalker(
+      root,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode: (node) => {
+          const text = node.nodeValue;
+          if (!text || text.length < 4) return NodeFilter.FILTER_REJECT;
+          if (!NLP_PARSER.containsRelativeTime(text)) return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      }
+    );
+
+    const relativeTimes = [];
+    let nodeCount = 0;
+    const MAX_TEXT_NODES = 2000; // Limit for performance
+
+    while (walker.nextNode() && ++nodeCount < MAX_TEXT_NODES) {
+      const node = walker.currentNode;
+      const text = node.nodeValue;
+
+      try {
+        const relativeTime = NLP_PARSER.parseRelativeTime(text);
+        if (relativeTime && relativeTime.confidence > 0.6) {
+          const absoluteTime = NLP_PARSER.convertToAbsoluteTime(relativeTime, new Date());
+          if (absoluteTime) {
+            // Create a synthetic time object for relative expressions
+            const hours = absoluteTime.getHours();
+            const minutes = absoluteTime.getMinutes();
+            const timezone = settings.enableContextTimezone ? DOMAIN_TZ.getContextTimezone(window.location.href) : null;
+
+            // Determine offset based on detected timezone or local timezone
+            let offset = timezone ? getTimezoneOffset(timezone) : getLocalOffset();
+
+            relativeTimes.push({
+              id: `nlp-${Date.now()}-${relativeTimes.length}`,
+              node,
+              start: 0,
+              end: text.length,
+              original: text.trim(),
+              originalParsed: {
+                hours,
+                minutes,
+                timezone: timezone || 'Local',
+                offset,
+                hasDate: true,
+                date: {
+                  year: absoluteTime.getFullYear(),
+                  month: absoluteTime.getMonth() + 1,
+                  day: absoluteTime.getDate()
+                }
+              },
+              converted: formatRelativeTime(relativeTime, absoluteTime),
+              convertedParsed: {
+                hours,
+                minutes,
+                timezone: timezone || 'Local',
+                offset: getLocalOffset(), // Always convert to local timezone for relative times
+                hasDate: true,
+                date: {
+                  year: absoluteTime.getFullYear(),
+                  month: absoluteTime.getMonth() + 1,
+                  day: absoluteTime.getDate()
+                }
+              },
+              isRelative: true,
+              confidence: relativeTime.confidence
+            });
+          }
+        }
+      } catch (e) {
+        if (DEBUG) console.error('[NLP] Error processing relative time:', e);
+      }
+    }
+
+    return relativeTimes;
+  }
+
+  // Format relative time for display
+  function formatRelativeTime(relativeTime, absoluteTime) {
+    const now = new Date();
+    const diffMs = absoluteTime - now;
+    const diffMinutes = Math.round(diffMs / (1000 * 60));
+    
+    if (diffMinutes < 0) {
+      return `In the past (${Math.abs(diffMinutes)} minutes ago)`;
+    } else if (diffMinutes === 0) {
+      return 'Now';
+    } else if (diffMinutes < 60) {
+      return `In ${diffMinutes} minutes`;
+    } else if (diffMinutes < 1440) {
+      const hours = Math.floor(diffMinutes / 60);
+      const mins = diffMinutes % 60;
+      return `In ${hours} hour${hours !== 1 ? 's' : ''}${mins > 0 ? ` ${mins} min` : ''}`;
+    } else {
+      const days = Math.floor(diffMinutes / 1440);
+      const hours = Math.floor((diffMinutes % 1440) / 60);
+      const mins = diffMinutes % 60;
+      return `In ${days} day${days !== 1 ? 's' : ''}${hours > 0 ? ` ${hours}h` : ''}${mins > 0 ? ` ${mins}m` : ''}`;
+    }
+  }
+
   let suppressMutationsCount = 0;
+
+  // Countdown timer functions
+  function createCountdownElement(time) {
+    try {
+      // Parse the original time to get the actual datetime
+      const originalDate = parseTimeToDate(time);
+      if (!originalDate) return null;
+
+      // Only show countdown for future events (within next 30 days)
+      const now = new Date();
+      const timeDiff = originalDate - now;
+      const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
+      
+      if (timeDiff <= 0 || daysDiff > 30) return null;
+
+      const countdown = document.createElement('span');
+      countdown.className = 'tz-countdown';
+      countdown.dataset.tzTargetTime = originalDate.toISOString();
+      
+      updateCountdownText(countdown, timeDiff);
+      
+      // Update countdown every minute
+      setInterval(() => {
+        const currentTime = new Date();
+        const targetTime = new Date(countdown.dataset.tzTargetTime);
+        const diff = targetTime - currentTime;
+        
+        if (diff <= 0) {
+          countdown.textContent = chrome.i18n.getMessage('countdownExpired') || 'Event started';
+          countdown.classList.add('urgent');
+        } else {
+          updateCountdownText(countdown, diff);
+        }
+      }, 60000); // Update every minute
+
+      return countdown;
+    } catch (e) {
+      if (DEBUG) console.error('[TimeZone Converter] Countdown error:', e);
+      return null;
+    }
+  }
+
+  function parseTimeToDate(time) {
+    try {
+      // Extract date from context or use current date
+      const now = new Date();
+      const contextText = getContextText(time.node, time.start, time.end);
+      const dateMatch = contextText.match(/\b(\d{1,2})[\/\-\.](\d{1,2})(?:[\/\-\.](\d{2,4}))?\b/);
+      
+      let day = now.getDate();
+      let month = now.getMonth();
+      let year = now.getFullYear();
+      
+      if (dateMatch) {
+        day = parseInt(dateMatch[1]);
+        month = parseInt(dateMatch[2]) - 1;
+        if (dateMatch[3]) {
+          year = parseInt(dateMatch[3]);
+          if (year < 100) year += 2000;
+        }
+      }
+      
+      // Parse time
+      const timeMatch = time.original.match(/(\d{1,2})[:.](\d{2})\s*(am|pm)?/i);
+      if (!timeMatch) return null;
+      
+      let hours = parseInt(timeMatch[1]);
+      const minutes = parseInt(timeMatch[2]);
+      const ampm = timeMatch[3]?.toLowerCase();
+      
+      if (ampm === 'pm' && hours !== 12) hours += 12;
+      if (ampm === 'am' && hours === 12) hours = 0;
+      
+      // Create date in target timezone
+      const targetDate = new Date(year, month, day, hours, minutes, 0, 0);
+      
+      // Convert to UTC, then adjust for target timezone offset
+      const targetOffset = time.targetOffset || 0;
+      const utcTime = targetDate.getTime() + (targetDate.getTimezoneOffset() * 60000);
+      const adjustedTime = utcTime + (targetOffset * 3600000);
+      
+      return new Date(adjustedTime);
+    } catch (e) {
+      if (DEBUG) console.error('[TimeZone Converter] Date parsing error:', e);
+      return null;
+    }
+  }
+
+  function getContextText(node, start, end) {
+    try {
+      const maxLength = 200;
+      const text = node.nodeValue || '';
+      const contextStart = Math.max(0, start - 50);
+      const contextEnd = Math.min(text.length, end + 50);
+      return text.substring(contextStart, contextEnd);
+    } catch (e) {
+      return '';
+    }
+  }
+
+  function updateCountdownText(element, timeDiff) {
+    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+    
+    let text = '';
+    let plural = '';
+    
+    if (days > 0) {
+      // Handle pluralization for different languages
+      const lang = chrome.i18n.getUILanguage();
+      if (lang.startsWith('pl')) {
+        if (days === 1) plural = 'dzień';
+        else if ([2, 3, 4].includes(days % 10) && ![12, 13, 14].includes(days % 100)) plural = 'dni';
+        else plural = 'dni';
+        text = `za ${days} ${plural}`;
+      } else if (lang.startsWith('de')) {
+        plural = days === 1 ? 'Tag' : 'Tage';
+        text = `in ${days} ${plural}`;
+      } else if (lang.startsWith('es')) {
+        plural = days === 1 ? 'día' : 'días';
+        text = `en ${days} ${plural}`;
+      } else if (lang.startsWith('pt')) {
+        plural = days === 1 ? 'dia' : 'dias';
+        text = `em ${days} ${plural}`;
+      } else {
+        // English fallback
+        plural = days === 1 ? 'day' : 'days';
+        text = `in ${days} ${plural}`;
+      }
+      element.classList.toggle('urgent', days <= 1);
+      element.classList.toggle('soon', days <= 7);
+    } else if (hours > 0) {
+      const lang = chrome.i18n.getUILanguage();
+      if (lang.startsWith('pl')) {
+        plural = hours === 1 ? 'godzinę' : 'godziny';
+        text = `za ${hours} ${plural}`;
+      } else if (lang.startsWith('de')) {
+        plural = hours === 1 ? 'Stunde' : 'Stunden';
+        text = `in ${hours} ${plural}`;
+      } else if (lang.startsWith('es')) {
+        plural = hours === 1 ? 'hora' : 'horas';
+        text = `en ${hours} ${plural}`;
+      } else if (lang.startsWith('pt')) {
+        plural = hours === 1 ? 'hora' : 'horas';
+        text = `em ${hours} ${plural}`;
+      } else {
+        // English fallback
+        plural = hours === 1 ? 'hour' : 'hours';
+        text = `in ${hours} ${plural}`;
+      }
+      element.classList.add('urgent');
+    } else {
+      const lang = chrome.i18n.getUILanguage();
+      if (lang.startsWith('pl')) {
+        plural = minutes === 1 ? 'minutę' : 'minuty';
+        text = `za ${minutes} ${plural}`;
+      } else if (lang.startsWith('de')) {
+        plural = minutes === 1 ? 'Minute' : 'Minuten';
+        text = `in ${minutes} ${plural}`;
+      } else if (lang.startsWith('es')) {
+        plural = minutes === 1 ? 'minuto' : 'minutos';
+        text = `en ${minutes} ${plural}`;
+      } else if (lang.startsWith('pt')) {
+        plural = minutes === 1 ? 'minuto' : 'minutos';
+        text = `em ${minutes} ${plural}`;
+      } else {
+        // English fallback
+        plural = minutes === 1 ? 'min' : 'mins';
+        text = `in ${minutes} ${plural}`;
+      }
+      element.classList.add('urgent');
+    }
+    
+    element.textContent = text;
+  }
 
   function withSuppressedMutations(fn) {
     suppressMutationsCount++;
@@ -644,6 +984,12 @@
             highlight.title = chrome.i18n.getMessage('clickToSee', [time.converted]);
           }
           applyHighlightStyle(highlight, false);
+
+          // Add countdown timer
+          const countdown = createCountdownElement(time);
+          if (countdown) {
+            highlight.appendChild(countdown);
+          }
 
           fragment.appendChild(highlight);
           lastIndex = time.end;
@@ -909,19 +1255,23 @@
           showOriginal: true,
           highlightTextOnly: false,
           maxConversions: 25,
-          ignoredSites: []
+          ignoredSites: [],
+          enableNlpDetection: false,
+          enableContextTimezone: false
         }, (items) => {
           // Check flag first (fastest)
           if (contextInvalidated) {
             resolve(settings);
             return;
           }
+
           try {
             // Check for chrome.runtime.lastError
             if (chrome.runtime?.lastError) {
               resolve(settings);
               return;
             }
+
             settings = { ...settings, ...items };
             highlightEnabled = items.highlightEnabled;
             resolve(settings);

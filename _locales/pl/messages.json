@@ -37,6 +37,14 @@
   "includeSourceTz": { "message": "Uwzględnij strefę źródłową (np. PST)" },
   "dateDetection": { "message": "Wykrywanie dat" },
   "enableDateDetection": { "message": "Włącz wykrywanie dat" },
+  "experimentalFeatures": { "message": "Funkcje eksperymentalne" },
+  "experimentalFeaturesDesc": { "message": "Testuj nowe funkcje (mogą być niestabilne)" },
+  "nlpDetection": { "message": "Wykrywanie języka naturalnego" },
+  "nlpDetectionDesc": { "message": "Wykrywanie wyrażeń relatywnych typu \"in 2 hours\" lub \"tomorrow at noon\"" },
+  "enableNlpDetection": { "message": "Włącz wykrywanie NLP" },
+  "contextTimezone": { "message": "Strefa kontekstowa" },
+  "contextTimezoneDesc": { "message": "Zgaduj strefę z domeny strony, gdy nie podano strefy" },
+  "enableContextTimezone": { "message": "Włącz zgadywanie strefy z domeny" },
   "dateDetectionDesc": { "message": "Eksperymentalne: wykrywa daty w różnych formatach" },
   "scanMode": { "message": "Tryb skanowania" },
   "scanModeDesc": { "message": "Kontroluj, jak dokładnie strona jest skanowana" },
@@ -93,5 +101,9 @@
   "settingsSaved": { "message": "Ustawienia zapisane" },
   "settingsRestored": { "message": "Przywrócono ustawienia domyślne" },
   "dayOffsetSingular": { "message": " ($SIGN$$DAYS$ dzień)", "placeholders": { "sign": { "content": "$1" }, "days": { "content": "$2" } } },
-  "dayOffsetPlural": { "message": " ($SIGN$$DAYS$ dni)", "placeholders": { "sign": { "content": "$1" }, "days": { "content": "$2" } } }
+  "dayOffsetPlural": { "message": " ($SIGN$$DAYS$ dni)", "placeholders": { "sign": { "content": "$1" }, "days": { "content": "$2" } } },
+  "countdownDays": { "message": "za $COUNT$ $PLURAL$", "placeholders": { "count": { "content": "$1" }, "plural": { "content": "$2" } } },
+  "countdownHours": { "message": "za $COUNT$ $PLURAL$", "placeholders": { "count": { "content": "$1" }, "plural": { "content": "$2" } } },
+  "countdownMinutes": { "message": "za $COUNT$ $PLURAL$", "placeholders": { "count": { "content": "$1" }, "plural": { "content": "$2" } } },
+  "countdownExpired": { "message": "Wydarzenie rozpoczęte" }
 }

@@ -38,8 +38,16 @@
   "dateDetection": { "message": "Обнаружение дат" },
   "enableDateDetection": { "message": "Включить обнаружение дат" },
   "dateDetectionDesc": { "message": "Экспериментально: распознает даты в разных форматах" },
+  "experimentalFeatures": { "message": "Экспериментальные функции" },
+  "experimentalFeaturesDesc": { "message": "Пробуйте ранние функции (могут быть нестабильны)" },
+  "nlpDetection": { "message": "Распознавание естественного языка" },
+  "nlpDetectionDesc": { "message": "Распознаёт относительные выражения времени вроде \"in 2 hours\" или \"tomorrow at noon\"" },
+  "enableNlpDetection": { "message": "Включить NLP/контекстное распознавание" },
+  "contextTimezone": { "message": "Контекстный часовой пояс" },
+  "contextTimezoneDesc": { "message": "Пытаться определить часовой пояс по домену, если он не указан" },
+  "enableContextTimezone": { "message": "Включить определение часового пояса по домену" },
   "scanMode": { "message": "Режим сканирования" },
-  "scanModeDesc": { "message": "Настройте тщательность сканирования страницы" },
+  "scanModeDesc": { "message": "Настройте, насколько агрессивно расширение сканирует страницы" },
   "scanAuto": { "message": "Автоматический (рекомендуется)" },
   "scanDeep": { "message": "Глубокий (медленнее, но точнее)" },
   "maxConversions": { "message": "Макс. количество конверсий" },
@@ -93,5 +101,9 @@
   "settingsSaved": { "message": "Настройки сохранены" },
   "settingsRestored": { "message": "Настройки сброшены" },
   "dayOffsetSingular": { "message": " ($SIGN$$DAYS$ день)", "placeholders": { "sign": { "content": "$1" }, "days": { "content": "$2" } } },
-  "dayOffsetPlural": { "message": " ($SIGN$$DAYS$ дн.)", "placeholders": { "sign": { "content": "$1" }, "days": { "content": "$2" } } }
+  "dayOffsetPlural": { "message": " ($SIGN$$DAYS$ дн.)", "placeholders": { "sign": { "content": "$1" }, "days": { "content": "$2" } } },
+  "countdownDays": { "message": "через $COUNT$ $PLURAL$", "placeholders": { "count": { "content": "$1" }, "plural": { "content": "$2" } } },
+  "countdownHours": { "message": "через $COUNT$ $PLURAL$", "placeholders": { "count": { "content": "$1" }, "plural": { "content": "$2" } } },
+  "countdownMinutes": { "message": "через $COUNT$ $PLURAL$", "placeholders": { "count": { "content": "$1" }, "plural": { "content": "$2" } } },
+  "countdownExpired": { "message": "Событие началось" }
 }

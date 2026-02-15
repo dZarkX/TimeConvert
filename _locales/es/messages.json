@@ -38,8 +38,16 @@
   "dateDetection": { "message": "Detección de fechas" },
   "enableDateDetection": { "message": "Habilitar detección de fechas" },
   "dateDetectionDesc": { "message": "Experimental: detecta fechas en varios formatos" },
+  "experimentalFeatures": { "message": "Funciones experimentales" },
+  "experimentalFeaturesDesc": { "message": "Prueba funciones tempranas (pueden ser inestables)" },
+  "nlpDetection": { "message": "Detección de lenguaje natural" },
+  "nlpDetectionDesc": { "message": "Detecta expresiones de tiempo relativas como \"in 2 hours\" o \"tomorrow at noon\"" },
+  "enableNlpDetection": { "message": "Habilitar detección de NLP/contexto" },
+  "contextTimezone": { "message": "Zona horaria contextual" },
+  "contextTimezoneDesc": { "message": "Adivina la zona horaria por el dominio del sitio cuando no se especifica" },
+  "enableContextTimezone": { "message": "Habilitar estimación de zona horaria basada en dominio" },
   "scanMode": { "message": "Modo de escaneo" },
-  "scanModeDesc": { "message": "Controla qué tan minuciosamente se escanea la página" },
+  "scanModeDesc": { "message": "Controla qué tan agresivamente la extensión escanea las páginas" },
   "scanAuto": { "message": "Automático (recomendado)" },
   "scanDeep": { "message": "Profundo (más lento, pero más minucioso)" },
   "maxConversions": { "message": "Número máximo de conversiones" },
@@ -93,5 +101,9 @@
   "settingsSaved": { "message": "Configuración guardada" },
   "settingsRestored": { "message": "Valores predeterminados restaurados" },
   "dayOffsetSingular": { "message": " ($SIGN$$DAYS$ día)", "placeholders": { "sign": { "content": "$1" }, "days": { "content": "$2" } } },
-  "dayOffsetPlural": { "message": " ($SIGN$$DAYS$ días)", "placeholders": { "sign": { "content": "$1" }, "days": { "content": "$2" } } }
+  "dayOffsetPlural": { "message": " ($SIGN$$DAYS$ días)", "placeholders": { "sign": { "content": "$1" }, "days": { "content": "$2" } } },
+  "countdownDays": { "message": "en $COUNT$ $PLURAL$", "placeholders": { "count": { "content": "$1" }, "plural": { "content": "$2" } } },
+  "countdownHours": { "message": "en $COUNT$ $PLURAL$", "placeholders": { "count": { "content": "$1" }, "plural": { "content": "$2" } } },
+  "countdownMinutes": { "message": "en $COUNT$ $PLURAL$", "placeholders": { "count": { "content": "$1" }, "plural": { "content": "$2" } } },
+  "countdownExpired": { "message": "Evento iniciado" }
 }

@@ -1,4 +1,4 @@
-﻿{
+{
     "appName":  {
                     "message":  "TimeZone Converter"
                 },
@@ -29,9 +29,7 @@
     "timesFound":  {
                        "message":  "times found"
                    },
-    "checking":  {
-                     "message":  "checkingâ€¦"
-                 },
+    "checking":  { "message": "checking…" },
     "connected":  {
                       "message":  "connected"
                   },
@@ -59,9 +57,7 @@
     "noTimesFound":  {
                          "message":  "No times found"
                      },
-    "emptyHint":  {
-                      "message":  "Open a webpage with times like â€ś8PM CETâ€ť and press Rescan."
-                  },
+    "emptyHint":  { "message": "Open a webpage with times like \"8PM CET\" and press Rescan." },
     "buyMeACoffee":  {
                          "message":  "Buy Me a Coffee"
                      },
@@ -113,9 +109,7 @@
     "displayModeDesc":  {
                             "message":  "Choose how converted times are shown"
                         },
-    "modeToggle":  {
-                       "message":  "Click to toggle (original â†” converted)"
-                   },
+    "modeToggle":  { "message": "Click to toggle (original ↔ converted)" },
     "modeTooltip":  {
                         "message":  "Tooltip only (no text replacement)"
                     },
@@ -135,8 +129,35 @@
                             "message":  "Include source timezone (e.g. CET)"
                         },
     "dateDetection":  {
-                          "message":  "Date Detection"
+                          "message":  "Date detection"
                       },
+    "enableDateDetection":  {
+                              "message":  "Enable date detection"
+                          },
+    "experimentalFeatures":  {
+                                 "message":  "Experimental Features"
+                             },
+    "experimentalFeaturesDesc":  {
+                                     "message":  "Try early features (may be unstable)"
+                                 },
+    "nlpDetection":  {
+                        "message":  "Natural language detection"
+                    },
+    "nlpDetectionDesc":  {
+                            "message":  "Detect relative time expressions like \"in 2 hours\" or \"tomorrow at noon\""
+                        },
+    "enableNlpDetection":  {
+                            "message":  "Enable NLP detection"
+                        },
+    "contextTimezone":  {
+                          "message":  "Context timezone"
+                      },
+    "contextTimezoneDesc":  {
+                              "message":  "Guess timezone from website domain when no timezone is specified"
+                          },
+    "enableContextTimezone":  {
+                              "message":  "Enable domain-based timezone guessing"
+                          },
     "detectDates":  {
                         "message":  "Detect dates next to times"
                     },
@@ -370,5 +391,41 @@
                         },
     "languageDesc":  {
                          "message":  "Choose your preferred interface language"
+                     },
+    "countdownDays":  {
+                       "message":  "in $COUNT$ day$PLURAL$",
+                       "placeholders":  {
+                                            "count":  {
+                                                          "content":  "$1"
+                                                      },
+                                            "plural":  {
+                                                           "content":  "$2"
+                                                       }
+                                        }
+                   },
+    "countdownHours":  {
+                        "message":  "in $COUNT$ hour$PLURAL$",
+                        "placeholders":  {
+                                             "count":  {
+                                                           "content":  "$1"
+                                                       },
+                                             "plural":  {
+                                                          "content":  "$2"
+                                                      }
+                                          }
+                    },
+    "countdownMinutes":  {
+                          "message":  "in $COUNT$ min$PLURAL$",
+                          "placeholders":  {
+                                               "count":  {
+                                                             "content":  "$1"
+                                                         },
+                                               "plural":  {
+                                                          "content":  "$2"
+                                                      }
+                                            }
+                      },
+    "countdownExpired":  {
+                         "message":  "Event started"
                      }
 }

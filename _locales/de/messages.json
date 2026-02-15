@@ -38,6 +38,14 @@
   "dateDetection": { "message": "Datumserkennung" },
   "enableDateDetection": { "message": "Datumserkennung aktivieren" },
   "dateDetectionDesc": { "message": "Experimentell: Erkennt Daten in verschiedenen Formaten" },
+  "experimentalFeatures": { "message": "Experimentelle Funktionen" },
+  "experimentalFeaturesDesc": { "message": "Frühe Funktionen ausprobieren (kann instabil sein)" },
+  "nlpDetection": { "message": "Erkennung natürlicher Sprache" },
+  "nlpDetectionDesc": { "message": "Erkennt relative Zeitangaben wie \"in 2 Stunden\" oder \"morgen um Mittag\"" },
+  "enableNlpDetection": { "message": "NLP-/Kontexterkennung aktivieren" },
+  "contextTimezone": { "message": "Kontext-Zeitzone" },
+  "contextTimezoneDesc": { "message": "Zeitzone anhand der Domain erraten, wenn keine Zeitzone angegeben ist" },
+  "enableContextTimezone": { "message": "Domain-basierte Zeitzonen-Schätzung aktivieren" },
   "scanMode": { "message": "Scan-Modus" },
   "scanModeDesc": { "message": "Steuern Sie, wie gründlich die Seite gescannt wird" },
   "scanAuto": { "message": "Automatisch (empfohlen)" },
@@ -93,5 +101,9 @@
   "settingsSaved": { "message": "Einstellungen gespeichert" },
   "settingsRestored": { "message": "Standardeinstellungen wiederhergestellt" },
   "dayOffsetSingular": { "message": " ($SIGN$$DAYS$ Tag)", "placeholders": { "sign": { "content": "$1" }, "days": { "content": "$2" } } },
-  "dayOffsetPlural": { "message": " ($SIGN$$DAYS$ Tage)", "placeholders": { "sign": { "content": "$1" }, "days": { "content": "$2" } } }
+  "dayOffsetPlural": { "message": " ($SIGN$$DAYS$ Tage)", "placeholders": { "sign": { "content": "$1" }, "days": { "content": "$2" } } },
+  "countdownDays": { "message": "in $COUNT$ $PLURAL$", "placeholders": { "count": { "content": "$1" }, "plural": { "content": "$2" } } },
+  "countdownHours": { "message": "in $COUNT$ $PLURAL$", "placeholders": { "count": { "content": "$1" }, "plural": { "content": "$2" } } },
+  "countdownMinutes": { "message": "in $COUNT$ $PLURAL$", "placeholders": { "count": { "content": "$1" }, "plural": { "content": "$2" } } },
+  "countdownExpired": { "message": "Ereignis begonnen" }
 }

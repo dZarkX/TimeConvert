@@ -68,3 +68,34 @@
   border-style: solid;
   border-color: #333 transparent transparent;
 }
+
+/* Countdown timer styles */
+.tz-countdown {
+  font-size: 11px !important;
+  color: #666 !important;
+  margin-left: 6px !important;
+  opacity: 0.8 !important;
+  font-weight: normal !important;
+  font-style: italic !important;
+  display: inline !important;
+  background: transparent !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  cursor: default !important;
+  transition: opacity 0.2s ease !important;
+}
+
+.tz-countdown:hover {
+  opacity: 1 !important;
+}
+
+.tz-countdown.urgent {
+  color: #d32f2f !important;
+  font-weight: bold !important;
+}
+
+.tz-countdown.soon {
+  color: #f57c00 !important;
+}

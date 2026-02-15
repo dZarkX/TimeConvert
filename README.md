@@ -2,7 +2,7 @@
 
 A small browser extension that detects times on web pages and converts them to your preferred timezone.
 
-![Version](https://img.shields.io/badge/version-1.4.0-green)
+![Version](https://img.shields.io/badge/version-1.5.0-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 [![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-Download%20Now-brightgreen)](https://chromewebstore.google.com/detail/timezone-converter/phpmfhmlfolhocoefklfafhipdopgdka?authuser=0&hl=pl)
 [![Firefox Add-ons](https://img.shields.io/badge/Firefox%20Add-ons-Pending%20Review-orange)](https://addons.mozilla.org/en-US/firefox/addon/timezone-converter/)
@@ -20,6 +20,9 @@ GitHub: https://github.com/dZarkX/TimeConvert
   - UTC offsets: `15:00 UTC+2`, `10AM UTC-5`
 - **50+ timezone abbreviations** - CET, EST, PST, JST, GMT, UTC, and many more
 - **Badge notification** - Shows count of detected times on the extension icon
+- **Countdown timers** - Shows time remaining until future events (in 5 languages)
+- **Experimental: NLP Detection** - Detect natural language time expressions like "in 2 hours" or "tomorrow at noon"
+- **Experimental: Context Timezone** - Guess timezone from website domain when not specified
 - **Customizable appearance** - Choose your own highlight colors
 - **Auto or manual timezone** - Use system timezone or select manually
 - **Dark mode support** - Automatically adapts to your system theme
@@ -199,6 +202,22 @@ This creates: `TimeConvert-Firefox.zip`
 - Some ambiguous timezone abbreviations (like IST - India/Ireland/Israel) default to one interpretation
 
 ## 📝 Changelog
+
+### v1.5.1 (Current)
+- **NEW**: Natural Language Processing (NLP) - Detects time expressions like "in 2 hours", "tomorrow at noon", "end of day"
+- **NEW**: Context Timezone Detection - Guesses timezone from website domain when not specified
+- **NEW**: Experimental Features section in settings with toggles for NLP and Context Timezone
+- **IMPROVED**: Reorganized settings UI with better section ordering
+- **FIXED**: Syntax error in content.js that caused extension to fail loading
+- **FIXED**: UTF-8 encoding issues in translation files
+
+### v1.5.0
+- **NEW**: Countdown timers for future events - shows time remaining until detected events
+- Countdown displays in small, non-intrusive text next to highlighted times
+- Smart pluralization support for Polish, German, Spanish, Portuguese, and English
+- Color-coded urgency: red for imminent events, orange for near-future events
+- Automatic updates every minute for accurate countdowns
+- Only shows countdowns for events within next 30 days
 
 ### v1.4.0
 - Updated product descriptions in all supported languages (EN, PL, DE, ES, PT)
