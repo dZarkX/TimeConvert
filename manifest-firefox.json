@@ -11,10 +11,17 @@
         "contextMenus",
         "<all_urls>"
     ],
-    "data_collection_permissions": {
-        "uses_data": false,
-        "includes_personal_data": false,
-        "includes_sensitive_data": false
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "timezone-converter@example.com",
+            "strict_min_version": "126.0",
+            "update_url": "https://github.com/dZarkX/TimeConvert/releases/latest",
+            "data_collection_permissions": {
+                "uses_data": false,
+                "includes_personal_data": false,
+                "includes_sensitive_data": false
+            }
+        }
     },
     "background": {
         "scripts": ["src/scripts/background.js"],
@@ -50,12 +57,5 @@
         "32": "src/icons/icon32.png",
         "48": "src/icons/icon48.png",
         "128": "src/icons/icon128.png"
-    },
-    "applications": {
-        "gecko": {
-            "id": "timezone-converter@example.com",
-            "strict_min_version": "109.0",
-            "update_url": "https://github.com/dZarkX/TimeConvert/releases/latest"
-        }
     }
 }

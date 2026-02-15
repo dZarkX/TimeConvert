@@ -39,6 +39,12 @@ async function createFirefoxPackage() {
         path.join(tempDir, 'manifest.json')
     );
     
+    // Copy Firefox-specific background script
+    fs.copyFileSync(
+        path.join(__dirname, '..', 'src', 'scripts', 'background-firefox.js'),
+        path.join(tempDir, 'src', 'scripts', 'background.js')
+    );
+    
     // Create zip package
     const output = fs.createWriteStream(path.join(__dirname, '..', 'TimeConvert-Firefox.zip'));
     const archive = archiver('zip', { zlib: { level: 9 } });
