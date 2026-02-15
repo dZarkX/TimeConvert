@@ -1,6 +1,6 @@
 {
-  "appName": { "message": "TimeZone Converter" },
-  "appDesc": { "message": "Erkennt und konvertiert Zeitzonen auf Webseiten automatisch in Ihre lokale Zeit." },
+  "appName": { "message": "Zeitzonen-Konverter" },
+  "appDesc": { "message": "Erkennt und konvertiert Zeitzonen auf jeder Website automatisch in Ihre lokale Zeit. Keine manuellen Berechnungen oder externen Suchen mehr." },
   "settings": { "message": "Einstellungen" },
   "highlight": { "message": "Hervorheben" },
   "ignoreThisSite": { "message": "Diese Seite ignorieren" },

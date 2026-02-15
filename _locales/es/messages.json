@@ -1,6 +1,6 @@
 {
-  "appName": { "message": "TimeZone Converter" },
-  "appDesc": { "message": "Detecta y convierte zonas horarias en sitios web automáticamente a tu hora local." },
+  "appName": { "message": "Conversor de Zona Horaria" },
+  "appDesc": { "message": "Detecta y convierte zonas horarias en cualquier sitio web automáticamente a tu hora local. No más cálculos manuales o búsquedas externas." },
   "settings": { "message": "Configuración" },
   "highlight": { "message": "Resaltar" },
   "ignoreThisSite": { "message": "Ignorar este sitio" },

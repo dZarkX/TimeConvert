@@ -1,6 +1,6 @@
 {
-  "appName": { "message": "TimeZone Converter" },
-  "appDesc": { "message": "Detecta e converte fusos horários em sites automaticamente para o seu horário local." },
+  "appName": { "message": "Conversor de Fuso Horário" },
+  "appDesc": { "message": "Detecta e converte fusos horários em qualquer site automaticamente para o seu horário local. Chega de cálculos manuais ou buscas externas." },
   "settings": { "message": "Configurações" },
   "highlight": { "message": "Destacar" },
   "ignoreThisSite": { "message": "Ignorar este site" },

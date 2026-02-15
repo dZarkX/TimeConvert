@@ -1,6 +1,6 @@
 {
-  "appName": { "message": "TimeZone Converter" },
-  "appDesc": { "message": "Automatycznie wykrywa i przelicza strefy czasowe na stronach na Twój lokalny czas." },
+  "appName": { "message": "Konwerter Stref Czasowych" },
+  "appDesc": { "message": "Automatycznie wykrywa i konwertuje strefy czasowe na dowolnej stronie internetowej na Twój lokalny czas. Koniec z ręcznymi obliczeniami lub zewnętrznymi wyszukiwaniami." },
   "settings": { "message": "Ustawienia" },
   "highlight": { "message": "Wyróżnij" },
   "ignoreThisSite": { "message": "Ignoruj witrynę" },

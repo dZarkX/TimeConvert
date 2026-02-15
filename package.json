@@ -1,6 +1,6 @@
 ﻿{
     "name":  "timeconvert",
-    "version":  "1.3.3",
+    "version":  "1.4.0",
     "description":  "A small browser extension that detects times on web pages and converts them to your preferred timezone.",
     "main":  "index.js",
     "directories":  {
