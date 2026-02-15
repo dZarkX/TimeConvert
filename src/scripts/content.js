@@ -1,5 +1,5 @@
 // Content script - runs on every page to detect times
-(function() {
+(function () {
   'use strict';
 
   const DEBUG = false;
@@ -332,10 +332,10 @@
 
   // Format time for display
   function formatTime(hours, minutes, use24Hour = false, includeDate = false, date = null) {
-    const timeStr = use24Hour ? 
+    const timeStr = use24Hour ?
       `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}` :
       `${hours % 12 || 12}:${minutes.toString().padStart(2, '0')} ${hours >= 12 ? 'PM' : 'AM'}`;
-    
+
     if (includeDate && date) {
       const monthsShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       const y = date.getUTCFullYear();
@@ -345,7 +345,7 @@
       const dateStr = `${monthsShort[m]} ${d}${y !== nowY ? `, ${y}` : ''}`;
       return `${dateStr} ${timeStr}`;
     }
-    
+
     return timeStr;
   }
 
@@ -370,9 +370,11 @@
   // Get day offset text
   function getDayOffsetText(dayOffset) {
     if (dayOffset === 0) return '';
-    if (dayOffset === 1) return ' (+1 day)';
-    if (dayOffset === -1) return ' (-1 day)';
-    return ` (${dayOffset > 0 ? '+' : ''}${dayOffset} days)`;
+    if (dayOffset === 1) return chrome.i18n.getMessage('dayOffsetPlus', ['1']);
+    if (dayOffset === -1) return chrome.i18n.getMessage('dayOffsetMinus', ['1']);
+    const absDays = Math.abs(dayOffset).toString();
+    const sign = dayOffset > 0 ? '+' : '-';
+    return chrome.i18n.getMessage('dayOffsetPlural', [sign, absDays]);
   }
 
   function buildConvertedString(parsed, converted, targetOffset) {
@@ -408,7 +410,7 @@
     const after = text.substring(end);
 
     const wrapper = document.createElement('span');
-    
+
     if (before) {
       wrapper.appendChild(document.createTextNode(before));
     }
@@ -420,11 +422,11 @@
     highlight.dataset.tzId = timeData.id;
     highlight.textContent = timeText;
     highlight.title = `${timeData.original} → ${timeData.converted}`;
-    
+
     // Apply custom styles
     highlight.style.backgroundColor = settings.highlightColor;
     highlight.style.color = settings.highlightTextColor;
-    
+
     wrapper.appendChild(highlight);
 
     if (after) {
@@ -639,7 +641,7 @@
           highlight.dataset.tzShowConverted = 'false';
           highlight.textContent = expected;
           if (settings.displayMode === 'toggle') {
-            highlight.title = `Click to see: ${time.converted}`;
+            highlight.title = chrome.i18n.getMessage('clickToSee', [time.converted]);
           }
           applyHighlightStyle(highlight, false);
 
@@ -719,7 +721,7 @@
       element.textContent = converted;
       element.dataset.tzShowConverted = 'true';
       if (settings.displayMode === 'toggle') {
-        element.title = `Click to see original: ${original}`;
+        element.title = chrome.i18n.getMessage('clickToSeeOriginal', [original]);
       } else {
         element.removeAttribute('title');
       }
@@ -728,7 +730,7 @@
       element.textContent = original;
       element.dataset.tzShowConverted = 'false';
       if (settings.displayMode === 'toggle') {
-        element.title = `Click to see: ${converted}`;
+        element.title = chrome.i18n.getMessage('clickToSee', [converted]);
       } else {
         element.removeAttribute('title');
       }
@@ -850,7 +852,7 @@
   // Check if extension context is still valid - using a safer method
   function isExtensionContextValid() {
     if (contextInvalidated) return false;
-    
+
     // Simple check without accessing properties that throw uncatchable errors
     if (typeof chrome === 'undefined') {
       contextInvalidated = true;
@@ -860,7 +862,7 @@
       contextInvalidated = true;
       return false;
     }
-    
+
     // Use getURL which returns empty string if context is invalid but doesn't throw
     try {
       const url = chrome.runtime.getURL('');
@@ -883,13 +885,13 @@
         resolve(settings);
         return;
       }
-      
+
       try {
         if (!isExtensionContextValid() || !chrome.storage?.sync) {
           resolve(settings);
           return;
         }
-        
+
         chrome.storage.sync.get({
           targetTimezone: 'auto',
           targetOffset: null,
@@ -1012,18 +1014,20 @@
         chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           // Check if context is still valid before processing
           if (contextInvalidated) return false;
-          
+
           try {
             switch (message.type) {
               case 'GET_TIMES':
-                sendResponse({ times: foundTimes.map(t => ({
-                  id: t.id,
-                  original: t.original,
-                  converted: t.converted,
-                  timezone: t.originalParsed.timezone
-                }))});
+                sendResponse({
+                  times: foundTimes.map(t => ({
+                    id: t.id,
+                    original: t.original,
+                    converted: t.converted,
+                    timezone: t.originalParsed.timezone
+                  }))
+                });
                 return true;
-                
+
               case 'CONVERT_SELECTION':
                 // Handle manual conversion of selected text
                 try {
@@ -1033,7 +1037,7 @@
                   sendResponse({ success: false, error: e.message });
                 }
                 return true;
-                
+
               case 'RESCAN':
                 if (highlightEnabled) removeHighlights();
                 loadSettings().then(() => {
@@ -1054,7 +1058,7 @@
                   }
                 });
                 return true; // Async response
-                
+
               case 'TOGGLE_HIGHLIGHTS':
                 highlightEnabled = message.enabled;
                 if (highlightEnabled) {
@@ -1081,7 +1085,7 @@
                 }
                 sendResponse({ success: true });
                 return true;
-                
+
               case 'SETTINGS_UPDATED':
                 loadSettings().then(() => {
                   // Update observer after settings changes
@@ -1110,7 +1114,7 @@
                   }
                 });
                 return true; // Async response
-                
+
               case 'SCROLL_TO_TIME':
                 const element = document.querySelector(`[data-tz-id="${message.timeId}"]`);
                 if (element) {
@@ -1140,11 +1144,11 @@
 
     const stopObserver = () => {
       if (observer) {
-        try { observer.disconnect(); } catch {}
+        try { observer.disconnect(); } catch { }
         observer = null;
       }
       if (rescanTimeout) {
-        try { clearTimeout(rescanTimeout); } catch {}
+        try { clearTimeout(rescanTimeout); } catch { }
         rescanTimeout = null;
       }
     };
@@ -1210,30 +1214,30 @@
   // Convert selected text manually
   function convertSelectedText(selectedText) {
     const trimmedText = selectedText.trim();
-    
+
     // Test if the selected text matches our time pattern
     TIME_PATTERN.lastIndex = 0;
     const match = TIME_PATTERN.exec(trimmedText);
-    
+
     if (match) {
       const parsed = parseMatch(match);
-      
+
       if (parsed.offset !== null) {
         const targetOffset = getTargetOffset();
         const converted = convertTime(parsed, targetOffset);
-        
+
         if (converted) {
-          const convertedStr = formatTime(converted.hours, converted.minutes, settings.use24Hour, converted.date, converted.date) + 
-                             ' ' + formatOffset(targetOffset) + 
-                             getDayOffsetText(converted.dayOffset);
-          
+          const convertedStr = formatTime(converted.hours, converted.minutes, settings.use24Hour, converted.date, converted.date) +
+            ' ' + formatOffset(targetOffset) +
+            getDayOffsetText(converted.dayOffset);
+
           // Show conversion result in a temporary popup
           showConversionPopup(trimmedText, convertedStr);
           return;
         }
       }
     }
-    
+
     // Show error if no valid time found
     showConversionPopup(trimmedText, 'No valid time with timezone found');
   }
@@ -1252,7 +1256,7 @@
     if (existingPopup) {
       existingPopup.remove();
     }
-    
+
     const popup = document.createElement('div');
     popup.id = 'tz-conversion-popup';
     popup.style.cssText = `
@@ -1270,7 +1274,7 @@
       max-width: 300px;
       animation: tz-slideIn 0.3s ease-out;
     `;
-    
+
     popup.innerHTML = `
       <div style="display: flex; align-items: center; margin-bottom: 8px;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="#4CAF50" style="margin-right: 8px;">
@@ -1294,7 +1298,7 @@
         font-size: 12px;
       ">Close</button>
     `;
-    
+
     // Add animation styles
     const style = document.createElement('style');
     style.textContent = `
@@ -1310,15 +1314,15 @@
       }
     `;
     document.head.appendChild(style);
-    
+
     document.body.appendChild(popup);
-    
+
     // Handle close button
     const closeBtn = popup.querySelector('#tz-popup-close');
     closeBtn.addEventListener('click', () => {
       popup.remove();
     });
-    
+
     // Auto-remove after 10 seconds
     setTimeout(() => {
       if (popup.parentNode) {

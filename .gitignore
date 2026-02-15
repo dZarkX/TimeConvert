@@ -46,4 +46,7 @@ package-lock.json
 # Python
 __pycache__/
 *.py[cod]
-*.pyc
+
+# Local memory
+MEMORY.MD
+

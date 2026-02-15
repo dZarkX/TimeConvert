@@ -1,0 +1,371 @@
+{
+    "appName": {
+        "message": "TimeZone Converter"
+    },
+    "appDesc": {
+        "message": "Автоматически обнаруживает и конвертирует часовые пояса на веб-страницах в ваше местное время."
+    },
+    "settings": {
+        "message": "Настройки"
+    },
+    "highlight": {
+        "message": "Выделить"
+    },
+    "ignoreThisSite": {
+        "message": "Игнорировать этот сайт"
+    },
+    "unignore": {
+        "message": "Перестать игнорировать"
+    },
+    "remove": {
+        "message": "Удалить"
+    },
+    "rescan": {
+        "message": "Пересканировать"
+    },
+    "ignored": {
+        "message": "Игнорируемые"
+    },
+    "timesFound": {
+        "message": "времени найдено"
+    },
+    "checking": {
+        "message": "проверка…"
+    },
+    "connected": {
+        "message": "подключено"
+    },
+    "notConnected": {
+        "message": "не подключено"
+    },
+    "fallback": {
+        "message": "запасной вариант (фон)"
+    },
+    "restricted": {
+        "message": "ограниченная страница"
+    },
+    "noTab": {
+        "message": "нет целевой вкладки"
+    },
+    "openWebpage": {
+        "message": "Откройте вкладку веб-страницы и снова откройте всплывающее окно."
+    },
+    "restrictedDesc": {
+        "message": "Эта страница ограничена Chrome (например, chrome://). Откройте обычный сайт."
+    },
+    "reloadPage": {
+        "message": "Не удалось подключиться к странице. Попробуйте обновить ее или нажмите Пересканировать."
+    },
+    "noTimesFound": {
+        "message": "Время не найдено"
+    },
+    "emptyHint": {
+        "message": "Откройте страницу с указанием времени, например «8PM CET», и нажмите Пересканировать."
+    },
+    "buyMeACoffee": {
+        "message": "Купи мне кофе"
+    },
+    "githubFeedback": {
+        "message": "GitHub / Отзывы"
+    },
+    "settingsTitle": {
+        "message": "Параметры и конфигурация"
+    },
+    "timezoneSettings": {
+        "message": "Настройки часового пояса"
+    },
+    "targetTimezone": {
+        "message": "Целевой часовой пояс"
+    },
+    "targetTimezoneDesc": {
+        "message": "Выберите способ конвертации времени"
+    },
+    "autoDetect": {
+        "message": "Автоопределение"
+    },
+    "autoDetectDesc": {
+        "message": "Использовать системный часовой пояс"
+    },
+    "manualSelection": {
+        "message": "Ручной выбор"
+    },
+    "manualSelectionDesc": {
+        "message": "Выберите конкретный часовой пояс"
+    },
+    "selectTimezone": {
+        "message": "Выбрать часовой пояс"
+    },
+    "timeFormat": {
+        "message": "Формат времени"
+    },
+    "use24HourFormat": {
+        "message": "Использовать 24-часовой формат"
+    },
+    "conversion": {
+        "message": "Конвертация"
+    },
+    "autoConvertOnLoad": {
+        "message": "Автоматически конвертировать при загрузке"
+    },
+    "displayMode": {
+        "message": "Режим отображения"
+    },
+    "displayModeDesc": {
+        "message": "Выберите способ отображения конвертированного времени"
+    },
+    "modeToggle": {
+        "message": "Нажмите для переключения (оригинал ↔ конвертировано)"
+    },
+    "modeTooltip": {
+        "message": "Только подсказка (без замены текста)"
+    },
+    "resultFormat": {
+        "message": "Формат результата"
+    },
+    "resultFormatDesc": {
+        "message": "Управляйте тем, что включается в конвертированный результат"
+    },
+    "includeUtcOffset": {
+        "message": "Включить смещение UTC (например, UTC+1)"
+    },
+    "includeDayOffset": {
+        "message": "Включить смещение дня (например, +1 день)"
+    },
+    "includeSourceTz": {
+        "message": "Включить исходный часовой пояс (например, CET)"
+    },
+    "dateDetection": {
+        "message": "Обнаружение даты"
+    },
+    "detectDates": {
+        "message": "Обнаруживать даты рядом со временем"
+    },
+    "scanMode": {
+        "message": "Режим сканирования"
+    },
+    "scanModeDesc": {
+        "message": "Управляйте тем, насколько агрессивно расширение сканирует страницы"
+    },
+    "scanAuto": {
+        "message": "Авто (сканировать + отслеживать динамические изменения)"
+    },
+    "scanAutoLight": {
+        "message": "Auto-light (сканировать один раз, без отслеживания DOM)"
+    },
+    "scanManual": {
+        "message": "Вручную (только при нажатии Пересканировать)"
+    },
+    "performanceSettings": {
+        "message": "Настройки производительности"
+    },
+    "performanceDesc": {
+        "message": "Ограничьте количество конверсий на странице для лучшей производительности"
+    },
+    "maxConversions": {
+        "message": "Максимум конверсий"
+    },
+    "noLimit": {
+        "message": "0 = без ограничений"
+    },
+    "detectedTimezone": {
+        "message": "Ваш определенный часовой пояс:"
+    },
+    "privacy": {
+        "message": "Конфиденциальность"
+    },
+    "privacyDesc": {
+        "message": "Это расширение обрабатывает время непосредственно в вашем браузере. Оно не передает личные данные."
+    },
+    "privacyBullet1": {
+        "message": "Настройки сохраняются в <strong>chrome.storage.sync</strong>."
+    },
+    "privacyBullet2": {
+        "message": "Без аналитики, трекеров и рекламы."
+    },
+    "privacyBullet3": {
+        "message": "Внешние вызовы API не требуются."
+    },
+    "privacyBullet4": {
+        "message": "Расширение читает только текст страницы для поиска и выделения времени."
+    },
+    "readFullPrivacy": {
+        "message": "Читать полную политику конфиденциальности"
+    },
+    "changelog": {
+        "message": "Список изменений"
+    },
+    "recentUpdates": {
+        "message": "Последние обновления (новые сверху)"
+    },
+    "appearance": {
+        "message": "Внешний вид"
+    },
+    "highlightColors": {
+        "message": "Цвета выделения"
+    },
+    "highlightColorsDesc": {
+        "message": "Настройте отображение найденного времени"
+    },
+    "bgColor": {
+        "message": "Цвет фона"
+    },
+    "textColor": {
+        "message": "Цвет текста"
+    },
+    "preview": {
+        "message": "Предпросмотр:"
+    },
+    "highlightBehavior": {
+        "message": "Поведение выделения"
+    },
+    "enableHighlighting": {
+        "message": "Включить выделение на страницах"
+    },
+    "highlightStyle": {
+        "message": "Стиль выделения"
+    },
+    "textOnlyHighlight": {
+        "message": "Только текст (без фона)"
+    },
+    "colorPresets": {
+        "message": "Цветовые пресеты"
+    },
+    "ignoredSites": {
+        "message": "Игнорируемые сайты"
+    },
+    "manageIgnoredSites": {
+        "message": "Управление игнорируемыми сайтами"
+    },
+    "ignoredSitesDesc": {
+        "message": "Добавьте сайты, на которых не нужно выделять время."
+    },
+    "addSite": {
+        "message": "Добавить сайт"
+    },
+    "testing": {
+        "message": "Тестирование"
+    },
+    "testingDesc": {
+        "message": "Быстрая проверка обнаружения и выделения прямо в настройках."
+    },
+    "inlineTestPanel": {
+        "message": "Внутренняя панель тестирования"
+    },
+    "inlineTestDesc": {
+        "message": "Разверните, чтобы увидеть примеры времени"
+    },
+    "highlightSamples": {
+        "message": "Выделить примеры"
+    },
+    "resetSamples": {
+        "message": "Сбросить примеры"
+    },
+    "status": {
+        "message": "Статус"
+    },
+    "idle": {
+        "message": "ожидание"
+    },
+    "detected": {
+        "message": "Обнаружено"
+    },
+    "format12h": {
+        "message": "12-часовой формат"
+    },
+    "format24h": {
+        "message": "24-часовой формат"
+    },
+    "utcOffsets": {
+        "message": "Смещения UTC"
+    },
+    "variousTz": {
+        "message": "Разные часовые пояса"
+    },
+    "edgeCases": {
+        "message": "Сложные случаи"
+    },
+    "notHighlighted": {
+        "message": "НЕ должны выделяться (без указания пояса)"
+    },
+    "testPanelTip": {
+        "message": "Совет: эта панель тестирует только стиль обнаружения в настройках."
+    },
+    "support": {
+        "message": "Поддержка"
+    },
+    "supportDesc": {
+        "message": "Если вам нравится это расширение, поддержите разработчика!"
+    },
+    "about": {
+        "message": "О расширении"
+    },
+    "features": {
+        "message": "Функции:"
+    },
+    "restoreDefaults": {
+        "message": "Сбросить настройки"
+    },
+    "badgeFound": {
+        "message": "TimeZone Converter — найдено $COUNT$ вр.",
+        "placeholders": {
+            "count": {
+                "content": "$1"
+            }
+        }
+    },
+    "badgeNone": {
+        "message": "TimeZone Converter — время не найдено"
+    },
+    "contextMenuConvert": {
+        "message": "Конвертировать время в мой пояс"
+    },
+    "settingsSaved": {
+        "message": "Настройки сохранены"
+    },
+    "confirmReset": {
+        "message": "Вы уверены, что хотите сбросить настройки?"
+    },
+    "clickToSee": {
+        "message": "Нажмите, чтобы увидеть: $TIME$",
+        "placeholders": {
+            "time": {
+                "content": "$1"
+            }
+        }
+    },
+    "clickToSeeOriginal": {
+        "message": "Нажмите, чтобы увидеть оригинал: $TIME$",
+        "placeholders": {
+            "time": {
+                "content": "$1"
+            }
+        }
+    },
+    "dayOffsetPlus": {
+        "message": " (+$DAYS$ день)",
+        "placeholders": {
+            "days": {
+                "content": "$1"
+            }
+        }
+    },
+    "dayOffsetMinus": {
+        "message": " (-$DAYS$ день)",
+        "placeholders": {
+            "days": {
+                "content": "$1"
+            }
+        }
+    },
+    "dayOffsetPlural": {
+        "message": " ($SIGN$$DAYS$ дн.)",
+        "placeholders": {
+            "sign": {
+                "content": "$1"
+            },
+            "days": {
+                "content": "$2"
+            }
+        }
+    }
+}

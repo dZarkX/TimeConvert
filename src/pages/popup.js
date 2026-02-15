@@ -21,6 +21,29 @@ document.addEventListener('DOMContentLoaded', async () => {
   const KOFI_URL = 'https://ko-fi.com/3mon_';
   const GITHUB_URL = 'https://github.com/dZarkX/TimeConvert';
 
+  // Localization helper
+  function localizeUI() {
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
+      const key = el.getAttribute('data-i18n');
+      const message = chrome.i18n.getMessage(key);
+      if (message) {
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+          el.placeholder = message;
+        } else {
+          el.textContent = message;
+        }
+      }
+    });
+
+    document.querySelectorAll('[data-i18n-title]').forEach((el) => {
+      const key = el.getAttribute('data-i18n-title');
+      const message = chrome.i18n.getMessage(key);
+      if (message) {
+        el.title = message;
+      }
+    });
+  }
+
   // Load settings
   async function loadSettings() {
     return new Promise((resolve) => {
@@ -60,13 +83,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const setStatus = (text, kind = '') => {
     if (!timesStatus) return;
-    timesStatus.textContent = text;
+    const localized = chrome.i18n.getMessage(text) || text;
+    timesStatus.textContent = localized;
     timesStatus.className = `times-status ${kind}`.trim();
   };
 
   const setEmptyHintText = (text) => {
     if (!emptyHint) return;
-    emptyHint.textContent = text;
+    const localized = chrome.i18n.getMessage(text) || text;
+    emptyHint.textContent = localized;
     emptyHint.style.display = 'block';
   };
 
@@ -90,7 +115,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const sendTabMessage = (tabId, msg, options) =>
     new Promise((resolve, reject) => {
       try {
-        // chrome.tabs.sendMessage(tabId, message, options?, callback)
         chrome.tabs.sendMessage(tabId, msg, options || undefined, (res) => {
           if (chrome.runtime.lastError) {
             reject(chrome.runtime.lastError);
@@ -162,7 +186,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const uniq = Array.from(new Set(normalizedSites)).sort((a, b) => a.localeCompare(b));
 
     const isIgnored = currentDomain ? uniq.includes(currentDomain) : false;
-    ignoredToggleBtn.textContent = isIgnored ? 'Unignore' : 'Ignore';
+
+    // Localization for toggle button
+    ignoredToggleBtn.textContent = isIgnored ?
+      (chrome.i18n.getMessage('unignore') || 'Unignore') :
+      (chrome.i18n.getMessage('ignoreThisSite') || 'Ignore');
+
     ignoredToggleBtn.classList.toggle('active', isIgnored);
 
     ignoredList.innerHTML = '';
@@ -175,9 +204,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     uniq.forEach((domain) => {
       const row = document.createElement('div');
       row.className = 'ignored-item';
+      const removeText = chrome.i18n.getMessage('remove') || 'Remove';
       row.innerHTML = `
         <span class="domain">${domain}</span>
-        <button type="button" class="remove" data-domain="${domain}">Remove</button>
+        <button type="button" class="remove" data-domain="${domain}">${removeText}</button>
       `;
       ignoredList.appendChild(row);
     });
@@ -201,13 +231,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!targetTabId) return { ok: false, reason: 'no-tab', times: [] };
     if (targetUrl && isRestrictedUrl(targetUrl)) return { ok: false, reason: 'restricted', times: [] };
 
-    // Ask the content script directly (top-frame) - used mainly as a "connected" signal.
     try {
       const res = await sendTabMessage(targetTabId, { type: 'GET_TIMES' });
       const times = res?.times || [];
       return { ok: true, reason: 'page', times };
     } catch {
-      // Try injecting and retrying once
       const ok = await injectContentScript(targetTabId);
       if (!ok) return { ok: false, reason: 'no-content', times: [] };
       try {
@@ -220,7 +248,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  // Fallback: get last-known data from background (badge pipeline)
   async function getTimesFromBackground() {
     const { targetTabId } = await getTargetTab();
     if (!targetTabId) return [];
@@ -228,13 +255,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     return data?.times || [];
   }
 
-  // Primary source of truth for the popup list:
-  // background merges TIMES_FOUND from all frames, while GET_TIMES is frame-local.
   async function getTimesForPopupList() {
     return await getTimesFromBackground();
   }
 
-  // Toggle highlights
   async function toggleHighlights(enabled) {
     const tab = await getActiveTab();
     if (tab?.id && tab.url && !isRestrictedUrl(tab.url)) {
@@ -245,14 +269,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (ok) {
           try {
             await sendTabMessage(tab.id, { type: 'TOGGLE_HIGHLIGHTS', enabled });
-          } catch {}
+          } catch { }
         }
       }
     }
     chrome.storage.sync.set({ highlightEnabled: enabled });
   }
 
-  // Rescan page
   async function rescanPage() {
     rescanBtn.disabled = true;
     rescanBtn.innerHTML = '<svg class="spinning" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>';
@@ -267,47 +290,42 @@ document.addEventListener('DOMContentLoaded', async () => {
           if (ok) {
             try {
               await sendTabMessage(targetTabId, { type: 'RESCAN' });
-            } catch {}
+            } catch { }
           }
         }
 
-        // Wait briefly for scan to complete then pull merged results from background
         await new Promise((r) => setTimeout(r, 250));
         const list = await getTimesForPopupList();
         renderTimes(list);
         setStatus('connected', 'ok');
       }
-    } catch {}
+    } catch { }
 
     rescanBtn.disabled = false;
     rescanBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>';
   }
 
-  // Escape HTML
   function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
   }
 
-  // Render times list
   function renderTimes(times) {
-    // Always clear existing items first, otherwise a later "0 results" render
-    // would show "No times found" while old items remain visible.
     const existingItems = timesList.querySelectorAll('.time-item');
     existingItems.forEach(item => item.remove());
 
     timesCount.textContent = times.length;
-    
+
     if (times.length === 0) {
       emptyState.style.display = 'flex';
       if (emptyHint) emptyHint.style.display = 'block';
       return;
     }
-    
+
     emptyState.style.display = 'none';
     if (emptyHint) emptyHint.style.display = 'none';
-    
+
     times.forEach((time) => {
       const item = document.createElement('div');
       item.className = 'time-item';
@@ -315,12 +333,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         <div class="time-converted">${escapeHtml(time.converted)}</div>
         <div class="time-original">${escapeHtml(time.original)}</div>
       `;
-      
+
       item.addEventListener('click', async () => {
         const { targetTabId } = await getTargetTab();
         if (!targetTabId) return;
 
-        // If time came from a subframe, target it explicitly.
         const frameId = typeof time.frameId === 'number' ? time.frameId : undefined;
         try {
           await sendTabMessage(
@@ -332,23 +349,22 @@ document.addEventListener('DOMContentLoaded', async () => {
           // ignore
         }
       });
-      
+
       timesList.appendChild(item);
     });
   }
 
   // Initialize
+  localizeUI();
   const settings = await loadSettings();
   highlightToggle.checked = settings.highlightEnabled;
 
-  // Ignored sites UI
   const { targetUrl } = await getTargetTab();
   const currentDomain = normalizeDomain(targetUrl);
   const ignoredSites = await loadIgnoredSites();
   renderIgnoredList(ignoredSites, currentDomain);
 
   ignoreBtn?.addEventListener('click', () => {
-    // Small UX: clicking the icon focuses the same toggle action
     ignoredToggleBtn?.click();
   });
 
@@ -365,71 +381,52 @@ document.addEventListener('DOMContentLoaded', async () => {
     await rescanPage();
   });
 
-  // Prefer direct-from-page data (strongest signal extension is working)
-  setStatus('checking…');
+  setStatus('checking');
   const result = await getTimesFromPage();
   const list = await getTimesForPopupList();
   renderTimes(list);
 
   if (result.ok) {
-    setStatus(result.reason === 'injected' ? 'connected (injected)' : 'connected', 'ok');
+    setStatus('connected', 'ok');
     if (list.length === 0) {
-      setEmptyHintText('No times detected on this page. Try pages with “8PM CET” or press Rescan.');
+      setEmptyHintText('emptyHint');
     }
   } else {
-    // If we couldn't talk to the page, show fallback from background (best-effort)
     if (list.length) {
-      setStatus('fallback (background)', 'warn');
-      setEmptyHintText('Showing last known results from the background. Press Rescan to refresh.');
+      setStatus('connected', 'ok'); // Best effort
+      setEmptyHintText('emptyHint');
     } else {
       if (result.reason === 'no-tab') {
-        setStatus('no target tab', 'err');
-        setEmptyHintText('Open a webpage tab and reopen the popup.');
+        setStatus('notConnected', 'err');
       } else if (result.reason === 'restricted') {
-        setStatus('restricted page', 'err');
-        setEmptyHintText('This page is restricted by Chrome (e.g. chrome://). Open a normal website to use the extension.');
+        setStatus('restricted', 'err');
+        setEmptyHintText('emptyHint');
         rescanBtn.disabled = true;
-      } else if (result.reason === 'no-content') {
-        setStatus('not connected', 'err');
-        setEmptyHintText('Could not connect to the page. Try reloading the page, then press Rescan.');
       } else {
-        setStatus('not connected', 'err');
-        setEmptyHintText('Could not connect to the page. Try reloading the page or press Rescan.');
+        setStatus('notConnected', 'err');
+        setEmptyHintText('emptyHint');
       }
     }
   }
 
-  // Event listeners
   highlightToggle.addEventListener('change', (e) => {
     toggleHighlights(e.target.checked);
   });
-  
+
   rescanBtn.addEventListener('click', rescanPage);
   settingsBtn.addEventListener('click', () => {
     chrome.runtime.openOptionsPage();
   });
 
   supportBtn?.addEventListener('click', () => {
-    try {
-      chrome.tabs.create({ url: SUPPORT_URL });
-    } catch {
-      // ignore
-    }
+    chrome.tabs.create({ url: SUPPORT_URL });
   });
 
   kofiBtn?.addEventListener('click', () => {
-    try {
-      chrome.tabs.create({ url: KOFI_URL });
-    } catch {
-      // ignore
-    }
+    chrome.tabs.create({ url: KOFI_URL });
   });
 
   githubBtn?.addEventListener('click', () => {
-    try {
-      chrome.tabs.create({ url: GITHUB_URL });
-    } catch {
-      // ignore
-    }
+    chrome.tabs.create({ url: GITHUB_URL });
   });
 });

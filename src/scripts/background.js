@@ -85,12 +85,12 @@ async function updateBadge(tabId, count) {
     await safeChromeCall(chrome.action.setBadgeBackgroundColor, { tabId, color: "#4CAF50" });
     await safeChromeCall(chrome.action.setTitle, {
       tabId,
-      title: `TimeZone Converter - ${count} time(s) found`
+      title: chrome.i18n.getMessage('badgeFound', [String(count)])
     });
   } else {
     await safeChromeCall(chrome.action.setTitle, {
       tabId,
-      title: "TimeZone Converter - No times found"
+      title: chrome.i18n.getMessage('badgeNone')
     });
   }
 }
@@ -101,7 +101,7 @@ function createContextMenus() {
       try {
         chrome.contextMenus.create({
           id: "convertSelection",
-          title: "Convert time to my timezone",
+          title: chrome.i18n.getMessage('contextMenuConvert'),
           contexts: ["selection"]
         });
       } catch {
