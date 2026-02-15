@@ -49,7 +49,8 @@
     "applications": {
         "gecko": {
             "id": "timezone-converter@example.com",
-            "strict_min_version": "109.0"
+            "strict_min_version": "109.0",
+            "update_url": "https://github.com/dZarkX/TimeConvert/releases/latest"
         }
     }
 }
