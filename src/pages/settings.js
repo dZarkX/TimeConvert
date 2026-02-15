@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const newIgnoredSite = document.getElementById('newIgnoredSite');
   const addIgnoredSite = document.getElementById('addIgnoredSite');
   const ignoredSitesList = document.getElementById('ignoredSitesList');
+  const preferredLanguage = document.getElementById('preferredLanguage');
   const detectedTimezone = document.getElementById('detectedTimezone');
   const resetBtn = document.getElementById('resetBtn');
   const toast = document.getElementById('toast');
@@ -35,11 +36,39 @@ document.addEventListener('DOMContentLoaded', async () => {
   const inlineTestStatus = document.getElementById('inlineTestStatus');
   const inlineTestCount = document.getElementById('inlineTestCount');
 
+  // Cache for loaded messages
+  let messagesCache = null;
+
   // Localization helper
-  function localizeUI() {
+  async function localizeUI() {
+    const settings = await new Promise(r => chrome.storage.sync.get({ preferredLanguage: 'auto' }, r));
+    const lang = settings.preferredLanguage;
+
+    if (lang !== 'auto' && !messagesCache) {
+      try {
+        const response = await fetch(chrome.runtime.getURL(`_locales/${lang}/messages.json`));
+        messagesCache = await response.json();
+      } catch (e) {
+        console.error('Failed to load locale:', lang, e);
+      }
+    }
+
+    function getMsg(key, placeholders) {
+      if (messagesCache && messagesCache[key]) {
+        let msg = messagesCache[key].message;
+        if (placeholders) {
+          placeholders.forEach((p, i) => {
+            msg = msg.replace(`$${i + 1}`, p);
+          });
+        }
+        return msg;
+      }
+      return chrome.i18n.getMessage(key, placeholders);
+    }
+
     document.querySelectorAll('[data-i18n]').forEach((el) => {
       const key = el.getAttribute('data-i18n');
-      const message = chrome.i18n.getMessage(key);
+      const message = getMsg(key);
       if (message) {
         if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
           el.placeholder = message;
@@ -51,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.querySelectorAll('[data-i18n-title]').forEach((el) => {
       const key = el.getAttribute('data-i18n-title');
-      const message = chrome.i18n.getMessage(key);
+      const message = getMsg(key);
       if (message) {
         el.title = message;
       }
@@ -98,7 +127,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       highlightTextColor: '#000000',
       highlightEnabled: true,
       highlightTextOnly: false,
-      ignoredSites: []
+      ignoredSites: [],
+      preferredLanguage: 'auto'
     }, resolve);
   });
 
@@ -127,6 +157,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   highlightTextColorText.value = settings.highlightTextColor;
   highlightEnabled.checked = settings.highlightEnabled;
   highlightTextOnly.checked = settings.highlightTextOnly;
+  preferredLanguage.value = settings.preferredLanguage;
 
   updatePreview();
 
@@ -182,7 +213,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       highlightColor: highlightColor.value,
       highlightTextColor: highlightTextColor.value,
       highlightEnabled: highlightEnabled.checked,
-      highlightTextOnly: highlightTextOnly.checked
+      highlightTextOnly: highlightTextOnly.checked,
+      preferredLanguage: preferredLanguage.value
     };
 
     chrome.storage.sync.set(newSettings, () => {
@@ -202,8 +234,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   [use24Hour, autoConvertOnLoad, displayMode, resultIncludeUtcOffset,
     resultIncludeDayOffset, resultIncludeSourceTz, enableDateDetection,
     scanMode, maxConversions, highlightColor, highlightTextColor,
-    highlightEnabled, highlightTextOnly, timezoneSelect].forEach(el => {
-      el.addEventListener('change', saveSettings);
+    highlightEnabled, highlightTextOnly, timezoneSelect, preferredLanguage].forEach(el => {
+      el.addEventListener('change', async () => {
+        if (el === preferredLanguage) {
+          messagesCache = null; // Clear cache to reload
+          await localizeUI();
+        }
+        saveSettings();
+      });
     });
 
   timezoneModeRadios.forEach(radio => {

@@ -17,15 +17,43 @@ document.addEventListener('DOMContentLoaded', async () => {
   const kofiBtn = document.getElementById('kofiBtn');
   const githubBtn = document.getElementById('githubBtn');
 
+  // Cache for loaded messages
+  let messagesCache = null;
+
   const SUPPORT_URL = 'https://buymeacoffee.com/3mon';
   const KOFI_URL = 'https://ko-fi.com/3mon_';
   const GITHUB_URL = 'https://github.com/dZarkX/TimeConvert';
 
   // Localization helper
-  function localizeUI() {
+  async function localizeUI() {
+    const settings = await new Promise(r => chrome.storage.sync.get({ preferredLanguage: 'auto' }, r));
+    const lang = settings.preferredLanguage;
+
+    if (lang !== 'auto' && !messagesCache) {
+      try {
+        const response = await fetch(chrome.runtime.getURL(`_locales/${lang}/messages.json`));
+        messagesCache = await response.json();
+      } catch (e) {
+        console.error('Failed to load locale:', lang, e);
+      }
+    }
+
+    function getMsg(key, placeholders) {
+      if (messagesCache && messagesCache[key]) {
+        let msg = messagesCache[key].message;
+        if (placeholders) {
+          placeholders.forEach((p, i) => {
+            msg = msg.replace(`$${i + 1}`, p);
+          });
+        }
+        return msg;
+      }
+      return chrome.i18n.getMessage(key, placeholders);
+    }
+
     document.querySelectorAll('[data-i18n]').forEach((el) => {
       const key = el.getAttribute('data-i18n');
-      const message = chrome.i18n.getMessage(key);
+      const message = getMsg(key);
       if (message) {
         if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
           el.placeholder = message;
@@ -37,7 +65,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.querySelectorAll('[data-i18n-title]').forEach((el) => {
       const key = el.getAttribute('data-i18n-title');
-      const message = chrome.i18n.getMessage(key);
+      const message = getMsg(key);
       if (message) {
         el.title = message;
       }
@@ -48,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function loadSettings() {
     return new Promise((resolve) => {
       chrome.storage.sync.get(
-        { highlightEnabled: true, use24Hour: false, ignoredSites: [] },
+        { highlightEnabled: true, use24Hour: false, ignoredSites: [], preferredLanguage: 'auto' },
         resolve
       );
     });

@@ -1,371 +1,379 @@
-{
-    "appName": {
-        "message": "TimeZone Converter"
-    },
-    "appDesc": {
-        "message": "Erkennt und konvertiert Zeitzonen auf Webseiten automatisch in Ihre lokale Zeit."
-    },
-    "settings": {
-        "message": "Einstellungen"
-    },
-    "highlight": {
-        "message": "Hervorheben"
-    },
-    "ignoreThisSite": {
-        "message": "Diese Seite ignorieren"
-    },
-    "unignore": {
-        "message": "Ignorieren aufheben"
-    },
-    "remove": {
-        "message": "Entfernen"
-    },
-    "rescan": {
-        "message": "Neu scannen"
-    },
-    "ignored": {
-        "message": "Ignoriert"
-    },
-    "timesFound": {
-        "message": "Zeiten gefunden"
-    },
-    "checking": {
-        "message": "Prüfen…"
-    },
-    "connected": {
-        "message": "Verbunden"
-    },
-    "notConnected": {
-        "message": "Nicht verbunden"
-    },
-    "fallback": {
-        "message": "Fallback (Hintergrund)"
-    },
-    "restricted": {
-        "message": "Eingeschränkte Seite"
-    },
-    "noTab": {
-        "message": "Kein Ziel-Tab"
-    },
-    "openWebpage": {
-        "message": "Öffnen Sie einen Webseiten-Tab und öffnen Sie das Popup erneut."
-    },
-    "restrictedDesc": {
-        "message": "Diese Seite ist von Chrome eingeschränkt (z. B. chrome://). Öffnen Sie eine normale Webseite."
-    },
-    "reloadPage": {
-        "message": "Verbindung zur Seite fehlgeschlagen. Seite neu laden oder Neu scannen drücken."
-    },
-    "noTimesFound": {
-        "message": "Keine Zeiten gefunden"
-    },
-    "emptyHint": {
-        "message": "Öffnen Sie eine Seite mit Zeiten wie „8PM CET“ und drücken Sie Neu scannen."
-    },
-    "buyMeACoffee": {
-        "message": "Kaffee spendieren"
-    },
-    "githubFeedback": {
-        "message": "GitHub / Feedback"
-    },
-    "settingsTitle": {
-        "message": "Einstellungen & Konfiguration"
-    },
-    "timezoneSettings": {
-        "message": "Zeitzonen-Einstellungen"
-    },
-    "targetTimezone": {
-        "message": "Ziel-Zeitzone"
-    },
-    "targetTimezoneDesc": {
-        "message": "Wählen Sie, wie Zeiten konvertiert werden sollen"
-    },
-    "autoDetect": {
-        "message": "Automatisch erkennen"
-    },
-    "autoDetectDesc": {
-        "message": "System-Zeitzone verwenden"
-    },
-    "manualSelection": {
-        "message": "Manuelle Auswahl"
-    },
-    "manualSelectionDesc": {
-        "message": "Spezifische Zeitzone wählen"
-    },
-    "selectTimezone": {
-        "message": "Zeitzone auswählen"
-    },
-    "timeFormat": {
-        "message": "Zeitformat"
-    },
-    "use24HourFormat": {
-        "message": "24-Stunden-Format verwenden"
-    },
-    "conversion": {
-        "message": "Konvertierung"
-    },
-    "autoConvertOnLoad": {
-        "message": "Automatisch beim Laden konvertieren"
-    },
-    "displayMode": {
-        "message": "Anzeigemodus"
-    },
-    "displayModeDesc": {
-        "message": "Wählen Sie, wie konvertierte Zeiten angezeigt werden"
-    },
-    "modeToggle": {
-        "message": "Klicken zum Umschalten (Original ↔ Konvertiert)"
-    },
-    "modeTooltip": {
-        "message": "Nur Tooltip (keine Textersetzung)"
-    },
-    "resultFormat": {
-        "message": "Ergebnisformat"
-    },
-    "resultFormatDesc": {
-        "message": "Steuern Sie, was im konvertierten Ergebnis enthalten ist"
-    },
-    "includeUtcOffset": {
-        "message": "UTC-Offset einschließen (z. B. UTC+1)"
-    },
-    "includeDayOffset": {
-        "message": "Tages-Offset einschließen (z. B. +1 Tag)"
-    },
-    "includeSourceTz": {
-        "message": "Quell-Zeitzone einschließen (z. B. CET)"
-    },
-    "dateDetection": {
-        "message": "Datumserkennung"
-    },
-    "detectDates": {
-        "message": "Daten neben Zeiten erkennen"
-    },
-    "scanMode": {
-        "message": "Scan-Modus"
-    },
-    "scanModeDesc": {
-        "message": "Steuern Sie, wie aggressiv die Erweiterung Seiten scannt"
-    },
-    "scanAuto": {
-        "message": "Auto (Scannen + dynamische Änderungen überwachen)"
-    },
-    "scanAutoLight": {
-        "message": "Auto-light (einmal scannen, keine DOM-Überwachung)"
-    },
-    "scanManual": {
-        "message": "Manuell (nur beim Drücken von Neu scannen)"
-    },
-    "performanceSettings": {
-        "message": "Leistungseinstellungen"
-    },
-    "performanceDesc": {
-        "message": "Konvertierungen pro Seite begrenzen für bessere Leistung"
-    },
-    "maxConversions": {
-        "message": "Maximale Konvertierungen"
-    },
-    "noLimit": {
-        "message": "0 = kein Limit"
-    },
-    "detectedTimezone": {
-        "message": "Ihre erkannte Zeitzone:"
-    },
-    "privacy": {
-        "message": "Datenschutz"
-    },
-    "privacyDesc": {
-        "message": "Diese Erweiterung verarbeitet erkannte Zeiten direkt in Ihrem Browser. Keine persönlichen Daten werden geteilt."
-    },
-    "privacyBullet1": {
-        "message": "Einstellungen werden in <strong>chrome.storage.sync</strong> gespeichert."
-    },
-    "privacyBullet2": {
-        "message": "Keine Analyse, Tracker oder Werbung."
-    },
-    "privacyBullet3": {
-        "message": "Keine externen API-Aufrufe erforderlich."
-    },
-    "privacyBullet4": {
-        "message": "Die Erweiterung liest nur Text, um Zeiten zu finden und hervorzuheben."
-    },
-    "readFullPrivacy": {
-        "message": "Vollständige Datenschutzerklärung lesen"
-    },
-    "changelog": {
-        "message": "Änderungsprotokoll"
-    },
-    "recentUpdates": {
-        "message": "Aktuelle Updates (neueste zuerst)"
-    },
-    "appearance": {
-        "message": "Erscheinungsbild"
-    },
-    "highlightColors": {
-        "message": "Hervorhebungsfarben"
-    },
-    "highlightColorsDesc": {
-        "message": "Anpassen, wie gefundene Zeiten angezeigt werden"
-    },
-    "bgColor": {
-        "message": "Hintergrundfarbe"
-    },
-    "textColor": {
-        "message": "Textfarbe"
-    },
-    "preview": {
-        "message": "Vorschau:"
-    },
-    "highlightBehavior": {
-        "message": "Hervorhebungsverhalten"
-    },
-    "enableHighlighting": {
-        "message": "Hervorhebung auf Seiten aktivieren"
-    },
-    "highlightStyle": {
-        "message": "Hervorhebungsstil"
-    },
-    "textOnlyHighlight": {
-        "message": "Nur Text (kein Hintergrund)"
-    },
-    "colorPresets": {
-        "message": "Farbvoreinstellungen"
-    },
-    "ignoredSites": {
-        "message": "Ignorierte Seiten"
-    },
-    "manageIgnoredSites": {
-        "message": "Ignorierte Seiten verwalten"
-    },
-    "ignoredSitesDesc": {
-        "message": "Webseiten hinzufügen, auf denen Zeiten nicht hervorgehoben werden sollen."
-    },
-    "addSite": {
-        "message": "Seite hinzufügen"
-    },
-    "testing": {
-        "message": "Testen"
-    },
-    "testingDesc": {
-        "message": "Schnelle Validierung der Erkennung/Hervorhebung in den Einstellungen."
-    },
-    "inlineTestPanel": {
-        "message": "Internes Testpanel"
-    },
-    "inlineTestDesc": {
-        "message": "Erweitern, um Beispielzeiten zu sehen"
-    },
-    "highlightSamples": {
-        "message": "Beispiele hervorheben"
-    },
-    "resetSamples": {
-        "message": "Beispiele zurücksetzen"
-    },
-    "status": {
-        "message": "Status"
-    },
-    "idle": {
-        "message": "untätig"
-    },
-    "detected": {
-        "message": "Erkannt"
-    },
-    "format12h": {
-        "message": "12-Stunden-Format"
-    },
-    "format24h": {
-        "message": "24-Stunden-Format"
-    },
-    "utcOffsets": {
-        "message": "UTC-Offsets"
-    },
-    "variousTz": {
-        "message": "Verschiedene Zeitzonen"
-    },
-    "edgeCases": {
-        "message": "Einzelfälle"
-    },
-    "notHighlighted": {
-        "message": "Sollten NICHT hervorgehoben werden (keine Zeitzone)"
-    },
-    "testPanelTip": {
-        "message": "Hinweis: Dieses Panel testet nur die Erkennung in den Einstellungen."
-    },
-    "support": {
-        "message": "Support"
-    },
-    "supportDesc": {
-        "message": "Wenn Ihnen die Erweiterung gefällt, unterstützen Sie den Entwickler!"
-    },
-    "about": {
-        "message": "Über"
-    },
-    "features": {
-        "message": "Funktionen:"
-    },
-    "restoreDefaults": {
-        "message": "Standard wiederherstellen"
-    },
-    "badgeFound": {
-        "message": "TimeZone Converter - $COUNT$ Zeit(en) gefunden",
-        "placeholders": {
-            "count": {
-                "content": "$1"
-            }
-        }
-    },
-    "badgeNone": {
-        "message": "TimeZone Converter - Keine Zeiten gefunden"
-    },
-    "contextMenuConvert": {
-        "message": "Zeit in meine Zeitzone konvertieren"
-    },
-    "settingsSaved": {
-        "message": "Einstellungen gespeichert"
-    },
-    "confirmReset": {
-        "message": "Möchten Sie die Standardeinstellungen wirklich wiederherstellen?"
-    },
-    "clickToSee": {
-        "message": "Klicken für: $TIME$",
-        "placeholders": {
-            "time": {
-                "content": "$1"
-            }
-        }
-    },
-    "clickToSeeOriginal": {
-        "message": "Klicken für Original: $TIME$",
-        "placeholders": {
-            "time": {
-                "content": "$1"
-            }
-        }
-    },
-    "dayOffsetPlus": {
-        "message": " (+$DAYS$ Tag)",
-        "placeholders": {
-            "days": {
-                "content": "$1"
-            }
-        }
-    },
-    "dayOffsetMinus": {
-        "message": " (-$DAYS$ Tag)",
-        "placeholders": {
-            "days": {
-                "content": "$1"
-            }
-        }
-    },
-    "dayOffsetPlural": {
-        "message": " ($SIGN$$DAYS$ Tage)",
-        "placeholders": {
-            "sign": {
-                "content": "$1"
-            },
-            "days": {
-                "content": "$2"
-            }
-        }
-    }
+﻿{
+    "appName":  {
+                    "message":  "TimeZone Converter"
+                },
+    "appDesc":  {
+                    "message":  "Erkennt und konvertiert Zeitzonen auf Webseiten automatisch in Ihre lokale Zeit."
+                },
+    "settings":  {
+                     "message":  "Einstellungen"
+                 },
+    "highlight":  {
+                      "message":  "Hervorheben"
+                  },
+    "ignoreThisSite":  {
+                           "message":  "Diese Seite ignorieren"
+                       },
+    "unignore":  {
+                     "message":  "Ignorieren aufheben"
+                 },
+    "remove":  {
+                   "message":  "Entfernen"
+               },
+    "rescan":  {
+                   "message":  "Neu scannen"
+               },
+    "ignored":  {
+                    "message":  "Ignoriert"
+                },
+    "timesFound":  {
+                       "message":  "Zeiten gefunden"
+                   },
+    "checking":  {
+                     "message":  "PrĂĽfenâ€¦"
+                 },
+    "connected":  {
+                      "message":  "Verbunden"
+                  },
+    "notConnected":  {
+                         "message":  "Nicht verbunden"
+                     },
+    "fallback":  {
+                     "message":  "Fallback (Hintergrund)"
+                 },
+    "restricted":  {
+                       "message":  "EingeschrĂ¤nkte Seite"
+                   },
+    "noTab":  {
+                  "message":  "Kein Ziel-Tab"
+              },
+    "openWebpage":  {
+                        "message":  "Ă–ffnen Sie einen Webseiten-Tab und Ă¶ffnen Sie das Popup erneut."
+                    },
+    "restrictedDesc":  {
+                           "message":  "Diese Seite ist von Chrome eingeschrĂ¤nkt (z. B. chrome://). Ă–ffnen Sie eine normale Webseite."
+                       },
+    "reloadPage":  {
+                       "message":  "Verbindung zur Seite fehlgeschlagen. Seite neu laden oder Neu scannen drĂĽcken."
+                   },
+    "noTimesFound":  {
+                         "message":  "Keine Zeiten gefunden"
+                     },
+    "emptyHint":  {
+                      "message":  "Ă–ffnen Sie eine Seite mit Zeiten wie â€ž8PM CETâ€ś und drĂĽcken Sie Neu scannen."
+                  },
+    "buyMeACoffee":  {
+                         "message":  "Kaffee spendieren"
+                     },
+    "githubFeedback":  {
+                           "message":  "GitHub / Feedback"
+                       },
+    "settingsTitle":  {
+                          "message":  "Einstellungen \u0026 Konfiguration"
+                      },
+    "timezoneSettings":  {
+                             "message":  "Zeitzonen-Einstellungen"
+                         },
+    "targetTimezone":  {
+                           "message":  "Ziel-Zeitzone"
+                       },
+    "targetTimezoneDesc":  {
+                               "message":  "WĂ¤hlen Sie, wie Zeiten konvertiert werden sollen"
+                           },
+    "autoDetect":  {
+                       "message":  "Automatisch erkennen"
+                   },
+    "autoDetectDesc":  {
+                           "message":  "System-Zeitzone verwenden"
+                       },
+    "manualSelection":  {
+                            "message":  "Manuelle Auswahl"
+                        },
+    "manualSelectionDesc":  {
+                                "message":  "Spezifische Zeitzone wĂ¤hlen"
+                            },
+    "selectTimezone":  {
+                           "message":  "Zeitzone auswĂ¤hlen"
+                       },
+    "timeFormat":  {
+                       "message":  "Zeitformat"
+                   },
+    "use24HourFormat":  {
+                            "message":  "24-Stunden-Format verwenden"
+                        },
+    "conversion":  {
+                       "message":  "Konvertierung"
+                   },
+    "autoConvertOnLoad":  {
+                              "message":  "Automatisch beim Laden konvertieren"
+                          },
+    "displayMode":  {
+                        "message":  "Anzeigemodus"
+                    },
+    "displayModeDesc":  {
+                            "message":  "WĂ¤hlen Sie, wie konvertierte Zeiten angezeigt werden"
+                        },
+    "modeToggle":  {
+                       "message":  "Klicken zum Umschalten (Original â†” Konvertiert)"
+                   },
+    "modeTooltip":  {
+                        "message":  "Nur Tooltip (keine Textersetzung)"
+                    },
+    "resultFormat":  {
+                         "message":  "Ergebnisformat"
+                     },
+    "resultFormatDesc":  {
+                             "message":  "Steuern Sie, was im konvertierten Ergebnis enthalten ist"
+                         },
+    "includeUtcOffset":  {
+                             "message":  "UTC-Offset einschlieĂźen (z. B. UTC+1)"
+                         },
+    "includeDayOffset":  {
+                             "message":  "Tages-Offset einschlieĂźen (z. B. +1 Tag)"
+                         },
+    "includeSourceTz":  {
+                            "message":  "Quell-Zeitzone einschlieĂźen (z. B. CET)"
+                        },
+    "dateDetection":  {
+                          "message":  "Datumserkennung"
+                      },
+    "detectDates":  {
+                        "message":  "Daten neben Zeiten erkennen"
+                    },
+    "scanMode":  {
+                     "message":  "Scan-Modus"
+                 },
+    "scanModeDesc":  {
+                         "message":  "Steuern Sie, wie aggressiv die Erweiterung Seiten scannt"
+                     },
+    "scanAuto":  {
+                     "message":  "Auto (Scannen + dynamische Ă„nderungen ĂĽberwachen)"
+                 },
+    "scanAutoLight":  {
+                          "message":  "Auto-light (einmal scannen, keine DOM-Ăśberwachung)"
+                      },
+    "scanManual":  {
+                       "message":  "Manuell (nur beim DrĂĽcken von Neu scannen)"
+                   },
+    "performanceSettings":  {
+                                "message":  "Leistungseinstellungen"
+                            },
+    "performanceDesc":  {
+                            "message":  "Konvertierungen pro Seite begrenzen fĂĽr bessere Leistung"
+                        },
+    "maxConversions":  {
+                           "message":  "Maximale Konvertierungen"
+                       },
+    "noLimit":  {
+                    "message":  "0 = kein Limit"
+                },
+    "detectedTimezone":  {
+                             "message":  "Ihre erkannte Zeitzone:"
+                         },
+    "privacy":  {
+                    "message":  "Datenschutz"
+                },
+    "privacyDesc":  {
+                        "message":  "Diese Erweiterung verarbeitet erkannte Zeiten direkt in Ihrem Browser. Keine persĂ¶nlichen Daten werden geteilt."
+                    },
+    "privacyBullet1":  {
+                           "message":  "Einstellungen werden in \u003cstrong\u003echrome.storage.sync\u003c/strong\u003e gespeichert."
+                       },
+    "privacyBullet2":  {
+                           "message":  "Keine Analyse, Tracker oder Werbung."
+                       },
+    "privacyBullet3":  {
+                           "message":  "Keine externen API-Aufrufe erforderlich."
+                       },
+    "privacyBullet4":  {
+                           "message":  "Die Erweiterung liest nur Text, um Zeiten zu finden und hervorzuheben."
+                       },
+    "readFullPrivacy":  {
+                            "message":  "VollstĂ¤ndige DatenschutzerklĂ¤rung lesen"
+                        },
+    "changelog":  {
+                      "message":  "Ă„nderungsprotokoll"
+                  },
+    "recentUpdates":  {
+                          "message":  "Aktuelle Updates (neueste zuerst)"
+                      },
+    "appearance":  {
+                       "message":  "Erscheinungsbild"
+                   },
+    "highlightColors":  {
+                            "message":  "Hervorhebungsfarben"
+                        },
+    "highlightColorsDesc":  {
+                                "message":  "Anpassen, wie gefundene Zeiten angezeigt werden"
+                            },
+    "bgColor":  {
+                    "message":  "Hintergrundfarbe"
+                },
+    "textColor":  {
+                      "message":  "Textfarbe"
+                  },
+    "preview":  {
+                    "message":  "Vorschau:"
+                },
+    "highlightBehavior":  {
+                              "message":  "Hervorhebungsverhalten"
+                          },
+    "enableHighlighting":  {
+                               "message":  "Hervorhebung auf Seiten aktivieren"
+                           },
+    "highlightStyle":  {
+                           "message":  "Hervorhebungsstil"
+                       },
+    "textOnlyHighlight":  {
+                              "message":  "Nur Text (kein Hintergrund)"
+                          },
+    "colorPresets":  {
+                         "message":  "Farbvoreinstellungen"
+                     },
+    "ignoredSites":  {
+                         "message":  "Ignorierte Seiten"
+                     },
+    "manageIgnoredSites":  {
+                               "message":  "Ignorierte Seiten verwalten"
+                           },
+    "ignoredSitesDesc":  {
+                             "message":  "Webseiten hinzufĂĽgen, auf denen Zeiten nicht hervorgehoben werden sollen."
+                         },
+    "addSite":  {
+                    "message":  "Seite hinzufĂĽgen"
+                },
+    "testing":  {
+                    "message":  "Testen"
+                },
+    "testingDesc":  {
+                        "message":  "Schnelle Validierung der Erkennung/Hervorhebung in den Einstellungen."
+                    },
+    "inlineTestPanel":  {
+                            "message":  "Internes Testpanel"
+                        },
+    "inlineTestDesc":  {
+                           "message":  "Erweitern, um Beispielzeiten zu sehen"
+                       },
+    "highlightSamples":  {
+                             "message":  "Beispiele hervorheben"
+                         },
+    "resetSamples":  {
+                         "message":  "Beispiele zurĂĽcksetzen"
+                     },
+    "status":  {
+                   "message":  "Status"
+               },
+    "idle":  {
+                 "message":  "untĂ¤tig"
+             },
+    "detected":  {
+                     "message":  "Erkannt"
+                 },
+    "format12h":  {
+                      "message":  "12-Stunden-Format"
+                  },
+    "format24h":  {
+                      "message":  "24-Stunden-Format"
+                  },
+    "utcOffsets":  {
+                       "message":  "UTC-Offsets"
+                   },
+    "variousTz":  {
+                      "message":  "Verschiedene Zeitzonen"
+                  },
+    "edgeCases":  {
+                      "message":  "EinzelfĂ¤lle"
+                  },
+    "notHighlighted":  {
+                           "message":  "Sollten NICHT hervorgehoben werden (keine Zeitzone)"
+                       },
+    "testPanelTip":  {
+                         "message":  "Hinweis: Dieses Panel testet nur die Erkennung in den Einstellungen."
+                     },
+    "support":  {
+                    "message":  "Support"
+                },
+    "supportDesc":  {
+                        "message":  "Wenn Ihnen die Erweiterung gefĂ¤llt, unterstĂĽtzen Sie den Entwickler!"
+                    },
+    "about":  {
+                  "message":  "Ăśber"
+              },
+    "features":  {
+                     "message":  "Funktionen:"
+                 },
+    "restoreDefaults":  {
+                            "message":  "Standard wiederherstellen"
+                        },
+    "badgeFound":  {
+                       "message":  "TimeZone Converter - $COUNT$ Zeit(en) gefunden",
+                       "placeholders":  {
+                                            "count":  {
+                                                          "content":  "$1"
+                                                      }
+                                        }
+                   },
+    "badgeNone":  {
+                      "message":  "TimeZone Converter - Keine Zeiten gefunden"
+                  },
+    "contextMenuConvert":  {
+                               "message":  "Zeit in meine Zeitzone konvertieren"
+                           },
+    "settingsSaved":  {
+                          "message":  "Einstellungen gespeichert"
+                      },
+    "confirmReset":  {
+                         "message":  "MĂ¶chten Sie die Standardeinstellungen wirklich wiederherstellen?"
+                     },
+    "clickToSee":  {
+                       "message":  "Klicken fĂĽr: $TIME$",
+                       "placeholders":  {
+                                            "time":  {
+                                                         "content":  "$1"
+                                                     }
+                                        }
+                   },
+    "clickToSeeOriginal":  {
+                               "message":  "Klicken fĂĽr Original: $TIME$",
+                               "placeholders":  {
+                                                    "time":  {
+                                                                 "content":  "$1"
+                                                             }
+                                                }
+                           },
+    "dayOffsetPlus":  {
+                          "message":  " (+$DAYS$ Tag)",
+                          "placeholders":  {
+                                               "days":  {
+                                                            "content":  "$1"
+                                                        }
+                                           }
+                      },
+    "dayOffsetMinus":  {
+                           "message":  " (-$DAYS$ Tag)",
+                           "placeholders":  {
+                                                "days":  {
+                                                             "content":  "$1"
+                                                         }
+                                            }
+                       },
+    "dayOffsetPlural":  {
+                            "message":  " ($SIGN$$DAYS$ Tage)",
+                            "placeholders":  {
+                                                 "sign":  {
+                                                              "content":  "$1"
+                                                          },
+                                                 "days":  {
+                                                              "content":  "$2"
+                                                          }
+                                             }
+                        },
+    "language":  "Sprache",
+    "langAuto":  "Automatisch (Browser)",
+    "langEn":  "Englisch",
+    "langPl":  "Polnisch",
+    "langDe":  "Deutsch",
+    "langEs":  "Spanisch",
+    "langPtBr":  "Portugiesisch (Brasilien)",
+    "langRu":  "Russisch"
 }
