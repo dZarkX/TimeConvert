@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const resultIncludeDayOffset = document.getElementById('resultIncludeDayOffset');
   const resultIncludeSourceTz = document.getElementById('resultIncludeSourceTz');
   const enableDateDetection = document.getElementById('enableDateDetection');
+  const enableNlpDetection = document.getElementById('enableNlpDetection');
+  const enableContextTimezone = document.getElementById('enableContextTimezone');
   const scanMode = document.getElementById('scanMode');
   const maxConversions = document.getElementById('maxConversions');
   const highlightColor = document.getElementById('highlightColor');
@@ -121,6 +123,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       resultIncludeDayOffset: true,
       resultIncludeSourceTz: false,
       enableDateDetection: false,
+      enableNlpDetection: false,
+      enableContextTimezone: false,
       scanMode: 'auto',
       maxConversions: 25,
       highlightColor: '#ffeb3b',
@@ -149,6 +153,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   resultIncludeDayOffset.checked = settings.resultIncludeDayOffset;
   resultIncludeSourceTz.checked = settings.resultIncludeSourceTz;
   enableDateDetection.checked = settings.enableDateDetection;
+  if (enableNlpDetection) enableNlpDetection.checked = settings.enableNlpDetection;
+  if (enableContextTimezone) enableContextTimezone.checked = settings.enableContextTimezone;
   scanMode.value = settings.scanMode;
   maxConversions.value = settings.maxConversions;
   highlightColor.value = settings.highlightColor;
@@ -208,6 +214,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       resultIncludeDayOffset: resultIncludeDayOffset.checked,
       resultIncludeSourceTz: resultIncludeSourceTz.checked,
       enableDateDetection: enableDateDetection.checked,
+      enableNlpDetection: enableNlpDetection ? enableNlpDetection.checked : false,
+      enableContextTimezone: enableContextTimezone ? enableContextTimezone.checked : false,
       scanMode: scanMode.value,
       maxConversions: parseInt(maxConversions.value) || 0,
       highlightColor: highlightColor.value,
@@ -233,8 +241,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Event Listeners for auto-save
   [use24Hour, autoConvertOnLoad, displayMode, resultIncludeUtcOffset,
     resultIncludeDayOffset, resultIncludeSourceTz, enableDateDetection,
-    scanMode, maxConversions, highlightColor, highlightTextColor,
+    enableNlpDetection, enableContextTimezone, scanMode, maxConversions, highlightColor, highlightTextColor,
     highlightEnabled, highlightTextOnly, timezoneSelect, preferredLanguage].forEach(el => {
+      if (!el) return;
       el.addEventListener('change', async () => {
         if (el === preferredLanguage) {
           messagesCache = null; // Clear cache to reload

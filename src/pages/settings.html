@@ -179,29 +179,38 @@
           </div>
         </div>
 
-        <div class="setting-group">
-          <label class="setting-label" data-i18n="nlpDetection">Natural Language Detection</label>
-          <p class="setting-description" data-i18n="nlpDetectionDesc">Detect relative time expressions like "in 2 hours" or "tomorrow at noon"</p>
-          <div class="toggle-setting">
-            <span class="toggle-text" data-i18n="enableNlpDetection">Enable NLP/context detection</span>
-            <label class="toggle">
-              <input type="checkbox" id="enableNlpDetection">
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
-        </div>
+        <details class="accordion" id="experimentalPanel" style="margin-top: 10px;">
+          <summary class="accordion-summary">
+            <span class="accordion-title" data-i18n="experimentalFeatures">Experimental Features</span>
+            <span class="accordion-subtitle" data-i18n="experimentalFeaturesDesc">Try early features (may be unstable)</span>
+          </summary>
 
-        <div class="setting-group">
-          <label class="setting-label" data-i18n="contextTimezone">Context Timezone</label>
-          <p class="setting-description" data-i18n="contextTimezoneDesc">Guess timezone from website domain when no timezone is specified</p>
-          <div class="toggle-setting">
-            <span class="toggle-text" data-i18n="enableContextTimezone">Enable domain-based timezone guessing</span>
-            <label class="toggle">
-              <input type="checkbox" id="enableContextTimezone">
-              <span class="toggle-slider"></span>
-            </label>
+          <div class="accordion-body">
+            <div class="setting-group" style="margin-top: 0;">
+              <label class="setting-label" data-i18n="nlpDetection">Natural Language Detection</label>
+              <p class="setting-description" data-i18n="nlpDetectionDesc">Detect relative time expressions like "in 2 hours" or "tomorrow at noon"</p>
+              <div class="toggle-setting">
+                <span class="toggle-text" data-i18n="enableNlpDetection">Enable NLP/context detection</span>
+                <label class="toggle">
+                  <input type="checkbox" id="enableNlpDetection">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="setting-group" style="margin-top: 14px;">
+              <label class="setting-label" data-i18n="contextTimezone">Context Timezone</label>
+              <p class="setting-description" data-i18n="contextTimezoneDesc">Guess timezone from website domain when no timezone is specified</p>
+              <div class="toggle-setting">
+                <span class="toggle-text" data-i18n="enableContextTimezone">Enable domain-based timezone guessing</span>
+                <label class="toggle">
+                  <input type="checkbox" id="enableContextTimezone">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
           </div>
-        </div>
+        </details>
 
         <div class="setting-group">
           <label class="setting-label" data-i18n="scanMode">Scan Mode</label>

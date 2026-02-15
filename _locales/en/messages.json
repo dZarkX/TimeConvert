@@ -1,4 +1,4 @@
-﻿{
+{
     "appName":  {
                     "message":  "TimeZone Converter"
                 },
@@ -140,6 +140,12 @@
     "enableDateDetection":  {
                               "message":  "Enable date detection"
                           },
+    "experimentalFeatures":  {
+                                 "message":  "Experimental Features"
+                             },
+    "experimentalFeaturesDesc":  {
+                                     "message":  "Try early features (may be unstable)"
+                                 },
     "nlpDetection":  {
                         "message":  "Natural language detection"
                     },

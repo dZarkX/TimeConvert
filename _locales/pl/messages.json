@@ -37,6 +37,8 @@
   "includeSourceTz": { "message": "Uwzględnij strefę źródłową (np. PST)" },
   "dateDetection": { "message": "Wykrywanie dat" },
   "enableDateDetection": { "message": "Włącz wykrywanie dat" },
+  "experimentalFeatures": { "message": "Funkcje eksperymentalne" },
+  "experimentalFeaturesDesc": { "message": "Testuj nowe funkcje (mogą być niestabilne)" },
   "nlpDetection": { "message": "Wykrywanie języka naturalnego" },
   "nlpDetectionDesc": { "message": "Wykrywanie wyrażeń relatywnych typu \"in 2 hours\" lub \"tomorrow at noon\"" },
   "enableNlpDetection": { "message": "Włącz wykrywanie NLP" },
