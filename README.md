@@ -5,7 +5,7 @@ A small browser extension that detects times on web pages and converts them to y
 ![Version](https://img.shields.io/badge/version-1.4.0-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 [![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-Download%20Now-brightgreen)](https://chromewebstore.google.com/detail/timezone-converter/phpmfhmlfolhocoefklfafhipdopgdka?authuser=0&hl=pl)
-[![Firefox Add-ons](https://img.shields.io/badge/Firefox%20Add-ons-Coming%20Soon-orange)](https://addons.mozilla.org/en-US/firefox/addon/timezone-converter/)
+[![Firefox Add-ons](https://img.shields.io/badge/Firefox%20Add-ons-Pending%20Review-orange)](https://addons.mozilla.org/en-US/firefox/addon/timezone-converter/)
 
 GitHub: https://github.com/dZarkX/TimeConvert
 
@@ -32,7 +32,7 @@ GitHub: https://github.com/dZarkX/TimeConvert
 The easiest way to install extension directly from the official store.
 
 ### From Firefox Add-ons
-🦊 [**Install from Firefox Add-ons**](https://addons.mozilla.org/en-US/firefox/addon/timezone-converter/) *(Coming soon)*
+🦊 [**Install from Firefox Add-ons**](https://addons.mozilla.org/en-US/firefox/addon/timezone-converter/) *(Pending review)*
 
 For Firefox users - available soon on Mozilla Add-ons marketplace.
 
@@ -154,7 +154,7 @@ MIT License - feel free to use and modify as you wish.
 
 ### 🌐 Official Downloads
 - **Chrome Web Store**: [https://chromewebstore.google.com/detail/timezone-converter/phpmfhmlfolhocoefklfafhipdopgdka](https://chromewebstore.google.com/detail/timezone-converter/phpmfhmlfolhocoefklfafhipdopgdka?authuser=0&hl=pl)
-- **Firefox Add-ons**: [https://addons.mozilla.org/en-US/firefox/addon/timezone-converter/](https://addons.mozilla.org/en-US/firefox/addon/timezone-converter/) *(Coming soon)*
+- **Firefox Add-ons**: [https://addons.mozilla.org/en-US/firefox/addon/timezone-converter/](https://addons.mozilla.org/en-US/firefox/addon/timezone-converter/) *(Pending review)*
 
 ### 📦 Direct Installation
 
@@ -178,7 +178,22 @@ For developers who want to modify or contribute:
 4. Click "Load unpacked"
 5. Select the project folder
 
-## �🐛 Known Issues
+## 🦊 Firefox / AMO Packaging
+
+This repository includes a Firefox (AMO) packaging flow:
+
+- `manifest-firefox.json` (Manifest V2)
+- `src/scripts/background-firefox.js` (Firefox-specific background implementation)
+- `tools/build-firefox.js` (packaging script)
+
+Build the Firefox ZIP package:
+
+1. Install dependencies: `npm install`
+2. Build package: `npm run pack-firefox`
+
+This creates: `TimeConvert-Firefox.zip`
+
+## 🐛 Known Issues
 
 - Times without timezone information are not detected (by design)
 - Some ambiguous timezone abbreviations (like IST - India/Ireland/Israel) default to one interpretation
@@ -225,11 +240,3 @@ For developers who want to modify or contribute:
 ## 🔒 Privacy Policy
 
 See: [privacy-policy.html](privacy-policy.html)
-
-Git setup (local)
-
-1. Initialize repository: `git init`
-2. Create main branch: `git checkout -b main`
-3. Create development branches: `git branch develop && git branch cleanup`
-
-If you'd like, provide a remote URL and I can add and push branches for you.
