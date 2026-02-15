@@ -1244,9 +1244,34 @@
 
   // Escape HTML to prevent XSS
   function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+    const s = String(text ?? '');
+    return s
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function createPopupClockIcon() {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('width', '16');
+    svg.setAttribute('height', '16');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('fill', '#4CAF50');
+    svg.style.marginRight = '8px';
+
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', '12');
+    circle.setAttribute('cy', '12');
+    circle.setAttribute('r', '10');
+
+    const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+    polyline.setAttribute('points', '12 6 12 12 16 14');
+
+    svg.appendChild(circle);
+    svg.appendChild(polyline);
+    return svg;
   }
 
   // Show conversion result popup
@@ -1275,29 +1300,61 @@
       animation: tz-slideIn 0.3s ease-out;
     `;
 
-    popup.innerHTML = `
-      <div style="display: flex; align-items: center; margin-bottom: 8px;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="#4CAF50" style="margin-right: 8px;">
-          <circle cx="12" cy="12" r="10"></circle>
-          <polyline points="12 6 12 12 16 14"></polyline>
-        </svg>
-        <strong>Time Conversion</strong>
-      </div>
-      <div style="margin-bottom: 4px; color: #666;">Original:</div>
-      <div style="background: #f5f5f5; padding: 8px; border-radius: 4px; margin-bottom: 12px; font-family: monospace;">${escapeHtml(original)}</div>
-      <div style="margin-bottom: 4px; color: #666;">Converted:</div>
-      <div style="background: #e8f5e8; padding: 8px; border-radius: 4px; font-family: monospace; color: #2e7d32;">${escapeHtml(converted)}</div>
-      <button id="tz-popup-close" style="
-        margin-top: 12px;
-        background: #4CAF50;
-        color: white;
-        border: none;
-        padding: 6px 12px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 12px;
-      ">Close</button>
-    `;
+    // Build DOM safely (avoid innerHTML)
+    const header = document.createElement('div');
+    header.style.display = 'flex';
+    header.style.alignItems = 'center';
+    header.style.marginBottom = '8px';
+    header.appendChild(createPopupClockIcon());
+
+    const headerText = document.createElement('strong');
+    headerText.textContent = 'Time Conversion';
+    header.appendChild(headerText);
+
+    const originalLabel = document.createElement('div');
+    originalLabel.style.marginBottom = '4px';
+    originalLabel.style.color = '#666';
+    originalLabel.textContent = 'Original:';
+
+    const originalBox = document.createElement('div');
+    originalBox.style.background = '#f5f5f5';
+    originalBox.style.padding = '8px';
+    originalBox.style.borderRadius = '4px';
+    originalBox.style.marginBottom = '12px';
+    originalBox.style.fontFamily = 'monospace';
+    originalBox.textContent = String(original ?? '');
+
+    const convertedLabel = document.createElement('div');
+    convertedLabel.style.marginBottom = '4px';
+    convertedLabel.style.color = '#666';
+    convertedLabel.textContent = 'Converted:';
+
+    const convertedBox = document.createElement('div');
+    convertedBox.style.background = '#e8f5e8';
+    convertedBox.style.padding = '8px';
+    convertedBox.style.borderRadius = '4px';
+    convertedBox.style.fontFamily = 'monospace';
+    convertedBox.style.color = '#2e7d32';
+    convertedBox.textContent = String(converted ?? '');
+
+    const closeBtn = document.createElement('button');
+    closeBtn.id = 'tz-popup-close';
+    closeBtn.style.marginTop = '12px';
+    closeBtn.style.background = '#4CAF50';
+    closeBtn.style.color = 'white';
+    closeBtn.style.border = 'none';
+    closeBtn.style.padding = '6px 12px';
+    closeBtn.style.borderRadius = '4px';
+    closeBtn.style.cursor = 'pointer';
+    closeBtn.style.fontSize = '12px';
+    closeBtn.textContent = 'Close';
+
+    popup.appendChild(header);
+    popup.appendChild(originalLabel);
+    popup.appendChild(originalBox);
+    popup.appendChild(convertedLabel);
+    popup.appendChild(convertedBox);
+    popup.appendChild(closeBtn);
 
     // Add animation styles
     const style = document.createElement('style');
@@ -1318,7 +1375,6 @@
     document.body.appendChild(popup);
 
     // Handle close button
-    const closeBtn = popup.querySelector('#tz-popup-close');
     closeBtn.addEventListener('click', () => {
       popup.remove();
     });

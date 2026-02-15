@@ -39,6 +39,41 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Cache for loaded messages
   let messagesCache = null;
 
+  function setLocalizedContent(el, message) {
+    if (!el || !message) return;
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+      el.placeholder = message;
+      return;
+    }
+
+    // Some strings include basic markup like <strong>...</strong>.
+    // Avoid innerHTML assignment: parse and whitelist only TEXT + STRONG tags.
+    if (/<\s*strong\b/i.test(message)) {
+      try {
+        const parsed = new DOMParser().parseFromString(`<div>${message}</div>`, 'text/html');
+        const container = parsed.body.firstElementChild;
+        const nodes = [];
+        for (const node of Array.from(container.childNodes)) {
+          if (node.nodeType === Node.TEXT_NODE) {
+            nodes.push(document.createTextNode(node.nodeValue || ''));
+          } else if (node.nodeType === Node.ELEMENT_NODE && node.nodeName.toLowerCase() === 'strong') {
+            const strong = document.createElement('strong');
+            strong.textContent = node.textContent || '';
+            nodes.push(strong);
+          } else {
+            // Drop any other nodes for safety.
+          }
+        }
+        el.replaceChildren(...nodes);
+        return;
+      } catch {
+        // fall back to plain text
+      }
+    }
+
+    el.textContent = message;
+  }
+
   // Localization helper
   async function localizeUI() {
     const settings = await new Promise(r => chrome.storage.sync.get({ preferredLanguage: 'auto' }, r));
@@ -70,11 +105,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const key = el.getAttribute('data-i18n');
       const message = getMsg(key);
       if (message) {
-        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-          el.placeholder = message;
-        } else {
-          el.innerHTML = message; // Use innerHTML for cases like privacyBullet1 which has <strong>
-        }
+        setLocalizedContent(el, message);
       }
     });
 
@@ -169,20 +200,29 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Render ignored sites
   function renderIgnoredSites(sites) {
-    ignoredSitesList.innerHTML = '';
+    ignoredSitesList.replaceChildren();
     sites.forEach((site, index) => {
       const item = document.createElement('div');
       item.className = 'ignored-site-item';
-      item.innerHTML = `
-        <span class="site-url">${site}</span>
-        <button class="remove-site" data-index="${index}">Remove</button>
-      `;
+
+      const urlSpan = document.createElement('span');
+      urlSpan.className = 'site-url';
+      urlSpan.textContent = site;
+
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'remove-site';
+      removeBtn.dataset.index = String(index);
+      removeBtn.type = 'button';
+      removeBtn.textContent = 'Remove';
+
+      item.appendChild(urlSpan);
+      item.appendChild(removeBtn);
       ignoredSitesList.appendChild(item);
     });
 
-    document.querySelectorAll('.remove-site').forEach(btn => {
+    ignoredSitesList.querySelectorAll('.remove-site').forEach(btn => {
       btn.addEventListener('click', (e) => {
-        const idx = parseInt(e.target.dataset.index);
+        const idx = parseInt(e.currentTarget.dataset.index);
         const newSites = [...sites];
         newSites.splice(idx, 1);
         chrome.storage.sync.set({ ignoredSites: newSites }, () => {
