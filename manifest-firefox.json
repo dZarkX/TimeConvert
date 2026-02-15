@@ -11,6 +11,11 @@
         "contextMenus",
         "<all_urls>"
     ],
+    "data_collection_permissions": {
+        "uses_data": false,
+        "includes_personal_data": false,
+        "includes_sensitive_data": false
+    },
     "background": {
         "scripts": ["src/scripts/background.js"],
         "persistent": false
