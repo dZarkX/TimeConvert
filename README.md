@@ -2,7 +2,7 @@
 
 A small browser extension that detects times on web pages and converts them to your preferred timezone.
 
-![Version](https://img.shields.io/badge/version-1.2.7-green)
+![Version](https://img.shields.io/badge/version-1.4.0-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 GitHub: https://github.com/dZarkX/TimeConvert
@@ -147,6 +147,11 @@ MIT License - feel free to use and modify as you wish.
 - Some ambiguous timezone abbreviations (like IST - India/Ireland/Israel) default to one interpretation
 
 ## 📝 Changelog
+
+### v1.4.0
+- Updated product descriptions in all supported languages (EN, PL, DE, ES, PT)
+- Improved marketing copy for better user understanding
+- Version bump to 1.4.0
 
 ### v1.2.7
 - Settings autosave (no manual Save button) + Restore Defaults moved to footer
