@@ -1,30 +1,32 @@
-{
-  "name": "timeconvert",
-  "version": "1.3.2",
-  "description": "A small browser extension that detects times on web pages and converts them to your preferred timezone.",
-  "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "pack": "powershell -Command \"Compress-Archive -Path src, _locales, manifest.json, privacy-policy.html -DestinationPath TimeConvert.zip -Force\"",
-    "publish-cws": "npm run pack && node tools/publish.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dZarkX/TimeConvert.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/dZarkX/TimeConvert/issues"
-  },
-  "homepage": "https://github.com/dZarkX/TimeConvert#readme",
-  "devDependencies": {
-    "chrome-webstore-upload-cli": "^3.5.0",
-    "dotenv": "^17.3.1"
-  }
+﻿{
+    "name":  "timeconvert",
+    "version":  "1.3.3",
+    "description":  "A small browser extension that detects times on web pages and converts them to your preferred timezone.",
+    "main":  "index.js",
+    "directories":  {
+                        "test":  "test"
+                    },
+    "scripts":  {
+                    "test":  "echo \"Error: no test specified\" \u0026\u0026 exit 1",
+                    "pack":  "powershell -Command \"Compress-Archive -Path src, _locales, manifest.json, privacy-policy.html -DestinationPath TimeConvert.zip -Force\"",
+                    "publish-cws":  "npm run pack \u0026\u0026 node tools/publish.js"
+                },
+    "repository":  {
+                       "type":  "git",
+                       "url":  "git+https://github.com/dZarkX/TimeConvert.git"
+                   },
+    "keywords":  [
+
+                 ],
+    "author":  "",
+    "license":  "ISC",
+    "type":  "commonjs",
+    "bugs":  {
+                 "url":  "https://github.com/dZarkX/TimeConvert/issues"
+             },
+    "homepage":  "https://github.com/dZarkX/TimeConvert#readme",
+    "devDependencies":  {
+                            "chrome-webstore-upload-cli":  "^3.5.0",
+                            "dotenv":  "^17.3.1"
+                        }
 }

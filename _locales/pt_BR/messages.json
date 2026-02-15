@@ -1,382 +1,97 @@
-﻿{
-    "appName":  {
-                    "message":  "TimeZone Converter"
-                },
-    "appDesc":  {
-                    "message":  "Detecta e converte fusos horĂˇrios em pĂˇginas da web automaticamente para a sua hora local."
-                },
-    "settings":  {
-                     "message":  "ConfiguraĂ§Ăµes"
-                 },
-    "highlight":  {
-                      "message":  "Destacar"
-                  },
-    "ignoreThisSite":  {
-                           "message":  "Ignorar este site"
-                       },
-    "unignore":  {
-                     "message":  "Parar de ignorar"
-                 },
-    "remove":  {
-                   "message":  "Remover"
-               },
-    "rescan":  {
-                   "message":  "Reescanear"
-               },
-    "ignored":  {
-                    "message":  "Ignorados"
-                },
-    "timesFound":  {
-                       "message":  "horĂˇrios encontrados"
-                   },
-    "checking":  {
-                     "message":  "verificandoâ€¦"
-                 },
-    "connected":  {
-                      "message":  "conectado"
-                  },
-    "notConnected":  {
-                         "message":  "nĂŁo conectado"
-                     },
-    "fallback":  {
-                     "message":  "fallback (fundo)"
-                 },
-    "restricted":  {
-                       "message":  "pĂˇgina restrita"
-                   },
-    "noTab":  {
-                  "message":  "sem guia de destino"
-              },
-    "openWebpage":  {
-                        "message":  "Abra uma guia de pĂˇgina e reabra o popup."
-                    },
-    "restrictedDesc":  {
-                           "message":  "Esta pĂˇgina Ă© restrita pelo Chrome (ex: chrome://). Abra um site normal."
-                       },
-    "reloadPage":  {
-                       "message":  "NĂŁo foi possĂ­vel conectar Ă  pĂˇgina. Tente recarregar ou pressione Reescanear."
-                   },
-    "noTimesFound":  {
-                         "message":  "Nenhum horĂˇrio encontrado"
-                     },
-    "emptyHint":  {
-                      "message":  "Abra uma pĂˇgina com horĂˇrios como â€ś8PM CETâ€ť e pressione Reescanear."
-                  },
-    "buyMeACoffee":  {
-                         "message":  "Pague-me um cafĂ©"
-                     },
-    "githubFeedback":  {
-                           "message":  "GitHub / Feedback"
-                       },
-    "settingsTitle":  {
-                          "message":  "ConfiguraĂ§Ăµes \u0026 ConfiguraĂ§ĂŁo"
-                      },
-    "timezoneSettings":  {
-                             "message":  "ConfiguraĂ§Ăµes de Fuso HorĂˇrio"
-                         },
-    "targetTimezone":  {
-                           "message":  "Fuso HorĂˇrio de Destino"
-                       },
-    "targetTimezoneDesc":  {
-                               "message":  "Escolha como os horĂˇrios devem ser convertidos"
-                           },
-    "autoDetect":  {
-                       "message":  "Auto-detectar"
-                   },
-    "autoDetectDesc":  {
-                           "message":  "Usar o fuso horĂˇrio do sistema"
-                       },
-    "manualSelection":  {
-                            "message":  "SeleĂ§ĂŁo manual"
-                        },
-    "manualSelectionDesc":  {
-                                "message":  "Escolha um fuso horĂˇrio especĂ­fico"
-                            },
-    "selectTimezone":  {
-                           "message":  "Selecionar Fuso HorĂˇrio"
-                       },
-    "timeFormat":  {
-                       "message":  "Format de Hora"
-                   },
-    "use24HourFormat":  {
-                            "message":  "Usar formato de 24 horas"
-                        },
-    "conversion":  {
-                       "message":  "ConversĂŁo"
-                   },
-    "autoConvertOnLoad":  {
-                              "message":  "Converter automaticamente ao carregar"
-                          },
-    "displayMode":  {
-                        "message":  "Modo de ExibiĂ§ĂŁo"
-                    },
-    "displayModeDesc":  {
-                            "message":  "Escolha como os horĂˇrios convertidos sĂŁo mostrados"
-                        },
-    "modeToggle":  {
-                       "message":  "Clique para alternar (original â†” convertido)"
-                   },
-    "modeTooltip":  {
-                        "message":  "Apenas tooltip (sem substituiĂ§ĂŁo de texto)"
-                    },
-    "resultFormat":  {
-                         "message":  "Formato do Resultado"
-                     },
-    "resultFormatDesc":  {
-                             "message":  "Controle o que Ă© incluĂ­do no resultado convertido"
-                         },
-    "includeUtcOffset":  {
-                             "message":  "Incluir fuso UTC (ex: UTC+1)"
-                         },
-    "includeDayOffset":  {
-                             "message":  "Incluir diferenĂ§a de dia (ex: +1 dia)"
-                         },
-    "includeSourceTz":  {
-                            "message":  "Incluir fuso de origem (ex: CET)"
-                        },
-    "dateDetection":  {
-                          "message":  "DetecĂ§ĂŁo de Data"
-                      },
-    "detectDates":  {
-                        "message":  "Detectar datas prĂłximas aos horĂˇrios"
-                    },
-    "scanMode":  {
-                     "message":  "Modo de Varredura"
-                 },
-    "scanModeDesc":  {
-                         "message":  "Controle a intensidade da varredura nas pĂˇginas"
-                     },
-    "scanAuto":  {
-                     "message":  "Auto (varrer + monitorar mudanĂ§as dinĂ˘micas)"
-                 },
-    "scanAutoLight":  {
-                          "message":  "Auto-light (varrer uma vez, sem monitorar DOM)"
-                      },
-    "scanManual":  {
-                       "message":  "Manual (apenas ao pressionar Reescanear)"
-                   },
-    "performanceSettings":  {
-                                "message":  "ConfiguraĂ§Ăµes de Desempenho"
-                            },
-    "performanceDesc":  {
-                            "message":  "Limite o nĂşmero de conversĂµes por pĂˇgina para melhor desempenho"
-                        },
-    "maxConversions":  {
-                           "message":  "MĂˇximo de conversĂµes"
-                       },
-    "noLimit":  {
-                    "message":  "0 = sem limite"
-                },
-    "detectedTimezone":  {
-                             "message":  "Seu fuso horĂˇrio detectado:"
-                         },
-    "privacy":  {
-                    "message":  "Privacidade"
-                },
-    "privacyDesc":  {
-                        "message":  "Esta extensĂŁo processa os horĂˇrios diretamente no seu navegador. NĂŁo compartilha dados pessoais."
-                    },
-    "privacyBullet1":  {
-                           "message":  "As configuraĂ§Ăµes sĂŁo armazenadas no \u003cstrong\u003echrome.storage.sync\u003c/strong\u003e."
-                       },
-    "privacyBullet2":  {
-                           "message":  "Sem anĂˇlises, rastreadores ou anĂşncios."
-                       },
-    "privacyBullet3":  {
-                           "message":  "NĂŁo sĂŁo necessĂˇrias chamadas de API externas."
-                       },
-    "privacyBullet4":  {
-                           "message":  "A extensĂŁo apenas lĂŞ o texto para encontrar e destacar horĂˇrios."
-                       },
-    "readFullPrivacy":  {
-                            "message":  "Ler a PolĂ­tica de Privacidade completa"
-                        },
-    "changelog":  {
-                      "message":  "Notas de AtualizaĂ§ĂŁo"
-                  },
-    "recentUpdates":  {
-                          "message":  "AtualizaĂ§Ăµes recentes (mais novas primeiro)"
-                      },
-    "appearance":  {
-                       "message":  "AparĂŞncia"
-                   },
-    "highlightColors":  {
-                            "message":  "Cores de Destaque"
-                        },
-    "highlightColorsDesc":  {
-                                "message":  "Personalize como os horĂˇrios aparecem"
-                            },
-    "bgColor":  {
-                    "message":  "Cor de Fundo"
-                },
-    "textColor":  {
-                      "message":  "Cor do Texto"
-                  },
-    "preview":  {
-                    "message":  "PrĂ©-visualizaĂ§ĂŁo:"
-                },
-    "highlightBehavior":  {
-                              "message":  "Comportamento do Destaque"
-                          },
-    "enableHighlighting":  {
-                               "message":  "Ativar destaque nas pĂˇginas"
-                           },
-    "highlightStyle":  {
-                           "message":  "Estilo do Destaque"
-                       },
-    "textOnlyHighlight":  {
-                              "message":  "Apenas texto (sem fundo)"
-                          },
-    "colorPresets":  {
-                         "message":  "PredefiniĂ§Ăµes de Cores"
-                     },
-    "ignoredSites":  {
-                         "message":  "Sites Ignorados"
-                     },
-    "manageIgnoredSites":  {
-                               "message":  "Gerenciar Sites Ignorados"
-                           },
-    "ignoredSitesDesc":  {
-                             "message":  "Adicione sites onde a extensĂŁo nĂŁo deve destacar horĂˇrios."
-                         },
-    "addSite":  {
-                    "message":  "Adicionar Site"
-                },
-    "testing":  {
-                    "message":  "Testando"
-                },
-    "testingDesc":  {
-                        "message":  "Valide rapidamente a detecĂ§ĂŁo diretamente nas configuraĂ§Ăµes."
-                    },
-    "inlineTestPanel":  {
-                            "message":  "Painel de teste interno"
-                        },
-    "inlineTestDesc":  {
-                           "message":  "Expanda para ver exemplos de horĂˇrios"
-                       },
-    "highlightSamples":  {
-                             "message":  "Destacar exemplos"
-                         },
-    "resetSamples":  {
-                         "message":  "Resetar exemplos"
-                     },
-    "status":  {
-                   "message":  "Status"
-               },
-    "idle":  {
-                 "message":  "ocioso"
-             },
-    "detected":  {
-                     "message":  "Detectado"
-                 },
-    "format12h":  {
-                      "message":  "Formato de 12 Horas"
-                  },
-    "format24h":  {
-                      "message":  "Formato de 24 Horas"
-                  },
-    "utcOffsets":  {
-                       "message":  "Fuso UTC"
-                   },
-    "variousTz":  {
-                      "message":  "VĂˇrios Fusos"
-                  },
-    "edgeCases":  {
-                      "message":  "Casos Especiais"
-                  },
-    "notHighlighted":  {
-                           "message":  "NĂO devem ser destacados (sem fuso)"
-                       },
-    "testPanelTip":  {
-                         "message":  "Dica: este painel apenas testa o estilo de detecĂ§ĂŁo nestas configuraĂ§Ăµes."
-                     },
-    "support":  {
-                    "message":  "Suporte"
-                },
-    "supportDesc":  {
-                        "message":  "Se vocĂŞ gosta desta extensĂŁo, considere apoiar o desenvolvedor!"
-                    },
-    "about":  {
-                  "message":  "Sobre"
-              },
-    "features":  {
-                     "message":  "Recursos:"
-                 },
-    "restoreDefaults":  {
-                            "message":  "Restaurar PadrĂµes"
-                        },
-    "badgeFound":  {
-                       "message":  "TimeZone Converter - $COUNT$ horĂˇrio(s) encontrado(s)",
-                       "placeholders":  {
-                                            "count":  {
-                                                          "content":  "$1"
-                                                      }
-                                        }
-                   },
-    "badgeNone":  {
-                      "message":  "TimeZone Converter - Nenhum horĂˇrio encontrado"
-                  },
-    "contextMenuConvert":  {
-                               "message":  "Converter horĂˇrio para o meu fuso"
-                           },
-    "settingsSaved":  {
-                          "message":  "ConfiguraĂ§Ăµes salvas"
-                      },
-    "confirmReset":  {
-                         "message":  "Tem certeza de que deseja restaurar os padrĂµes?"
-                     },
-    "clickToSee":  {
-                       "message":  "Clique para ver: $TIME$",
-                       "placeholders":  {
-                                            "time":  {
-                                                         "content":  "$1"
-                                                     }
-                                        }
-                   },
-    "clickToSeeOriginal":  {
-                               "message":  "Clique para ver original: $TIME$",
-                               "placeholders":  {
-                                                    "time":  {
-                                                                 "content":  "$1"
-                                                             }
-                                                }
-                           },
-    "dayOffsetPlus":  {
-                          "message":  " (+$DAYS$ dia)",
-                          "placeholders":  {
-                                               "days":  {
-                                                            "content":  "$1"
-                                                        }
-                                           }
-                      },
-    "dayOffsetMinus":  {
-                           "message":  " (-$DAYS$ dia)",
-                           "placeholders":  {
-                                                "days":  {
-                                                             "content":  "$1"
-                                                         }
-                                            }
-                       },
-    "dayOffsetPlural":  {
-                            "message":  " ($SIGN$$DAYS$ dias)",
-                            "placeholders":  {
-                                                 "sign":  {
-                                                              "content":  "$1"
-                                                          },
-                                                 "days":  {
-                                                              "content":  "$2"
-                                                          }
-                                             }
-                        },
-    "language":  "Idioma",
-    "langAuto":  "Automático (Navegador)",
-    "langEn":  "Inglês",
-    "langPl":  "Polonês",
-    "langDe":  "Alemão",
-    "langEs":  "Espanhol",
-    "langPtBr":  "Português (Brasil)",
-    "langRu":  "Russo",
-    "languageDesc":  {
-                         "message":  "Escolha o seu idioma de interface preferido"
-                     }
+{
+  "appName": { "message": "TimeZone Converter" },
+  "appDesc": { "message": "Detecta e converte fusos horários em sites automaticamente para o seu horário local." },
+  "settings": { "message": "Configurações" },
+  "highlight": { "message": "Destacar" },
+  "ignoreThisSite": { "message": "Ignorar este site" },
+  "unignore": { "message": "Parar de ignorar" },
+  "remove": { "message": "Remover" },
+  "rescan": { "message": "Verificar novamente" },
+  "ignored": { "message": "Ignorado" },
+  "timesFound": { "message": "horários encontrados" },
+  "checking": { "message": "verificando" },
+  "connected": { "message": "conectado" },
+  "notConnected": { "message": "não conectado" },
+  "fallback": { "message": "fallback (fundo)" },
+  "restricted": { "message": "página restrita" },
+  "noTab": { "message": "sem aba de destino" },
+  "openWebpage": { "message": "Abrir página da web" },
+  "emptyHint": { "message": "Nenhum horário encontrado nesta página" },
+  "targetTimezone": { "message": "Fuso horário de destino" },
+  "autoDetect": { "message": "Detectar automaticamente" },
+  "autoDetectDesc": { "message": "Usa o fuso horário do seu sistema" },
+  "manualSelect": { "message": "Selecionar manualmente" },
+  "manualSelectDesc": { "message": "Escolha um fuso horário específico" },
+  "timeFormat": { "message": "Formato de hora" },
+  "use24HourFormat": { "message": "Usar formato de 24 horas" },
+  "conversion": { "message": "Conversão" },
+  "autoConvertOnLoad": { "message": "Converter automaticamente ao carregar a página" },
+  "displayMode": { "message": "Modo de exibição" },
+  "displayModeDesc": { "message": "Escolha como os horários convertidos são exibidos" },
+  "modeToggle": { "message": "Clique para alternar (original  convertido)" },
+  "modeTooltip": { "message": "Apenas dica de ferramenta (sem substituição de texto)" },
+  "resultFormat": { "message": "Formato de resultado" },
+  "resultFormatDesc": { "message": "Controle o que está incluído no resultado convertido" },
+  "includeUtcOffset": { "message": "Incluir deslocamento UTC (ex. UTC+1)" },
+  "includeDayOffset": { "message": "Incluir deslocamento de dia (ex. +1 dia)" },
+  "includeSourceTz": { "message": "Incluir fuso horário de origem (ex. PST)" },
+  "dateDetection": { "message": "Detecção de data" },
+  "enableDateDetection": { "message": "Habilitar detecção de data" },
+  "dateDetectionDesc": { "message": "Experimental: detecta datas em vários formatos" },
+  "scanMode": { "message": "Modo de verificação" },
+  "scanModeDesc": { "message": "Controle quão minuciosamente a página é verificada" },
+  "scanAuto": { "message": "Automático (recomendado)" },
+  "scanDeep": { "message": "Profundo (mais lento, mas mais minucioso)" },
+  "maxConversions": { "message": "Número máximo de conversões" },
+  "maxConversionsDesc": { "message": "Limite o número de horários detectados na página (0 = sem limite)" },
+  "appearance": { "message": "Aparência" },
+  "highlightColors": { "message": "Cores de destaque" },
+  "highlightColorsDesc": { "message": "Personalize como os horários detectados aparecem nas páginas" },
+  "bgColor": { "message": "Cor de fundo" },
+  "textColor": { "message": "Cor do texto" },
+  "preview": { "message": "Visualização" },
+  "colorPresets": { "message": "Predefinições de cor" },
+  "highlightBehavior": { "message": "Comportamento de destaque" },
+  "highlightEnabled": { "message": "Habilitar destaque" },
+  "highlightTextOnly": { "message": "Destacar apenas texto (sem fundo)" },
+  "language": { "message": "Idioma" },
+  "languageDesc": { "message": "Escolha o seu idioma de interface preferido" },
+  "langAuto": { "message": "Automático (Navegador)" },
+  "langEn": { "message": "Inglês" },
+  "langPl": { "message": "Polonês" },
+  "langDe": { "message": "Alemão" },
+  "langEs": { "message": "Espanhol" },
+  "langPtBr": { "message": "Português (Brasil)" },
+  "langRu": { "message": "Russo" },
+  "ignoredSites": { "message": "Sites ignorados" },
+  "ignoredSitesDesc": { "message": "A extensão não funcionará nesses sites" },
+  "addSite": { "message": "Adicionar site" },
+  "sitePlaceholder": { "message": "ex. example.com" },
+  "currentTimezone": { "message": "Seu fuso horário" },
+  "support": { "message": "Apoio" },
+  "supportDesc": { "message": "Se você gosta desta extensão, considere apoiá-la" },
+  "buyMeCoffee": { "message": "Compre-me um café" },
+  "kofi": { "message": "Ko-fi" },
+  "about": { "message": "Sobre" },
+  "features": { "message": "Recursos:" },
+  "feature1": { "message": "Detecção automática de horário" },
+  "feature2": { "message": "Conversão para o seu fuso horário" },
+  "feature3": { "message": "Destaque personalizável" },
+  "feature4": { "message": "Suporte para vários formatos" },
+  "recentUpdates": { "message": "Atualizações recentes (mais recentes primeiro)" },
+  "privacy": { "message": "Privacidade" },
+  "privacyTitle": { "message": "Política de privacidade" },
+  "privacyIntro": { "message": "TimeZone Converter respeita sua privacidade. Veja como trabalhamos:" },
+  "privacyBullet1": { "message": "<strong>Sem coleta de dados:</strong> Não coletamos, armazenamos ou transmitimos nenhum de seus dados pessoais." },
+  "privacyBullet2": { "message": "<strong>Processamento local:</strong> Todas as conversões de fuso horário ocorrem localmente em seu navegador." },
+  "privacyBullet3": { "message": "<strong>Sem rastreamento:</strong> Não usamos nenhuma ferramenta de análise ou rastreamento." },
+  "privacyBullet4": { "message": "<strong>Sem anúncios:</strong> Não exibimos anúncios nem trabalhamos com redes de publicidade." },
+  "privacyBullet5": { "message": "<strong>Sincronização de configurações:</strong> Suas configurações são sincronizadas pelo Chrome, mas apenas você tem acesso a elas." },
+  "privacyBullet6": { "message": "<strong>Código aberto:</strong> O código-fonte está disponível no GitHub para verificação." },
+  "privacyContact": { "message": "Se você tiver dúvidas sobre privacidade, entre em contato conosco pelo GitHub." },
+  "restoreDefaults": { "message": "Restaurar padrões" },
+  "settingsSaved": { "message": "Configurações salvas" },
+  "settingsRestored": { "message": "Padrões restaurados" },
+  "dayOffsetSingular": { "message": " ($SIGN$$DAYS$ dia)", "placeholders": { "sign": { "content": "$1" }, "days": { "content": "$2" } } },
+  "dayOffsetPlural": { "message": " ($SIGN$$DAYS$ dias)", "placeholders": { "sign": { "content": "$1" }, "days": { "content": "$2" } } }
 }
