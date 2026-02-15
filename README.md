@@ -5,6 +5,7 @@ A small browser extension that detects times on web pages and converts them to y
 ![Version](https://img.shields.io/badge/version-1.4.0-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 [![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-Download%20Now-brightgreen)](https://chromewebstore.google.com/detail/timezone-converter/phpmfhmlfolhocoefklfafhipdopgdka?authuser=0&hl=pl)
+[![Firefox Add-ons](https://img.shields.io/badge/Firefox%20Add-ons-Coming%20Soon-orange)](https://addons.mozilla.org/en-US/firefox/addon/timezone-converter/)
 
 GitHub: https://github.com/dZarkX/TimeConvert
 
@@ -28,7 +29,12 @@ GitHub: https://github.com/dZarkX/TimeConvert
 ### From Chrome Web Store (Recommended)
 🔗 [**Install from Chrome Web Store**](https://chromewebstore.google.com/detail/timezone-converter/phpmfhmlfolhocoefklfafhipdopgdka?authuser=0&hl=pl)
 
-The easiest way to install the extension directly from the official store.
+The easiest way to install extension directly from the official store.
+
+### From Firefox Add-ons
+🦊 [**Install from Firefox Add-ons**](https://addons.mozilla.org/en-US/firefox/addon/timezone-converter/) *(Coming soon)*
+
+For Firefox users - available soon on Mozilla Add-ons marketplace.
 
 ### From Source (Developer Mode)
 
@@ -144,14 +150,23 @@ https://github.com/dZarkX/TimeConvert/issues
 
 MIT License - feel free to use and modify as you wish.
 
-## � Download & Installation
+## 🔗 Download & Installation
 
-### 🌐 Official Download
+### 🌐 Official Downloads
 - **Chrome Web Store**: [https://chromewebstore.google.com/detail/timezone-converter/phpmfhmlfolhocoefklfafhipdopgdka](https://chromewebstore.google.com/detail/timezone-converter/phpmfhmlfolhocoefklfafhipdopgdka?authuser=0&hl=pl)
+- **Firefox Add-ons**: [https://addons.mozilla.org/en-US/firefox/addon/timezone-converter/](https://addons.mozilla.org/en-US/firefox/addon/timezone-converter/) *(Coming soon)*
 
 ### 📦 Direct Installation
-1. Visit the Chrome Web Store link above
+
+#### Chrome/Brave/Edge
+1. Visit Chrome Web Store link above
 2. Click "Add to Chrome" 
+3. Grant necessary permissions
+4. Extension will be automatically installed and activated
+
+#### Firefox
+1. Visit Firefox Add-ons link above *(when available)*
+2. Click "Add to Firefox"
 3. Grant necessary permissions
 4. Extension will be automatically installed and activated
 
