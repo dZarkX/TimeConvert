@@ -239,58 +239,6 @@
         </div>
       </section>
 
-      <!-- Privacy Section -->
-      <section class="settings-section">
-        <h2 class="section-title">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-          </svg>
-          <span data-i18n="privacy">Privacy</span>
-        </h2>
-
-        <div class="setting-group">
-          <p class="setting-description" data-i18n="privacyDesc">This extension processes detected times directly in
-            your browser. It does not sell or share personal data.</p>
-          <div class="about-info">
-            <ul>
-              <li data-i18n="privacyBullet1">Settings are stored in <strong>chrome.storage.sync</strong> (so they can
-                sync between your browsers).</li>
-              <li data-i18n="privacyBullet2">No analytics, trackers, or ads.</li>
-              <li data-i18n="privacyBullet3">No external API calls are required for basic functionality.</li>
-              <li data-i18n="privacyBullet4">The extension only reads page text to find time expressions and
-                highlight/convert them.</li>
-            </ul>
-            <p><a href="../../privacy-policy.html" target="_blank" rel="noopener" data-i18n="readFullPrivacy">Read the
-                full Privacy Policy</a></p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Changelog Section -->
-      <section class="settings-section">
-        <h2 class="section-title">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 11H3v2h6v-2zm0-4H3v2h6V7zm0 8H3v2h6v-2zm12-8h-6v2h6V7zm0 4h-6v2h6v-2zm0 4h-6v2h6v-2z"></path>
-          </svg>
-          <span data-i18n="changelog">Changelog</span>
-        </h2>
-
-        <div class="setting-group">
-          <p class="setting-description" data-i18n="recentUpdates">Recent updates (latest first)</p>
-          <div class="about-info" id="changelog">
-            <p><strong>v1.3.2</strong> — Improved language selection UI and visual consistency.</p>
-            <p><strong>v1.3.1</strong> — Manual language selection (EN, PL, DE, ES, PT-BR, RU).</p>
-            <p><strong>v1.3.0</strong> — High-quality app icon & CWS graphics.</p>
-            <p><strong>v1.2.9</strong> — Cleanup project structure & preparation for CWS.</p>
-            <p><strong>v1.2.8</strong> — Added German, Brazilian Portuguese, Spanish, and Russian support.</p>
-            <p><strong>v1.2.7</strong> — Internationalization support (English, Polish).</p>
-            <p><strong>v1.2.4</strong> — Settings autosave + Restore Defaults in footer.</p>
-            <p><strong>v1.2.3</strong> — GitHub feedback link in popup + repo links.</p>
-            <p><strong>v1.2.0</strong> — Added Privacy Policy page + sharper settings logo.</p>
-          </div>
-        </div>
-      </section>
-
       <!-- Appearance Settings -->
       <section class="settings-section">
         <h2 class="section-title">
@@ -431,6 +379,40 @@
         </div>
       </section>
 
+      <!-- Support Section -->
+      <section class="settings-section">
+        <h2 class="section-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path
+              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+            </path>
+          </svg>
+          <span data-i18n="support">Support</span>
+        </h2>
+
+        <div class="setting-group">
+          <p class="setting-description" data-i18n="supportDesc">If you like this extension, consider supporting the
+            developer!</p>
+          <div class="support-buttons">
+            <a href="https://buymeacoffee.com/3mon" target="_blank" class="support-btn coffee-btn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z" />
+              </svg>
+              <span data-i18n="buyMeACoffee">Buy Me a Coffee</span>
+            </a>
+
+            <a href="https://ko-fi.com/3mon_" target="_blank" class="support-btn kofi-btn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M12 21s-6.716-4.35-9.192-8.11C.936 9.73 2.08 6.5 5.4 6.5c1.733 0 3.043.93 3.86 2.02.817-1.09 2.127-2.02 3.86-2.02 3.32 0 4.464 3.23 2.592 6.39C18.716 16.65 12 21 12 21z" />
+              </svg>
+              Ko-fi
+            </a>
+          </div>
+        </div>
+      </section>
+
       <!-- Testing Section -->
       <section class="settings-section">
         <h2 class="section-title">
@@ -526,36 +508,54 @@
         </div>
       </section>
 
-      <!-- Support Section -->
+      <!-- Privacy Section -->
       <section class="settings-section">
         <h2 class="section-title">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path
-              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-            </path>
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
           </svg>
-          <span data-i18n="support">Support</span>
+          <span data-i18n="privacy">Privacy</span>
         </h2>
 
         <div class="setting-group">
-          <p class="setting-description" data-i18n="supportDesc">If you like this extension, consider supporting the
-            developer!</p>
-          <div class="support-buttons">
-            <a href="https://buymeacoffee.com/3mon" target="_blank" class="support-btn coffee-btn">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path
-                  d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z" />
-              </svg>
-              <span data-i18n="buyMeACoffee">Buy Me a Coffee</span>
-            </a>
+          <p class="setting-description" data-i18n="privacyDesc">This extension processes detected times directly in
+            your browser. It does not sell or share personal data.</p>
+          <div class="about-info">
+            <ul>
+              <li data-i18n="privacyBullet1">Settings are stored in <strong>chrome.storage.sync</strong> (so they can
+                sync between your browsers).</li>
+              <li data-i18n="privacyBullet2">No analytics, trackers, or ads.</li>
+              <li data-i18n="privacyBullet3">No external API calls are required for basic functionality.</li>
+              <li data-i18n="privacyBullet4">The extension only reads page text to find time expressions and
+                highlight/convert them.</li>
+            </ul>
+            <p><a href="../../privacy-policy.html" target="_blank" rel="noopener" data-i18n="readFullPrivacy">Read the
+                full Privacy Policy</a></p>
+          </div>
+        </div>
+      </section>
 
-            <a href="https://ko-fi.com/3mon_" target="_blank" class="support-btn kofi-btn">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path
-                  d="M12 21s-6.716-4.35-9.192-8.11C.936 9.73 2.08 6.5 5.4 6.5c1.733 0 3.043.93 3.86 2.02.817-1.09 2.127-2.02 3.86-2.02 3.32 0 4.464 3.23 2.592 6.39C18.716 16.65 12 21 12 21z" />
-              </svg>
-              Ko-fi
-            </a>
+      <!-- Changelog Section -->
+      <section class="settings-section">
+        <h2 class="section-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 11H3v2h6v-2zm0-4H3v2h6V7zm0 8H3v2h6v-2zm12-8h-6v2h6V7zm0 4h-6v2h6v-2zm0 4h-6v2h6v-2z"></path>
+          </svg>
+          <span data-i18n="changelog">Changelog</span>
+        </h2>
+
+        <div class="setting-group">
+          <p class="setting-description" data-i18n="recentUpdates">Recent updates (latest first)</p>
+          <div class="about-info" id="changelog">
+            <p><strong>v1.3.2</strong> — Improved language selection UI and visual consistency.</p>
+            <p><strong>v1.3.1</strong> — Manual language selection (EN, PL, DE, ES, PT-BR, RU).</p>
+            <p><strong>v1.3.0</strong> — High-quality app icon & CWS graphics.</p>
+            <p><strong>v1.2.9</strong> — Cleanup project structure & preparation for CWS.</p>
+            <p><strong>v1.2.8</strong> — Added German, Brazilian Portuguese, Spanish, and Russian support.</p>
+            <p><strong>v1.2.7</strong> — Internationalization support (English, Polish).</p>
+            <p><strong>v1.2.4</strong> — Settings autosave + Restore Defaults in footer.</p>
+            <p><strong>v1.2.3</strong> — GitHub feedback link in popup + repo links.</p>
+            <p><strong>v1.2.0</strong> — Added Privacy Policy page + sharper settings logo.</p>
           </div>
         </div>
       </section>
