@@ -375,5 +375,8 @@
     "langDe":  "Alemán",
     "langEs":  "Español",
     "langPtBr":  "Portugués (Brasil)",
-    "langRu":  "Ruso"
+    "langRu":  "Ruso",
+    "languageDesc":  {
+                         "message":  "Elija su idioma de interfaz preferido"
+                     }
 }

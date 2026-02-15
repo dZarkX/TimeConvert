@@ -1,371 +1,374 @@
-{
-    "appName": {
-        "message": "TimeZone Converter"
-    },
-    "appDesc": {
-        "message": "Automatycznie wykrywa i przelicza strefy czasowe na stronach na Twój lokalny czas."
-    },
-    "settings": {
-        "message": "Ustawienia"
-    },
-    "highlight": {
-        "message": "Wyróżnij"
-    },
-    "ignoreThisSite": {
-        "message": "Ignoruj witrynę"
-    },
-    "unignore": {
-        "message": "Przestań ignorować"
-    },
-    "remove": {
-        "message": "Usuń"
-    },
-    "rescan": {
-        "message": "Odśwież"
-    },
-    "ignored": {
-        "message": "Ignorowane"
-    },
-    "timesFound": {
-        "message": "znalezionych godzin"
-    },
-    "checking": {
-        "message": "sprawdzam…"
-    },
-    "connected": {
-        "message": "podłączono"
-    },
-    "notConnected": {
-        "message": "brak połączenia"
-    },
-    "fallback": {
-        "message": "fallback (tło)"
-    },
-    "restricted": {
-        "message": "strona zastrzeżona"
-    },
-    "noTab": {
-        "message": "brak karty docelowej"
-    },
-    "openWebpage": {
-        "message": "Otwórz kartę ze stroną i ponownie otwórz popup."
-    },
-    "restrictedDesc": {
-        "message": "Ta strona jest zastrzeżona przez Chrome (np. chrome://). Otwórz normalną stronę, by użyć rozszerzenia."
-    },
-    "reloadPage": {
-        "message": "Nie udało się połączyć ze stroną. Spróbuj ją odświeżyć lub kliknij Odśwież."
-    },
-    "noTimesFound": {
-        "message": "Nie znaleziono godzin"
-    },
-    "emptyHint": {
-        "message": "Otwórz stronę z godzinami takimi jak „8PM CET” i kliknij Odśwież."
-    },
-    "buyMeACoffee": {
-        "message": "Kup mi kawę"
-    },
-    "githubFeedback": {
-        "message": "GitHub / Feedback"
-    },
-    "settingsTitle": {
-        "message": "Ustawienia i konfiguracja"
-    },
-    "timezoneSettings": {
-        "message": "Ustawienia strefy czasowej"
-    },
-    "targetTimezone": {
-        "message": "Docelowa strefa czasowa"
-    },
-    "targetTimezoneDesc": {
-        "message": "Wybierz, jak mają być przeliczane godziny"
-    },
-    "autoDetect": {
-        "message": "Wykryj automatycznie"
-    },
-    "autoDetectDesc": {
-        "message": "Użyj strefy czasowej systemu"
-    },
-    "manualSelection": {
-        "message": "Wybór ręczny"
-    },
-    "manualSelectionDesc": {
-        "message": "Wybierz konkretną strefę"
-    },
-    "selectTimezone": {
-        "message": "Wybierz strefę"
-    },
-    "timeFormat": {
-        "message": "Format godziny"
-    },
-    "use24HourFormat": {
-        "message": "Użyj formatu 24-godzinnego"
-    },
-    "conversion": {
-        "message": "Konwersja"
-    },
-    "autoConvertOnLoad": {
-        "message": "Automatycznie przeliczaj po załadowaniu"
-    },
-    "displayMode": {
-        "message": "Tryb wyświetlania"
-    },
-    "displayModeDesc": {
-        "message": "Wybierz sposób wyświetlania przeliczonych godzin"
-    },
-    "modeToggle": {
-        "message": "Kliknij, by przełączyć (oryginał ↔ przeliczone)"
-    },
-    "modeTooltip": {
-        "message": "Tylko dymek (bez zamiany tekstu)"
-    },
-    "resultFormat": {
-        "message": "Format wyniku"
-    },
-    "resultFormatDesc": {
-        "message": "Kontroluj co ma zawierać przeliczony wynik"
-    },
-    "includeUtcOffset": {
-        "message": "Uwzględnij przesunięcie UTC (np. UTC+1)"
-    },
-    "includeDayOffset": {
-        "message": "Uwzględnij przesunięcie dnia (np. +1 dzień)"
-    },
-    "includeSourceTz": {
-        "message": "Uwzględnij strefę źródłową (np. CET)"
-    },
-    "dateDetection": {
-        "message": "Wykrywanie daty"
-    },
-    "detectDates": {
-        "message": "Wykrywaj daty obok godzin"
-    },
-    "scanMode": {
-        "message": "Tryb skanowania"
-    },
-    "scanModeDesc": {
-        "message": "Kontroluj jak agresywnie rozszerzenie skanuje strony"
-    },
-    "scanAuto": {
-        "message": "Auto (skanuj + obserwuj dynamiczne zmiany)"
-    },
-    "scanAutoLight": {
-        "message": "Auto-light (skanuj raz, bez obserwowania DOM)"
-    },
-    "scanManual": {
-        "message": "Ręczny (tylko po kliknięciu Odśwież)"
-    },
-    "performanceSettings": {
-        "message": "Ustawienia wydajności"
-    },
-    "performanceDesc": {
-        "message": "Ogranicz liczbę konwersji na stronie dla lepszej wydajności"
-    },
-    "maxConversions": {
-        "message": "Maksymalna liczba konwersji"
-    },
-    "noLimit": {
-        "message": "0 = brak limitu"
-    },
-    "detectedTimezone": {
-        "message": "Twoja wykryta strefa:"
-    },
-    "privacy": {
-        "message": "Prywatność"
-    },
-    "privacyDesc": {
-        "message": "To rozszerzenie przetwarza wykryte godziny bezpośrednio w przeglądarce. Nie sprzedaje ani nie udostępnia danych osobowych."
-    },
-    "privacyBullet1": {
-        "message": "Ustawienia są przechowywane w <strong>chrome.storage.sync</strong> (dzięki czemu synchronizują się między przeglądarkami)."
-    },
-    "privacyBullet2": {
-        "message": "Brak analityki, trackerów czy reklam."
-    },
-    "privacyBullet3": {
-        "message": "Podstawowe funkcje nie wymagają zewnętrznych wywołań API."
-    },
-    "privacyBullet4": {
-        "message": "Rozszerzenie czyta tekst strony tylko w celu znalezienia, wyróżnienia i przeliczenia godzin."
-    },
-    "readFullPrivacy": {
-        "message": "Przeczytaj pełną Politykę Prywatności"
-    },
-    "changelog": {
-        "message": "Lista zmian"
-    },
-    "recentUpdates": {
-        "message": "Ostatnie aktualizacje (najnowsze u góry)"
-    },
-    "appearance": {
-        "message": "Wygląd"
-    },
-    "highlightColors": {
-        "message": "Kolory wyróżnienia"
-    },
-    "highlightColorsDesc": {
-        "message": "Dostosuj sposób wyświetlania godzin na stronach"
-    },
-    "bgColor": {
-        "message": "Kolor tła"
-    },
-    "textColor": {
-        "message": "Kolor tekstu"
-    },
-    "preview": {
-        "message": "Podgląd:"
-    },
-    "highlightBehavior": {
-        "message": "Zachowanie wyróżnienia"
-    },
-    "enableHighlighting": {
-        "message": "Włącz wyróżnianie na stronach"
-    },
-    "highlightStyle": {
-        "message": "Styl wyróżnienia"
-    },
-    "textOnlyHighlight": {
-        "message": "Tylko tekst (bez tła)"
-    },
-    "colorPresets": {
-        "message": "Palety kolorów"
-    },
-    "ignoredSites": {
-        "message": "Ignorowane witryny"
-    },
-    "manageIgnoredSites": {
-        "message": "Zarządzaj ignorowanymi witrynami"
-    },
-    "ignoredSitesDesc": {
-        "message": "Dodaj strony, na których rozszerzenie nie powinno wyróżniać godzin."
-    },
-    "addSite": {
-        "message": "Dodaj stronę"
-    },
-    "testing": {
-        "message": "Testowanie"
-    },
-    "testingDesc": {
-        "message": "Szybko sprawdź wykrywanie/wyróżnianie bezpośrednio w ustawieniach."
-    },
-    "inlineTestPanel": {
-        "message": "Wewnętrzny panel testowy"
-    },
-    "inlineTestDesc": {
-        "message": "Rozwiń, by zobaczyć przykładowe godziny i je wyróżnić"
-    },
-    "highlightSamples": {
-        "message": "Wyróżnij przykłady"
-    },
-    "resetSamples": {
-        "message": "Resetuj przykłady"
-    },
-    "status": {
-        "message": "Status"
-    },
-    "idle": {
-        "message": "bezczynny"
-    },
-    "detected": {
-        "message": "Wykryto"
-    },
-    "format12h": {
-        "message": "Format 12-godzinny"
-    },
-    "format24h": {
-        "message": "Format 24-godzinny"
-    },
-    "utcOffsets": {
-        "message": "Przesunięcia UTC"
-    },
-    "variousTz": {
-        "message": "Różne strefy"
-    },
-    "edgeCases": {
-        "message": "Przypadki brzegowe"
-    },
-    "notHighlighted": {
-        "message": "NIE powinny być wyróżnione (brak strefy)"
-    },
-    "testPanelTip": {
-        "message": "Wskazówka: ten panel testuje tylko wykrywanie i styl w ustawieniach. Skanowanie stron nadal odbywa się przez skrypt content.js."
-    },
-    "support": {
-        "message": "Wsparcie"
-    },
-    "supportDesc": {
-        "message": "Jeśli podoba Ci się to rozszerzenie, rozważ wsparcie autora!"
-    },
-    "about": {
-        "message": "O rozszerzeniu"
-    },
-    "features": {
-        "message": "Funkcje:"
-    },
-    "restoreDefaults": {
-        "message": "Przywróć domyślne"
-    },
-    "badgeFound": {
-        "message": "TimeZone Converter - znaleziono $COUNT$ stref(y)",
-        "placeholders": {
-            "count": {
-                "content": "$1"
-            }
-        }
-    },
-    "badgeNone": {
-        "message": "TimeZone Converter - Nie znaleziono godzin"
-    },
-    "contextMenuConvert": {
-        "message": "Przelicz strefę czasową"
-    },
-    "settingsSaved": {
-        "message": "Ustawienia zapisane"
-    },
-    "confirmReset": {
-        "message": "Czy na pewno chcesz przywrócić ustawienia domyślne?"
-    },
-    "clickToSee": {
-        "message": "Kliknij, by zobaczyć: $TIME$",
-        "placeholders": {
-            "time": {
-                "content": "$1"
-            }
-        }
-    },
-    "clickToSeeOriginal": {
-        "message": "Kliknij, by zobaczyć oryginał: $TIME$",
-        "placeholders": {
-            "time": {
-                "content": "$1"
-            }
-        }
-    },
-    "dayOffsetPlus": {
-        "message": " (+$DAYS$ dzień)",
-        "placeholders": {
-            "days": {
-                "content": "$1"
-            }
-        }
-    },
-    "dayOffsetMinus": {
-        "message": " (-$DAYS$ dzień)",
-        "placeholders": {
-            "days": {
-                "content": "$1"
-            }
-        }
-    },
-    "dayOffsetPlural": {
-        "message": " ($SIGN$$DAYS$ dni)",
-        "placeholders": {
-            "sign": {
-                "content": "$1"
-            },
-            "days": {
-                "content": "$2"
-            }
-        }
-    }
+﻿{
+    "appName":  {
+                    "message":  "TimeZone Converter"
+                },
+    "appDesc":  {
+                    "message":  "Automatycznie wykrywa i przelicza strefy czasowe na stronach na TwĂłj lokalny czas."
+                },
+    "settings":  {
+                     "message":  "Ustawienia"
+                 },
+    "highlight":  {
+                      "message":  "WyrĂłĹĽnij"
+                  },
+    "ignoreThisSite":  {
+                           "message":  "Ignoruj witrynÄ™"
+                       },
+    "unignore":  {
+                     "message":  "PrzestaĹ„ ignorowaÄ‡"
+                 },
+    "remove":  {
+                   "message":  "UsuĹ„"
+               },
+    "rescan":  {
+                   "message":  "OdĹ›wieĹĽ"
+               },
+    "ignored":  {
+                    "message":  "Ignorowane"
+                },
+    "timesFound":  {
+                       "message":  "znalezionych godzin"
+                   },
+    "checking":  {
+                     "message":  "sprawdzamâ€¦"
+                 },
+    "connected":  {
+                      "message":  "podĹ‚Ä…czono"
+                  },
+    "notConnected":  {
+                         "message":  "brak poĹ‚Ä…czenia"
+                     },
+    "fallback":  {
+                     "message":  "fallback (tĹ‚o)"
+                 },
+    "restricted":  {
+                       "message":  "strona zastrzeĹĽona"
+                   },
+    "noTab":  {
+                  "message":  "brak karty docelowej"
+              },
+    "openWebpage":  {
+                        "message":  "OtwĂłrz kartÄ™ ze stronÄ… i ponownie otwĂłrz popup."
+                    },
+    "restrictedDesc":  {
+                           "message":  "Ta strona jest zastrzeĹĽona przez Chrome (np. chrome://). OtwĂłrz normalnÄ… stronÄ™, by uĹĽyÄ‡ rozszerzenia."
+                       },
+    "reloadPage":  {
+                       "message":  "Nie udaĹ‚o siÄ™ poĹ‚Ä…czyÄ‡ ze stronÄ…. SprĂłbuj jÄ… odĹ›wieĹĽyÄ‡ lub kliknij OdĹ›wieĹĽ."
+                   },
+    "noTimesFound":  {
+                         "message":  "Nie znaleziono godzin"
+                     },
+    "emptyHint":  {
+                      "message":  "OtwĂłrz stronÄ™ z godzinami takimi jak â€ž8PM CETâ€ť i kliknij OdĹ›wieĹĽ."
+                  },
+    "buyMeACoffee":  {
+                         "message":  "Kup mi kawÄ™"
+                     },
+    "githubFeedback":  {
+                           "message":  "GitHub / Feedback"
+                       },
+    "settingsTitle":  {
+                          "message":  "Ustawienia i konfiguracja"
+                      },
+    "timezoneSettings":  {
+                             "message":  "Ustawienia strefy czasowej"
+                         },
+    "targetTimezone":  {
+                           "message":  "Docelowa strefa czasowa"
+                       },
+    "targetTimezoneDesc":  {
+                               "message":  "Wybierz, jak majÄ… byÄ‡ przeliczane godziny"
+                           },
+    "autoDetect":  {
+                       "message":  "Wykryj automatycznie"
+                   },
+    "autoDetectDesc":  {
+                           "message":  "UĹĽyj strefy czasowej systemu"
+                       },
+    "manualSelection":  {
+                            "message":  "WybĂłr rÄ™czny"
+                        },
+    "manualSelectionDesc":  {
+                                "message":  "Wybierz konkretnÄ… strefÄ™"
+                            },
+    "selectTimezone":  {
+                           "message":  "Wybierz strefÄ™"
+                       },
+    "timeFormat":  {
+                       "message":  "Format godziny"
+                   },
+    "use24HourFormat":  {
+                            "message":  "UĹĽyj formatu 24-godzinnego"
+                        },
+    "conversion":  {
+                       "message":  "Konwersja"
+                   },
+    "autoConvertOnLoad":  {
+                              "message":  "Automatycznie przeliczaj po zaĹ‚adowaniu"
+                          },
+    "displayMode":  {
+                        "message":  "Tryb wyĹ›wietlania"
+                    },
+    "displayModeDesc":  {
+                            "message":  "Wybierz sposĂłb wyĹ›wietlania przeliczonych godzin"
+                        },
+    "modeToggle":  {
+                       "message":  "Kliknij, by przeĹ‚Ä…czyÄ‡ (oryginaĹ‚ â†” przeliczone)"
+                   },
+    "modeTooltip":  {
+                        "message":  "Tylko dymek (bez zamiany tekstu)"
+                    },
+    "resultFormat":  {
+                         "message":  "Format wyniku"
+                     },
+    "resultFormatDesc":  {
+                             "message":  "Kontroluj co ma zawieraÄ‡ przeliczony wynik"
+                         },
+    "includeUtcOffset":  {
+                             "message":  "UwzglÄ™dnij przesuniÄ™cie UTC (np. UTC+1)"
+                         },
+    "includeDayOffset":  {
+                             "message":  "UwzglÄ™dnij przesuniÄ™cie dnia (np. +1 dzieĹ„)"
+                         },
+    "includeSourceTz":  {
+                            "message":  "UwzglÄ™dnij strefÄ™ ĹşrĂłdĹ‚owÄ… (np. CET)"
+                        },
+    "dateDetection":  {
+                          "message":  "Wykrywanie daty"
+                      },
+    "detectDates":  {
+                        "message":  "Wykrywaj daty obok godzin"
+                    },
+    "scanMode":  {
+                     "message":  "Tryb skanowania"
+                 },
+    "scanModeDesc":  {
+                         "message":  "Kontroluj jak agresywnie rozszerzenie skanuje strony"
+                     },
+    "scanAuto":  {
+                     "message":  "Auto (skanuj + obserwuj dynamiczne zmiany)"
+                 },
+    "scanAutoLight":  {
+                          "message":  "Auto-light (skanuj raz, bez obserwowania DOM)"
+                      },
+    "scanManual":  {
+                       "message":  "RÄ™czny (tylko po klikniÄ™ciu OdĹ›wieĹĽ)"
+                   },
+    "performanceSettings":  {
+                                "message":  "Ustawienia wydajnoĹ›ci"
+                            },
+    "performanceDesc":  {
+                            "message":  "Ogranicz liczbÄ™ konwersji na stronie dla lepszej wydajnoĹ›ci"
+                        },
+    "maxConversions":  {
+                           "message":  "Maksymalna liczba konwersji"
+                       },
+    "noLimit":  {
+                    "message":  "0 = brak limitu"
+                },
+    "detectedTimezone":  {
+                             "message":  "Twoja wykryta strefa:"
+                         },
+    "privacy":  {
+                    "message":  "PrywatnoĹ›Ä‡"
+                },
+    "privacyDesc":  {
+                        "message":  "To rozszerzenie przetwarza wykryte godziny bezpoĹ›rednio w przeglÄ…darce. Nie sprzedaje ani nie udostÄ™pnia danych osobowych."
+                    },
+    "privacyBullet1":  {
+                           "message":  "Ustawienia sÄ… przechowywane w \u003cstrong\u003echrome.storage.sync\u003c/strong\u003e (dziÄ™ki czemu synchronizujÄ… siÄ™ miÄ™dzy przeglÄ…darkami)."
+                       },
+    "privacyBullet2":  {
+                           "message":  "Brak analityki, trackerĂłw czy reklam."
+                       },
+    "privacyBullet3":  {
+                           "message":  "Podstawowe funkcje nie wymagajÄ… zewnÄ™trznych wywoĹ‚aĹ„ API."
+                       },
+    "privacyBullet4":  {
+                           "message":  "Rozszerzenie czyta tekst strony tylko w celu znalezienia, wyrĂłĹĽnienia i przeliczenia godzin."
+                       },
+    "readFullPrivacy":  {
+                            "message":  "Przeczytaj peĹ‚nÄ… PolitykÄ™ PrywatnoĹ›ci"
+                        },
+    "changelog":  {
+                      "message":  "Lista zmian"
+                  },
+    "recentUpdates":  {
+                          "message":  "Ostatnie aktualizacje (najnowsze u gĂłry)"
+                      },
+    "appearance":  {
+                       "message":  "WyglÄ…d"
+                   },
+    "highlightColors":  {
+                            "message":  "Kolory wyrĂłĹĽnienia"
+                        },
+    "highlightColorsDesc":  {
+                                "message":  "Dostosuj sposĂłb wyĹ›wietlania godzin na stronach"
+                            },
+    "bgColor":  {
+                    "message":  "Kolor tĹ‚a"
+                },
+    "textColor":  {
+                      "message":  "Kolor tekstu"
+                  },
+    "preview":  {
+                    "message":  "PodglÄ…d:"
+                },
+    "highlightBehavior":  {
+                              "message":  "Zachowanie wyrĂłĹĽnienia"
+                          },
+    "enableHighlighting":  {
+                               "message":  "WĹ‚Ä…cz wyrĂłĹĽnianie na stronach"
+                           },
+    "highlightStyle":  {
+                           "message":  "Styl wyrĂłĹĽnienia"
+                       },
+    "textOnlyHighlight":  {
+                              "message":  "Tylko tekst (bez tĹ‚a)"
+                          },
+    "colorPresets":  {
+                         "message":  "Palety kolorĂłw"
+                     },
+    "ignoredSites":  {
+                         "message":  "Ignorowane witryny"
+                     },
+    "manageIgnoredSites":  {
+                               "message":  "ZarzÄ…dzaj ignorowanymi witrynami"
+                           },
+    "ignoredSitesDesc":  {
+                             "message":  "Dodaj strony, na ktĂłrych rozszerzenie nie powinno wyrĂłĹĽniaÄ‡ godzin."
+                         },
+    "addSite":  {
+                    "message":  "Dodaj stronÄ™"
+                },
+    "testing":  {
+                    "message":  "Testowanie"
+                },
+    "testingDesc":  {
+                        "message":  "Szybko sprawdĹş wykrywanie/wyrĂłĹĽnianie bezpoĹ›rednio w ustawieniach."
+                    },
+    "inlineTestPanel":  {
+                            "message":  "WewnÄ™trzny panel testowy"
+                        },
+    "inlineTestDesc":  {
+                           "message":  "RozwiĹ„, by zobaczyÄ‡ przykĹ‚adowe godziny i je wyrĂłĹĽniÄ‡"
+                       },
+    "highlightSamples":  {
+                             "message":  "WyrĂłĹĽnij przykĹ‚ady"
+                         },
+    "resetSamples":  {
+                         "message":  "Resetuj przykĹ‚ady"
+                     },
+    "status":  {
+                   "message":  "Status"
+               },
+    "idle":  {
+                 "message":  "bezczynny"
+             },
+    "detected":  {
+                     "message":  "Wykryto"
+                 },
+    "format12h":  {
+                      "message":  "Format 12-godzinny"
+                  },
+    "format24h":  {
+                      "message":  "Format 24-godzinny"
+                  },
+    "utcOffsets":  {
+                       "message":  "PrzesuniÄ™cia UTC"
+                   },
+    "variousTz":  {
+                      "message":  "RĂłĹĽne strefy"
+                  },
+    "edgeCases":  {
+                      "message":  "Przypadki brzegowe"
+                  },
+    "notHighlighted":  {
+                           "message":  "NIE powinny byÄ‡ wyrĂłĹĽnione (brak strefy)"
+                       },
+    "testPanelTip":  {
+                         "message":  "WskazĂłwka: ten panel testuje tylko wykrywanie i styl w ustawieniach. Skanowanie stron nadal odbywa siÄ™ przez skrypt content.js."
+                     },
+    "support":  {
+                    "message":  "Wsparcie"
+                },
+    "supportDesc":  {
+                        "message":  "JeĹ›li podoba Ci siÄ™ to rozszerzenie, rozwaĹĽ wsparcie autora!"
+                    },
+    "about":  {
+                  "message":  "O rozszerzeniu"
+              },
+    "features":  {
+                     "message":  "Funkcje:"
+                 },
+    "restoreDefaults":  {
+                            "message":  "PrzywrĂłÄ‡ domyĹ›lne"
+                        },
+    "badgeFound":  {
+                       "message":  "TimeZone Converter - znaleziono $COUNT$ stref(y)",
+                       "placeholders":  {
+                                            "count":  {
+                                                          "content":  "$1"
+                                                      }
+                                        }
+                   },
+    "badgeNone":  {
+                      "message":  "TimeZone Converter - Nie znaleziono godzin"
+                  },
+    "contextMenuConvert":  {
+                               "message":  "Przelicz strefÄ™ czasowÄ…"
+                           },
+    "settingsSaved":  {
+                          "message":  "Ustawienia zapisane"
+                      },
+    "confirmReset":  {
+                         "message":  "Czy na pewno chcesz przywrĂłciÄ‡ ustawienia domyĹ›lne?"
+                     },
+    "clickToSee":  {
+                       "message":  "Kliknij, by zobaczyÄ‡: $TIME$",
+                       "placeholders":  {
+                                            "time":  {
+                                                         "content":  "$1"
+                                                     }
+                                        }
+                   },
+    "clickToSeeOriginal":  {
+                               "message":  "Kliknij, by zobaczyÄ‡ oryginaĹ‚: $TIME$",
+                               "placeholders":  {
+                                                    "time":  {
+                                                                 "content":  "$1"
+                                                             }
+                                                }
+                           },
+    "dayOffsetPlus":  {
+                          "message":  " (+$DAYS$ dzieĹ„)",
+                          "placeholders":  {
+                                               "days":  {
+                                                            "content":  "$1"
+                                                        }
+                                           }
+                      },
+    "dayOffsetMinus":  {
+                           "message":  " (-$DAYS$ dzieĹ„)",
+                           "placeholders":  {
+                                                "days":  {
+                                                             "content":  "$1"
+                                                         }
+                                            }
+                       },
+    "dayOffsetPlural":  {
+                            "message":  " ($SIGN$$DAYS$ dni)",
+                            "placeholders":  {
+                                                 "sign":  {
+                                                              "content":  "$1"
+                                                          },
+                                                 "days":  {
+                                                              "content":  "$2"
+                                                          }
+                                             }
+                        },
+    "languageDesc":  {
+                         "message":  "Wybierz preferowany język interfejsu"
+                     }
 }

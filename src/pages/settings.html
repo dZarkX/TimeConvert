@@ -270,6 +270,29 @@
         </h2>
 
         <div class="setting-group">
+          <label class="setting-label">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              style="vertical-align: middle; margin-right: 4px;">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+              </path>
+            </svg>
+            <span data-i18n="language">Language</span>
+          </label>
+          <p class="setting-description" data-i18n="languageDesc">Choose your preferred interface language</p>
+          <select id="preferredLanguage" class="select-input">
+            <option value="auto" data-i18n="langAuto">Automatic (Browser)</option>
+            <option value="en" data-i18n="langEn">English</option>
+            <option value="pl" data-i18n="langPl">Polish</option>
+            <option value="de" data-i18n="langDe">German</option>
+            <option value="es" data-i18n="langEs">Spanish</option>
+            <option value="pt_BR" data-i18n="langPtBr">Portuguese (Brazil)</option>
+            <option value="ru" data-i18n="langRu">Russian</option>
+          </select>
+        </div>
+
+        <div class="setting-group">
           <label class="setting-label" data-i18n="highlightColors">Highlight Colors</label>
           <p class="setting-description" data-i18n="highlightColorsDesc">Customize how detected times appear on pages
           </p>
@@ -344,18 +367,6 @@
           </div>
         </div>
 
-        <div class="setting-group">
-          <label class="setting-label" data-i18n="language">Language</label>
-          <select id="preferredLanguage" class="setting-select">
-            <option value="auto" data-i18n="langAuto">Automatic (Browser)</option>
-            <option value="en" data-i18n="langEn">English</option>
-            <option value="pl" data-i18n="langPl">Polish</option>
-            <option value="de" data-i18n="langDe">German</option>
-            <option value="es" data-i18n="langEs">Spanish</option>
-            <option value="pt_BR" data-i18n="langPtBr">Portuguese (Brazil)</option>
-            <option value="ru" data-i18n="langRu">Russian</option>
-          </select>
-        </div>
       </section>
 
       <!-- Ignored Sites Section -->

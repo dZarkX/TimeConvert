@@ -375,5 +375,8 @@
     "langDe":  "Deutsch",
     "langEs":  "Spanisch",
     "langPtBr":  "Portugiesisch (Brasilien)",
-    "langRu":  "Russisch"
+    "langRu":  "Russisch",
+    "languageDesc":  {
+                         "message":  "Wählen Sie Ihre bevorzugte Oberflächensprache"
+                     }
 }

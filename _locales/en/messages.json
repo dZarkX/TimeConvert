@@ -1,371 +1,374 @@
-{
-    "appName": {
-        "message": "TimeZone Converter"
-    },
-    "appDesc": {
-        "message": "Automatically detects and converts time zones on web pages to your local time."
-    },
-    "settings": {
-        "message": "Settings"
-    },
-    "highlight": {
-        "message": "Highlight"
-    },
-    "ignoreThisSite": {
-        "message": "Ignore this site"
-    },
-    "unignore": {
-        "message": "Unignore site"
-    },
-    "remove": {
-        "message": "Remove"
-    },
-    "rescan": {
-        "message": "Rescan"
-    },
-    "ignored": {
-        "message": "Ignored"
-    },
-    "timesFound": {
-        "message": "times found"
-    },
-    "checking": {
-        "message": "checking…"
-    },
-    "connected": {
-        "message": "connected"
-    },
-    "notConnected": {
-        "message": "not connected"
-    },
-    "fallback": {
-        "message": "fallback (background)"
-    },
-    "restricted": {
-        "message": "restricted page"
-    },
-    "noTab": {
-        "message": "no target tab"
-    },
-    "openWebpage": {
-        "message": "Open a webpage tab and reopen the popup."
-    },
-    "restrictedDesc": {
-        "message": "This page is restricted by Chrome (e.g. chrome://). Open a normal website to use the extension."
-    },
-    "reloadPage": {
-        "message": "Could not connect to the page. Try reloading the page or press Rescan."
-    },
-    "noTimesFound": {
-        "message": "No times found"
-    },
-    "emptyHint": {
-        "message": "Open a webpage with times like “8PM CET” and press Rescan."
-    },
-    "buyMeACoffee": {
-        "message": "Buy Me a Coffee"
-    },
-    "githubFeedback": {
-        "message": "GitHub / Feedback"
-    },
-    "settingsTitle": {
-        "message": "Settings & Configuration"
-    },
-    "timezoneSettings": {
-        "message": "Timezone Settings"
-    },
-    "targetTimezone": {
-        "message": "Target Timezone"
-    },
-    "targetTimezoneDesc": {
-        "message": "Choose how times should be converted"
-    },
-    "autoDetect": {
-        "message": "Auto-detect"
-    },
-    "autoDetectDesc": {
-        "message": "Use your system timezone"
-    },
-    "manualSelection": {
-        "message": "Manual selection"
-    },
-    "manualSelectionDesc": {
-        "message": "Choose a specific timezone"
-    },
-    "selectTimezone": {
-        "message": "Select Timezone"
-    },
-    "timeFormat": {
-        "message": "Time Format"
-    },
-    "use24HourFormat": {
-        "message": "Use 24-hour format"
-    },
-    "conversion": {
-        "message": "Conversion"
-    },
-    "autoConvertOnLoad": {
-        "message": "Automatically convert on page load"
-    },
-    "displayMode": {
-        "message": "Display Mode"
-    },
-    "displayModeDesc": {
-        "message": "Choose how converted times are shown"
-    },
-    "modeToggle": {
-        "message": "Click to toggle (original ↔ converted)"
-    },
-    "modeTooltip": {
-        "message": "Tooltip only (no text replacement)"
-    },
-    "resultFormat": {
-        "message": "Result Format"
-    },
-    "resultFormatDesc": {
-        "message": "Control what is included in the converted result"
-    },
-    "includeUtcOffset": {
-        "message": "Include UTC offset (e.g. UTC+1)"
-    },
-    "includeDayOffset": {
-        "message": "Include day offset (e.g. +1 day)"
-    },
-    "includeSourceTz": {
-        "message": "Include source timezone (e.g. CET)"
-    },
-    "dateDetection": {
-        "message": "Date Detection"
-    },
-    "detectDates": {
-        "message": "Detect dates next to times"
-    },
-    "scanMode": {
-        "message": "Scan Mode"
-    },
-    "scanModeDesc": {
-        "message": "Control how aggressively the extension scans pages"
-    },
-    "scanAuto": {
-        "message": "Auto (scan + watch for dynamic changes)"
-    },
-    "scanAutoLight": {
-        "message": "Auto-light (scan once, no DOM watching)"
-    },
-    "scanManual": {
-        "message": "Manual (only when you press Rescan)"
-    },
-    "performanceSettings": {
-        "message": "Performance Settings"
-    },
-    "performanceDesc": {
-        "message": "Limit the number of time conversions on a page for better performance"
-    },
-    "maxConversions": {
-        "message": "Maximum conversions"
-    },
-    "noLimit": {
-        "message": "0 = no limit"
-    },
-    "detectedTimezone": {
-        "message": "Your detected timezone:"
-    },
-    "privacy": {
-        "message": "Privacy"
-    },
-    "privacyDesc": {
-        "message": "This extension processes detected times directly in your browser. It does not sell or share personal data."
-    },
-    "privacyBullet1": {
-        "message": "Settings are stored in <strong>chrome.storage.sync</strong> (so they can sync between your browsers)."
-    },
-    "privacyBullet2": {
-        "message": "No analytics, trackers, or ads."
-    },
-    "privacyBullet3": {
-        "message": "No external API calls are required for basic functionality."
-    },
-    "privacyBullet4": {
-        "message": "The extension only reads page text to find time expressions and highlight/convert them."
-    },
-    "readFullPrivacy": {
-        "message": "Read the full Privacy Policy"
-    },
-    "changelog": {
-        "message": "Changelog"
-    },
-    "recentUpdates": {
-        "message": "Recent updates (latest first)"
-    },
-    "appearance": {
-        "message": "Appearance"
-    },
-    "highlightColors": {
-        "message": "Highlight Colors"
-    },
-    "highlightColorsDesc": {
-        "message": "Customize how detected times appear on pages"
-    },
-    "bgColor": {
-        "message": "Background Color"
-    },
-    "textColor": {
-        "message": "Text Color"
-    },
-    "preview": {
-        "message": "Preview:"
-    },
-    "highlightBehavior": {
-        "message": "Highlight Behavior"
-    },
-    "enableHighlighting": {
-        "message": "Enable highlighting on pages"
-    },
-    "highlightStyle": {
-        "message": "Highlight Style"
-    },
-    "textOnlyHighlight": {
-        "message": "Text-only highlight (no background)"
-    },
-    "colorPresets": {
-        "message": "Color Presets"
-    },
-    "ignoredSites": {
-        "message": "Ignored Sites"
-    },
-    "manageIgnoredSites": {
-        "message": "Manage Ignored Sites"
-    },
-    "ignoredSitesDesc": {
-        "message": "Add websites where the extension should not highlight times."
-    },
-    "addSite": {
-        "message": "Add Site"
-    },
-    "testing": {
-        "message": "Testing"
-    },
-    "testingDesc": {
-        "message": "Quickly validate detection/highlighting directly in settings (no Live Server needed)."
-    },
-    "inlineTestPanel": {
-        "message": "Inline test panel"
-    },
-    "inlineTestDesc": {
-        "message": "Expand to see sample times and highlight them"
-    },
-    "highlightSamples": {
-        "message": "Highlight samples"
-    },
-    "resetSamples": {
-        "message": "Reset samples"
-    },
-    "status": {
-        "message": "Status"
-    },
-    "idle": {
-        "message": "idle"
-    },
-    "detected": {
-        "message": "Detected"
-    },
-    "format12h": {
-        "message": "12-Hour Format"
-    },
-    "format24h": {
-        "message": "24-Hour Format"
-    },
-    "utcOffsets": {
-        "message": "UTC Offsets"
-    },
-    "variousTz": {
-        "message": "Various Timezones"
-    },
-    "edgeCases": {
-        "message": "Edge Cases"
-    },
-    "notHighlighted": {
-        "message": "Should NOT be highlighted (no timezone)"
-    },
-    "testPanelTip": {
-        "message": "Tip: this panel only tests detection/highlight styling in the settings page. Actual page scanning still happens via the content script."
-    },
-    "support": {
-        "message": "Support"
-    },
-    "supportDesc": {
-        "message": "If you like this extension, consider supporting the developer!"
-    },
-    "about": {
-        "message": "About"
-    },
-    "features": {
-        "message": "Features:"
-    },
-    "restoreDefaults": {
-        "message": "Restore Defaults"
-    },
-    "badgeFound": {
-        "message": "TimeZone Converter - $COUNT$ time(s) found",
-        "placeholders": {
-            "count": {
-                "content": "$1"
-            }
-        }
-    },
-    "badgeNone": {
-        "message": "TimeZone Converter - No times found"
-    },
-    "contextMenuConvert": {
-        "message": "Convert time to my timezone"
-    },
-    "settingsSaved": {
-        "message": "Settings saved"
-    },
-    "confirmReset": {
-        "message": "Are you sure you want to restore defaults?"
-    },
-    "clickToSee": {
-        "message": "Click to see: $TIME$",
-        "placeholders": {
-            "time": {
-                "content": "$1"
-            }
-        }
-    },
-    "clickToSeeOriginal": {
-        "message": "Click to see original: $TIME$",
-        "placeholders": {
-            "time": {
-                "content": "$1"
-            }
-        }
-    },
-    "dayOffsetPlus": {
-        "message": " (+$DAYS$ day)",
-        "placeholders": {
-            "days": {
-                "content": "$1"
-            }
-        }
-    },
-    "dayOffsetMinus": {
-        "message": " (-$DAYS$ day)",
-        "placeholders": {
-            "days": {
-                "content": "$1"
-            }
-        }
-    },
-    "dayOffsetPlural": {
-        "message": " ($SIGN$$DAYS$ days)",
-        "placeholders": {
-            "sign": {
-                "content": "$1"
-            },
-            "days": {
-                "content": "$2"
-            }
-        }
-    }
+﻿{
+    "appName":  {
+                    "message":  "TimeZone Converter"
+                },
+    "appDesc":  {
+                    "message":  "Automatically detects and converts time zones on web pages to your local time."
+                },
+    "settings":  {
+                     "message":  "Settings"
+                 },
+    "highlight":  {
+                      "message":  "Highlight"
+                  },
+    "ignoreThisSite":  {
+                           "message":  "Ignore this site"
+                       },
+    "unignore":  {
+                     "message":  "Unignore site"
+                 },
+    "remove":  {
+                   "message":  "Remove"
+               },
+    "rescan":  {
+                   "message":  "Rescan"
+               },
+    "ignored":  {
+                    "message":  "Ignored"
+                },
+    "timesFound":  {
+                       "message":  "times found"
+                   },
+    "checking":  {
+                     "message":  "checkingâ€¦"
+                 },
+    "connected":  {
+                      "message":  "connected"
+                  },
+    "notConnected":  {
+                         "message":  "not connected"
+                     },
+    "fallback":  {
+                     "message":  "fallback (background)"
+                 },
+    "restricted":  {
+                       "message":  "restricted page"
+                   },
+    "noTab":  {
+                  "message":  "no target tab"
+              },
+    "openWebpage":  {
+                        "message":  "Open a webpage tab and reopen the popup."
+                    },
+    "restrictedDesc":  {
+                           "message":  "This page is restricted by Chrome (e.g. chrome://). Open a normal website to use the extension."
+                       },
+    "reloadPage":  {
+                       "message":  "Could not connect to the page. Try reloading the page or press Rescan."
+                   },
+    "noTimesFound":  {
+                         "message":  "No times found"
+                     },
+    "emptyHint":  {
+                      "message":  "Open a webpage with times like â€ś8PM CETâ€ť and press Rescan."
+                  },
+    "buyMeACoffee":  {
+                         "message":  "Buy Me a Coffee"
+                     },
+    "githubFeedback":  {
+                           "message":  "GitHub / Feedback"
+                       },
+    "settingsTitle":  {
+                          "message":  "Settings \u0026 Configuration"
+                      },
+    "timezoneSettings":  {
+                             "message":  "Timezone Settings"
+                         },
+    "targetTimezone":  {
+                           "message":  "Target Timezone"
+                       },
+    "targetTimezoneDesc":  {
+                               "message":  "Choose how times should be converted"
+                           },
+    "autoDetect":  {
+                       "message":  "Auto-detect"
+                   },
+    "autoDetectDesc":  {
+                           "message":  "Use your system timezone"
+                       },
+    "manualSelection":  {
+                            "message":  "Manual selection"
+                        },
+    "manualSelectionDesc":  {
+                                "message":  "Choose a specific timezone"
+                            },
+    "selectTimezone":  {
+                           "message":  "Select Timezone"
+                       },
+    "timeFormat":  {
+                       "message":  "Time Format"
+                   },
+    "use24HourFormat":  {
+                            "message":  "Use 24-hour format"
+                        },
+    "conversion":  {
+                       "message":  "Conversion"
+                   },
+    "autoConvertOnLoad":  {
+                              "message":  "Automatically convert on page load"
+                          },
+    "displayMode":  {
+                        "message":  "Display Mode"
+                    },
+    "displayModeDesc":  {
+                            "message":  "Choose how converted times are shown"
+                        },
+    "modeToggle":  {
+                       "message":  "Click to toggle (original â†” converted)"
+                   },
+    "modeTooltip":  {
+                        "message":  "Tooltip only (no text replacement)"
+                    },
+    "resultFormat":  {
+                         "message":  "Result Format"
+                     },
+    "resultFormatDesc":  {
+                             "message":  "Control what is included in the converted result"
+                         },
+    "includeUtcOffset":  {
+                             "message":  "Include UTC offset (e.g. UTC+1)"
+                         },
+    "includeDayOffset":  {
+                             "message":  "Include day offset (e.g. +1 day)"
+                         },
+    "includeSourceTz":  {
+                            "message":  "Include source timezone (e.g. CET)"
+                        },
+    "dateDetection":  {
+                          "message":  "Date Detection"
+                      },
+    "detectDates":  {
+                        "message":  "Detect dates next to times"
+                    },
+    "scanMode":  {
+                     "message":  "Scan Mode"
+                 },
+    "scanModeDesc":  {
+                         "message":  "Control how aggressively the extension scans pages"
+                     },
+    "scanAuto":  {
+                     "message":  "Auto (scan + watch for dynamic changes)"
+                 },
+    "scanAutoLight":  {
+                          "message":  "Auto-light (scan once, no DOM watching)"
+                      },
+    "scanManual":  {
+                       "message":  "Manual (only when you press Rescan)"
+                   },
+    "performanceSettings":  {
+                                "message":  "Performance Settings"
+                            },
+    "performanceDesc":  {
+                            "message":  "Limit the number of time conversions on a page for better performance"
+                        },
+    "maxConversions":  {
+                           "message":  "Maximum conversions"
+                       },
+    "noLimit":  {
+                    "message":  "0 = no limit"
+                },
+    "detectedTimezone":  {
+                             "message":  "Your detected timezone:"
+                         },
+    "privacy":  {
+                    "message":  "Privacy"
+                },
+    "privacyDesc":  {
+                        "message":  "This extension processes detected times directly in your browser. It does not sell or share personal data."
+                    },
+    "privacyBullet1":  {
+                           "message":  "Settings are stored in \u003cstrong\u003echrome.storage.sync\u003c/strong\u003e (so they can sync between your browsers)."
+                       },
+    "privacyBullet2":  {
+                           "message":  "No analytics, trackers, or ads."
+                       },
+    "privacyBullet3":  {
+                           "message":  "No external API calls are required for basic functionality."
+                       },
+    "privacyBullet4":  {
+                           "message":  "The extension only reads page text to find time expressions and highlight/convert them."
+                       },
+    "readFullPrivacy":  {
+                            "message":  "Read the full Privacy Policy"
+                        },
+    "changelog":  {
+                      "message":  "Changelog"
+                  },
+    "recentUpdates":  {
+                          "message":  "Recent updates (latest first)"
+                      },
+    "appearance":  {
+                       "message":  "Appearance"
+                   },
+    "highlightColors":  {
+                            "message":  "Highlight Colors"
+                        },
+    "highlightColorsDesc":  {
+                                "message":  "Customize how detected times appear on pages"
+                            },
+    "bgColor":  {
+                    "message":  "Background Color"
+                },
+    "textColor":  {
+                      "message":  "Text Color"
+                  },
+    "preview":  {
+                    "message":  "Preview:"
+                },
+    "highlightBehavior":  {
+                              "message":  "Highlight Behavior"
+                          },
+    "enableHighlighting":  {
+                               "message":  "Enable highlighting on pages"
+                           },
+    "highlightStyle":  {
+                           "message":  "Highlight Style"
+                       },
+    "textOnlyHighlight":  {
+                              "message":  "Text-only highlight (no background)"
+                          },
+    "colorPresets":  {
+                         "message":  "Color Presets"
+                     },
+    "ignoredSites":  {
+                         "message":  "Ignored Sites"
+                     },
+    "manageIgnoredSites":  {
+                               "message":  "Manage Ignored Sites"
+                           },
+    "ignoredSitesDesc":  {
+                             "message":  "Add websites where the extension should not highlight times."
+                         },
+    "addSite":  {
+                    "message":  "Add Site"
+                },
+    "testing":  {
+                    "message":  "Testing"
+                },
+    "testingDesc":  {
+                        "message":  "Quickly validate detection/highlighting directly in settings (no Live Server needed)."
+                    },
+    "inlineTestPanel":  {
+                            "message":  "Inline test panel"
+                        },
+    "inlineTestDesc":  {
+                           "message":  "Expand to see sample times and highlight them"
+                       },
+    "highlightSamples":  {
+                             "message":  "Highlight samples"
+                         },
+    "resetSamples":  {
+                         "message":  "Reset samples"
+                     },
+    "status":  {
+                   "message":  "Status"
+               },
+    "idle":  {
+                 "message":  "idle"
+             },
+    "detected":  {
+                     "message":  "Detected"
+                 },
+    "format12h":  {
+                      "message":  "12-Hour Format"
+                  },
+    "format24h":  {
+                      "message":  "24-Hour Format"
+                  },
+    "utcOffsets":  {
+                       "message":  "UTC Offsets"
+                   },
+    "variousTz":  {
+                      "message":  "Various Timezones"
+                  },
+    "edgeCases":  {
+                      "message":  "Edge Cases"
+                  },
+    "notHighlighted":  {
+                           "message":  "Should NOT be highlighted (no timezone)"
+                       },
+    "testPanelTip":  {
+                         "message":  "Tip: this panel only tests detection/highlight styling in the settings page. Actual page scanning still happens via the content script."
+                     },
+    "support":  {
+                    "message":  "Support"
+                },
+    "supportDesc":  {
+                        "message":  "If you like this extension, consider supporting the developer!"
+                    },
+    "about":  {
+                  "message":  "About"
+              },
+    "features":  {
+                     "message":  "Features:"
+                 },
+    "restoreDefaults":  {
+                            "message":  "Restore Defaults"
+                        },
+    "badgeFound":  {
+                       "message":  "TimeZone Converter - $COUNT$ time(s) found",
+                       "placeholders":  {
+                                            "count":  {
+                                                          "content":  "$1"
+                                                      }
+                                        }
+                   },
+    "badgeNone":  {
+                      "message":  "TimeZone Converter - No times found"
+                  },
+    "contextMenuConvert":  {
+                               "message":  "Convert time to my timezone"
+                           },
+    "settingsSaved":  {
+                          "message":  "Settings saved"
+                      },
+    "confirmReset":  {
+                         "message":  "Are you sure you want to restore defaults?"
+                     },
+    "clickToSee":  {
+                       "message":  "Click to see: $TIME$",
+                       "placeholders":  {
+                                            "time":  {
+                                                         "content":  "$1"
+                                                     }
+                                        }
+                   },
+    "clickToSeeOriginal":  {
+                               "message":  "Click to see original: $TIME$",
+                               "placeholders":  {
+                                                    "time":  {
+                                                                 "content":  "$1"
+                                                             }
+                                                }
+                           },
+    "dayOffsetPlus":  {
+                          "message":  " (+$DAYS$ day)",
+                          "placeholders":  {
+                                               "days":  {
+                                                            "content":  "$1"
+                                                        }
+                                           }
+                      },
+    "dayOffsetMinus":  {
+                           "message":  " (-$DAYS$ day)",
+                           "placeholders":  {
+                                                "days":  {
+                                                             "content":  "$1"
+                                                         }
+                                            }
+                       },
+    "dayOffsetPlural":  {
+                            "message":  " ($SIGN$$DAYS$ days)",
+                            "placeholders":  {
+                                                 "sign":  {
+                                                              "content":  "$1"
+                                                          },
+                                                 "days":  {
+                                                              "content":  "$2"
+                                                          }
+                                             }
+                        },
+    "languageDesc":  {
+                         "message":  "Choose your preferred interface language"
+                     }
 }
