@@ -29,9 +29,7 @@
     "timesFound":  {
                        "message":  "times found"
                    },
-    "checking":  {
-                     "message":  "checkingâ€¦"
-                 },
+    "checking":  { "message": "checking…" },
     "connected":  {
                       "message":  "connected"
                   },
@@ -59,9 +57,7 @@
     "noTimesFound":  {
                          "message":  "No times found"
                      },
-    "emptyHint":  {
-                      "message":  "Open a webpage with times like â€ś8PM CETâ€ť and press Rescan."
-                  },
+    "emptyHint":  { "message": "Open a webpage with times like \"8PM CET\" and press Rescan." },
     "buyMeACoffee":  {
                          "message":  "Buy Me a Coffee"
                      },
@@ -113,9 +109,7 @@
     "displayModeDesc":  {
                             "message":  "Choose how converted times are shown"
                         },
-    "modeToggle":  {
-                       "message":  "Click to toggle (original â†” converted)"
-                   },
+    "modeToggle":  { "message": "Click to toggle (original ↔ converted)" },
     "modeTooltip":  {
                         "message":  "Tooltip only (no text replacement)"
                     },

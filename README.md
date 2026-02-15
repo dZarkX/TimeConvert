@@ -19,6 +19,8 @@ GitHub: https://github.com/dZarkX/TimeConvert
 - **50+ timezone abbreviations** - CET, EST, PST, JST, GMT, UTC, and many more
 - **Badge notification** - Shows count of detected times on the extension icon
 - **Countdown timers** - Shows time remaining until future events (in 5 languages)
+- **Experimental: NLP Detection** - Detect natural language time expressions like "in 2 hours" or "tomorrow at noon"
+- **Experimental: Context Timezone** - Guess timezone from website domain when not specified
 - **Customizable appearance** - Choose your own highlight colors
 - **Auto or manual timezone** - Use system timezone or select manually
 - **Dark mode support** - Automatically adapts to your system theme
@@ -148,6 +150,14 @@ MIT License - feel free to use and modify as you wish.
 - Some ambiguous timezone abbreviations (like IST - India/Ireland/Israel) default to one interpretation
 
 ## 📝 Changelog
+
+### v1.5.1 (Current)
+- **NEW**: Natural Language Processing (NLP) - Detects time expressions like "in 2 hours", "tomorrow at noon", "end of day"
+- **NEW**: Context Timezone Detection - Guesses timezone from website domain when not specified
+- **NEW**: Experimental Features section in settings with toggles for NLP and Context Timezone
+- **IMPROVED**: Reorganized settings UI with better section ordering
+- **FIXED**: Syntax error in content.js that caused extension to fail loading
+- **FIXED**: UTF-8 encoding issues in translation files
 
 ### v1.5.0
 - **NEW**: Countdown timers for future events - shows time remaining until detected events
