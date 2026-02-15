@@ -24,7 +24,7 @@ async function publish() {
         refreshToken: REFRESH_TOKEN,
     });
 
-    const zipPath = path.join(__dirname, 'TimeConvert.zip');
+    const zipPath = path.join(__dirname, '..', 'TimeConvert.zip');
 
     if (!fs.existsSync(zipPath)) {
         console.error(`Error: Plik ${zipPath} nie istnieje. Uruchom najpierw pakowanie.`);

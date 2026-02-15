@@ -1,6 +1,6 @@
 {
   "name": "timeconvert",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "description": "A small browser extension that detects times on web pages and converts them to your preferred timezone.",
   "main": "index.js",
   "directories": {
@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "pack": "powershell -Command \"Compress-Archive -Path src, _locales, manifest.json, privacy-policy.html -DestinationPath TimeConvert.zip -Force\"",
-    "publish-cws": "npm run pack && node publish.js"
+    "publish-cws": "npm run pack && node tools/publish.js"
   },
   "repository": {
     "type": "git",
