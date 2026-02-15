@@ -370,5 +370,41 @@
                         },
     "languageDesc":  {
                          "message":  "Choose your preferred interface language"
+                     },
+    "countdownDays":  {
+                       "message":  "in $COUNT$ day$PLURAL$",
+                       "placeholders":  {
+                                            "count":  {
+                                                          "content":  "$1"
+                                                      },
+                                            "plural":  {
+                                                           "content":  "$2"
+                                                       }
+                                        }
+                   },
+    "countdownHours":  {
+                        "message":  "in $COUNT$ hour$PLURAL$",
+                        "placeholders":  {
+                                             "count":  {
+                                                           "content":  "$1"
+                                                       },
+                                             "plural":  {
+                                                          "content":  "$2"
+                                                      }
+                                          }
+                    },
+    "countdownMinutes":  {
+                          "message":  "in $COUNT$ min$PLURAL$",
+                          "placeholders":  {
+                                               "count":  {
+                                                             "content":  "$1"
+                                                         },
+                                               "plural":  {
+                                                          "content":  "$2"
+                                                      }
+                                            }
+                      },
+    "countdownExpired":  {
+                         "message":  "Event started"
                      }
 }

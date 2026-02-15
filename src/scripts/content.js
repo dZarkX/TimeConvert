@@ -589,6 +589,182 @@
 
   let suppressMutationsCount = 0;
 
+  // Countdown timer functions
+  function createCountdownElement(time) {
+    try {
+      // Parse the original time to get the actual datetime
+      const originalDate = parseTimeToDate(time);
+      if (!originalDate) return null;
+
+      // Only show countdown for future events (within next 30 days)
+      const now = new Date();
+      const timeDiff = originalDate - now;
+      const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
+      
+      if (timeDiff <= 0 || daysDiff > 30) return null;
+
+      const countdown = document.createElement('span');
+      countdown.className = 'tz-countdown';
+      countdown.dataset.tzTargetTime = originalDate.toISOString();
+      
+      updateCountdownText(countdown, timeDiff);
+      
+      // Update countdown every minute
+      setInterval(() => {
+        const currentTime = new Date();
+        const targetTime = new Date(countdown.dataset.tzTargetTime);
+        const diff = targetTime - currentTime;
+        
+        if (diff <= 0) {
+          countdown.textContent = chrome.i18n.getMessage('countdownExpired') || 'Event started';
+          countdown.classList.add('urgent');
+        } else {
+          updateCountdownText(countdown, diff);
+        }
+      }, 60000); // Update every minute
+
+      return countdown;
+    } catch (e) {
+      if (DEBUG) console.error('[TimeZone Converter] Countdown error:', e);
+      return null;
+    }
+  }
+
+  function parseTimeToDate(time) {
+    try {
+      // Extract date from context or use current date
+      const now = new Date();
+      const contextText = getContextText(time.node, time.start, time.end);
+      const dateMatch = contextText.match(/\b(\d{1,2})[\/\-\.](\d{1,2})(?:[\/\-\.](\d{2,4}))?\b/);
+      
+      let day = now.getDate();
+      let month = now.getMonth();
+      let year = now.getFullYear();
+      
+      if (dateMatch) {
+        day = parseInt(dateMatch[1]);
+        month = parseInt(dateMatch[2]) - 1;
+        if (dateMatch[3]) {
+          year = parseInt(dateMatch[3]);
+          if (year < 100) year += 2000;
+        }
+      }
+      
+      // Parse time
+      const timeMatch = time.original.match(/(\d{1,2})[:.](\d{2})\s*(am|pm)?/i);
+      if (!timeMatch) return null;
+      
+      let hours = parseInt(timeMatch[1]);
+      const minutes = parseInt(timeMatch[2]);
+      const ampm = timeMatch[3]?.toLowerCase();
+      
+      if (ampm === 'pm' && hours !== 12) hours += 12;
+      if (ampm === 'am' && hours === 12) hours = 0;
+      
+      // Create date in target timezone
+      const targetDate = new Date(year, month, day, hours, minutes, 0, 0);
+      
+      // Convert to UTC, then adjust for target timezone offset
+      const targetOffset = time.targetOffset || 0;
+      const utcTime = targetDate.getTime() + (targetDate.getTimezoneOffset() * 60000);
+      const adjustedTime = utcTime + (targetOffset * 3600000);
+      
+      return new Date(adjustedTime);
+    } catch (e) {
+      if (DEBUG) console.error('[TimeZone Converter] Date parsing error:', e);
+      return null;
+    }
+  }
+
+  function getContextText(node, start, end) {
+    try {
+      const maxLength = 200;
+      const text = node.nodeValue || '';
+      const contextStart = Math.max(0, start - 50);
+      const contextEnd = Math.min(text.length, end + 50);
+      return text.substring(contextStart, contextEnd);
+    } catch (e) {
+      return '';
+    }
+  }
+
+  function updateCountdownText(element, timeDiff) {
+    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+    
+    let text = '';
+    let plural = '';
+    
+    if (days > 0) {
+      // Handle pluralization for different languages
+      const lang = chrome.i18n.getUILanguage();
+      if (lang.startsWith('pl')) {
+        if (days === 1) plural = 'dzień';
+        else if ([2, 3, 4].includes(days % 10) && ![12, 13, 14].includes(days % 100)) plural = 'dni';
+        else plural = 'dni';
+        text = `za ${days} ${plural}`;
+      } else if (lang.startsWith('de')) {
+        plural = days === 1 ? 'Tag' : 'Tage';
+        text = `in ${days} ${plural}`;
+      } else if (lang.startsWith('es')) {
+        plural = days === 1 ? 'día' : 'días';
+        text = `en ${days} ${plural}`;
+      } else if (lang.startsWith('pt')) {
+        plural = days === 1 ? 'dia' : 'dias';
+        text = `em ${days} ${plural}`;
+      } else {
+        // English fallback
+        plural = days === 1 ? 'day' : 'days';
+        text = `in ${days} ${plural}`;
+      }
+      element.classList.toggle('urgent', days <= 1);
+      element.classList.toggle('soon', days <= 7);
+    } else if (hours > 0) {
+      const lang = chrome.i18n.getUILanguage();
+      if (lang.startsWith('pl')) {
+        plural = hours === 1 ? 'godzinę' : 'godziny';
+        text = `za ${hours} ${plural}`;
+      } else if (lang.startsWith('de')) {
+        plural = hours === 1 ? 'Stunde' : 'Stunden';
+        text = `in ${hours} ${plural}`;
+      } else if (lang.startsWith('es')) {
+        plural = hours === 1 ? 'hora' : 'horas';
+        text = `en ${hours} ${plural}`;
+      } else if (lang.startsWith('pt')) {
+        plural = hours === 1 ? 'hora' : 'horas';
+        text = `em ${hours} ${plural}`;
+      } else {
+        // English fallback
+        plural = hours === 1 ? 'hour' : 'hours';
+        text = `in ${hours} ${plural}`;
+      }
+      element.classList.add('urgent');
+    } else {
+      const lang = chrome.i18n.getUILanguage();
+      if (lang.startsWith('pl')) {
+        plural = minutes === 1 ? 'minutę' : 'minuty';
+        text = `za ${minutes} ${plural}`;
+      } else if (lang.startsWith('de')) {
+        plural = minutes === 1 ? 'Minute' : 'Minuten';
+        text = `in ${minutes} ${plural}`;
+      } else if (lang.startsWith('es')) {
+        plural = minutes === 1 ? 'minuto' : 'minutos';
+        text = `en ${minutes} ${plural}`;
+      } else if (lang.startsWith('pt')) {
+        plural = minutes === 1 ? 'minuto' : 'minutos';
+        text = `em ${minutes} ${plural}`;
+      } else {
+        // English fallback
+        plural = minutes === 1 ? 'min' : 'mins';
+        text = `in ${minutes} ${plural}`;
+      }
+      element.classList.add('urgent');
+    }
+    
+    element.textContent = text;
+  }
+
   function withSuppressedMutations(fn) {
     suppressMutationsCount++;
     try {
@@ -644,6 +820,12 @@
             highlight.title = chrome.i18n.getMessage('clickToSee', [time.converted]);
           }
           applyHighlightStyle(highlight, false);
+
+          // Add countdown timer
+          const countdown = createCountdownElement(time);
+          if (countdown) {
+            highlight.appendChild(countdown);
+          }
 
           fragment.appendChild(highlight);
           lastIndex = time.end;

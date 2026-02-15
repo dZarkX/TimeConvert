@@ -2,7 +2,7 @@
 
 A small browser extension that detects times on web pages and converts them to your preferred timezone.
 
-![Version](https://img.shields.io/badge/version-1.4.0-green)
+![Version](https://img.shields.io/badge/version-1.5.0-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 GitHub: https://github.com/dZarkX/TimeConvert
@@ -18,6 +18,7 @@ GitHub: https://github.com/dZarkX/TimeConvert
   - UTC offsets: `15:00 UTC+2`, `10AM UTC-5`
 - **50+ timezone abbreviations** - CET, EST, PST, JST, GMT, UTC, and many more
 - **Badge notification** - Shows count of detected times on the extension icon
+- **Countdown timers** - Shows time remaining until future events (in 5 languages)
 - **Customizable appearance** - Choose your own highlight colors
 - **Auto or manual timezone** - Use system timezone or select manually
 - **Dark mode support** - Automatically adapts to your system theme
@@ -147,6 +148,14 @@ MIT License - feel free to use and modify as you wish.
 - Some ambiguous timezone abbreviations (like IST - India/Ireland/Israel) default to one interpretation
 
 ## 📝 Changelog
+
+### v1.5.0
+- **NEW**: Countdown timers for future events - shows time remaining until detected events
+- Countdown displays in small, non-intrusive text next to highlighted times
+- Smart pluralization support for Polish, German, Spanish, Portuguese, and English
+- Color-coded urgency: red for imminent events, orange for near-future events
+- Automatic updates every minute for accurate countdowns
+- Only shows countdowns for events within next 30 days
 
 ### v1.4.0
 - Updated product descriptions in all supported languages (EN, PL, DE, ES, PT)

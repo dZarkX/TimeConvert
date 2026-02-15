@@ -93,5 +93,9 @@
   "settingsSaved": { "message": "Configurações salvas" },
   "settingsRestored": { "message": "Padrões restaurados" },
   "dayOffsetSingular": { "message": " ($SIGN$$DAYS$ dia)", "placeholders": { "sign": { "content": "$1" }, "days": { "content": "$2" } } },
-  "dayOffsetPlural": { "message": " ($SIGN$$DAYS$ dias)", "placeholders": { "sign": { "content": "$1" }, "days": { "content": "$2" } } }
+  "dayOffsetPlural": { "message": " ($SIGN$$DAYS$ dias)", "placeholders": { "sign": { "content": "$1" }, "days": { "content": "$2" } } },
+  "countdownDays": { "message": "em $COUNT$ $PLURAL$", "placeholders": { "count": { "content": "$1" }, "plural": { "content": "$2" } } },
+  "countdownHours": { "message": "em $COUNT$ $PLURAL$", "placeholders": { "count": { "content": "$1" }, "plural": { "content": "$2" } } },
+  "countdownMinutes": { "message": "em $COUNT$ $PLURAL$", "placeholders": { "count": { "content": "$1" }, "plural": { "content": "$2" } } },
+  "countdownExpired": { "message": "Evento iniciado" }
 }
