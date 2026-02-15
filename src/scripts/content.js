@@ -4,6 +4,57 @@
 
   const DEBUG = false;
 
+  // Import NLP and domain timezone modules
+  // Note: These are included as separate files to keep the code organized
+  // In a production build, these would be bundled together
+  const NLP_PARSER = {
+    parseRelativeTime: function(text) {
+      // Basic implementation - will be enhanced
+      const lowerText = text.toLowerCase();
+      if (lowerText.includes('in 2 hours') || lowerText.includes('in 2hrs')) return { offset: 120, confidence: 0.8 };
+      if (lowerText.includes('in 1 hour') || lowerText.includes('in 1hr')) return { offset: 60, confidence: 0.8 };
+      if (lowerText.includes('tomorrow')) return { offset: 24 * 60, confidence: 0.9 };
+      if (lowerText.includes('yesterday')) return { offset: -24 * 60, confidence: 0.9 };
+      if (lowerText.includes('next week')) return { offset: 7 * 24 * 60, confidence: 0.7 };
+      if (lowerText.includes('end of day') || lowerText.includes('eod')) return { offset: 18 * 60, confidence: 0.7 };
+      if (lowerText.includes('noon')) return { offset: 12 * 60, confidence: 0.8 };
+      if (lowerText.includes('morning')) return { offset: 9 * 60, confidence: 0.6 };
+      if (lowerText.includes('afternoon')) return { offset: 15 * 60, confidence: 0.6 };
+      return null;
+    },
+    convertToAbsoluteTime: function(relativeTime, baseDate) {
+      if (!relativeTime) return null;
+      const result = new Date(baseDate);
+      result.setTime(result.getTime() + (relativeTime.offset * 60 * 1000));
+      return result;
+    },
+    containsRelativeTime: function(text) {
+      const lowerText = text.toLowerCase();
+      return /(?:in\s+\d+\s+(?:hour|hr|day|week)|tomorrow|yesterday|end\s+of\s+day|noon|morning|afternoon)/i.test(lowerText);
+    }
+  };
+
+  const DOMAIN_TZ = {
+    getTimezoneFromDomain: function(url) {
+      try {
+        if (!url) return null;
+        let domain = url.replace(/^https?:\/\//i, '').replace(/^www\./i, '').split('/')[0].toLowerCase();
+        const domainMap = {
+          '.pl': 'Europe/Warsaw', '.de': 'Europe/Berlin', '.fr': 'Europe/Paris', '.it': 'Europe/Rome',
+          '.es': 'Europe/Madrid', '.uk': 'Europe/London', '.nl': 'Europe/Amsterdam',
+          '.jp': 'Asia/Tokyo', '.kr': 'Asia/Seoul', '.cn': 'Asia/Shanghai',
+          '.au': 'Australia/Sydney', '.br': 'America/Sao_Paulo', '.ca': 'America/Toronto'
+        };
+        const tldMatch = domain.match(/(\.[a-z]{2,3})$/);
+        if (tldMatch && domainMap[tldMatch[1]]) return domainMap[tldMatch[1]];
+        return null;
+      } catch (e) { return null; }
+    },
+    getContextTimezone: function(url) {
+      return this.getTimezoneFromDomain(url);
+    }
+  };
+
   // Prevent double-injection (can happen with scripting.executeScript + content_scripts)
   if (window.__tzConverterInjected) return;
   window.__tzConverterInjected = true;
@@ -155,7 +206,10 @@
     showOriginal: true,
     highlightTextOnly: false,
     maxConversions: 25,
-    ignoredSites: []
+    ignoredSites: [],
+    // NEW: NLP and context detection settings
+    enableNlpDetection: false,
+    enableContextTimezone: false
   };
 
   // Get local timezone offset
@@ -576,6 +630,12 @@
       foundTimes = [];
       findTimesInNode(document.body, foundTimes);
 
+      // NEW: Check for relative time expressions if NLP detection is enabled
+      if (settings.enableNlpDetection) {
+        const relativeTimes = findRelativeTimesInNode(document.body);
+        foundTimes.push(...relativeTimes);
+      }
+
       if (settings.maxConversions > 0 && foundTimes.length > settings.maxConversions) {
         foundTimes = foundTimes.slice(0, settings.maxConversions);
       }
@@ -584,6 +644,110 @@
     } catch (e) {
       if (DEBUG) console.error('[TimeZone Converter] Scan error:', e);
       return [];
+    }
+  }
+
+  // NEW: Find relative time expressions using NLP
+  function findRelativeTimesInNode(root) {
+    const walker = document.createTreeWalker(
+      root,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode: (node) => {
+          const text = node.nodeValue;
+          if (!text || text.length < 4) return NodeFilter.FILTER_REJECT;
+          if (!NLP_PARSER.containsRelativeTime(text)) return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      }
+    );
+
+    const relativeTimes = [];
+    let nodeCount = 0;
+    const MAX_TEXT_NODES = 2000; // Limit for performance
+
+    while (walker.nextNode() && ++nodeCount < MAX_TEXT_NODES) {
+      const node = walker.currentNode;
+      const text = node.nodeValue;
+
+      try {
+        const relativeTime = NLP_PARSER.parseRelativeTime(text);
+        if (relativeTime && relativeTime.confidence > 0.6) {
+          const absoluteTime = NLP_PARSER.convertToAbsoluteTime(relativeTime, new Date());
+          if (absoluteTime) {
+            // Create a synthetic time object for relative expressions
+            const hours = absoluteTime.getHours();
+            const minutes = absoluteTime.getMinutes();
+            const timezone = settings.enableContextTimezone ? DOMAIN_TZ.getContextTimezone(window.location.href) : null;
+
+            // Determine offset based on detected timezone or local timezone
+            let offset = timezone ? getTimezoneOffset(timezone) : getLocalOffset();
+
+            relativeTimes.push({
+              id: `nlp-${Date.now()}-${relativeTimes.length}`,
+              node,
+              start: 0,
+              end: text.length,
+              original: text.trim(),
+              originalParsed: {
+                hours,
+                minutes,
+                timezone: timezone || 'Local',
+                offset,
+                hasDate: true,
+                date: {
+                  year: absoluteTime.getFullYear(),
+                  month: absoluteTime.getMonth() + 1,
+                  day: absoluteTime.getDate()
+                }
+              },
+              converted: formatRelativeTime(relativeTime, absoluteTime),
+              convertedParsed: {
+                hours,
+                minutes,
+                timezone: timezone || 'Local',
+                offset: getLocalOffset(), // Always convert to local timezone for relative times
+                hasDate: true,
+                date: {
+                  year: absoluteTime.getFullYear(),
+                  month: absoluteTime.getMonth() + 1,
+                  day: absoluteTime.getDate()
+                }
+              },
+              isRelative: true,
+              confidence: relativeTime.confidence
+            });
+          }
+        }
+      } catch (e) {
+        if (DEBUG) console.error('[NLP] Error processing relative time:', e);
+      }
+    }
+
+    return relativeTimes;
+  }
+
+  // Format relative time for display
+  function formatRelativeTime(relativeTime, absoluteTime) {
+    const now = new Date();
+    const diffMs = absoluteTime - now;
+    const diffMinutes = Math.round(diffMs / (1000 * 60));
+    
+    if (diffMinutes < 0) {
+      return `In the past (${Math.abs(diffMinutes)} minutes ago)`;
+    } else if (diffMinutes === 0) {
+      return 'Now';
+    } else if (diffMinutes < 60) {
+      return `In ${diffMinutes} minutes`;
+    } else if (diffMinutes < 1440) {
+      const hours = Math.floor(diffMinutes / 60);
+      const mins = diffMinutes % 60;
+      return `In ${hours} hour${hours !== 1 ? 's' : ''}${mins > 0 ? ` ${mins} min` : ''}`;
+    } else {
+      const days = Math.floor(diffMinutes / 1440);
+      const hours = Math.floor((diffMinutes % 1440) / 60);
+      const mins = diffMinutes % 60;
+      return `In ${days} day${days !== 1 ? 's' : ''}${hours > 0 ? ` ${hours}h` : ''}${mins > 0 ? ` ${mins}m` : ''}`;
     }
   }
 
@@ -1064,44 +1228,6 @@
     return new Promise((resolve) => {
       // Quick check using flag
       if (contextInvalidated) {
-        resolve(settings);
-        return;
-      }
-
-      try {
-        if (!isExtensionContextValid() || !chrome.storage?.sync) {
-          resolve(settings);
-          return;
-        }
-
-        chrome.storage.sync.get({
-          targetTimezone: 'auto',
-          targetOffset: null,
-          use24Hour: false,
-          autoConvertOnLoad: false,
-          displayMode: 'toggle',
-          resultIncludeUtcOffset: true,
-          resultIncludeDayOffset: true,
-          resultIncludeSourceTz: false,
-          enableDateDetection: false,
-          scanMode: 'auto',
-          highlightColor: '#ffeb3b',
-          highlightTextColor: '#000000',
-          highlightEnabled: true,
-          showOriginal: true,
-          highlightTextOnly: false,
-          maxConversions: 25,
-          ignoredSites: []
-        }, (items) => {
-          // Check flag first (fastest)
-          if (contextInvalidated) {
-            resolve(settings);
-            return;
-          }
-          try {
-            // Check for chrome.runtime.lastError
-            if (chrome.runtime?.lastError) {
-              resolve(settings);
               return;
             }
             settings = { ...settings, ...items };

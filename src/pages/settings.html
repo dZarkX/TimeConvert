@@ -180,6 +180,30 @@
         </div>
 
         <div class="setting-group">
+          <label class="setting-label" data-i18n="nlpDetection">Natural Language Detection</label>
+          <p class="setting-description" data-i18n="nlpDetectionDesc">Detect relative time expressions like "in 2 hours" or "tomorrow at noon"</p>
+          <div class="toggle-setting">
+            <span class="toggle-text" data-i18n="enableNlpDetection">Enable NLP/context detection</span>
+            <label class="toggle">
+              <input type="checkbox" id="enableNlpDetection">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <label class="setting-label" data-i18n="contextTimezone">Context Timezone</label>
+          <p class="setting-description" data-i18n="contextTimezoneDesc">Guess timezone from website domain when no timezone is specified</p>
+          <div class="toggle-setting">
+            <span class="toggle-text" data-i18n="enableContextTimezone">Enable domain-based timezone guessing</span>
+            <label class="toggle">
+              <input type="checkbox" id="enableContextTimezone">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-group">
           <label class="setting-label" data-i18n="scanMode">Scan Mode</label>
           <p class="setting-description" data-i18n="scanModeDesc">Control how aggressively the extension scans pages</p>
           <select id="scanMode" class="select-input">

@@ -135,8 +135,29 @@
                             "message":  "Include source timezone (e.g. CET)"
                         },
     "dateDetection":  {
-                          "message":  "Date Detection"
+                          "message":  "Date detection"
                       },
+    "enableDateDetection":  {
+                              "message":  "Enable date detection"
+                          },
+    "nlpDetection":  {
+                        "message":  "Natural language detection"
+                    },
+    "nlpDetectionDesc":  {
+                            "message":  "Detect relative time expressions like \"in 2 hours\" or \"tomorrow at noon\""
+                        },
+    "enableNlpDetection":  {
+                            "message":  "Enable NLP detection"
+                        },
+    "contextTimezone":  {
+                          "message":  "Context timezone"
+                      },
+    "contextTimezoneDesc":  {
+                              "message":  "Guess timezone from website domain when no timezone is specified"
+                          },
+    "enableContextTimezone":  {
+                              "message":  "Enable domain-based timezone guessing"
+                          },
     "detectDates":  {
                         "message":  "Detect dates next to times"
                     },
