@@ -19,7 +19,12 @@
             "data_collection_permissions": {
                 "uses_data": false,
                 "includes_personal_data": false,
-                "includes_sensitive_data": false
+                "includes_sensitive_data": false,
+                "required": {
+                    "network_connection": false,
+                    "personal_data": false,
+                    "third_party_data": false
+                }
             }
         }
     },
