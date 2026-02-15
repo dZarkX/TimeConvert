@@ -4,6 +4,7 @@ A small browser extension that detects times on web pages and converts them to y
 
 ![Version](https://img.shields.io/badge/version-1.4.0-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
+[![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-Download%20Now-brightgreen)](https://chromewebstore.google.com/detail/timezone-converter/phpmfhmlfolhocoefklfafhipdopgdka?authuser=0&hl=pl)
 
 GitHub: https://github.com/dZarkX/TimeConvert
 
@@ -24,6 +25,11 @@ GitHub: https://github.com/dZarkX/TimeConvert
 
 ## 📦 Installation
 
+### From Chrome Web Store (Recommended)
+🔗 [**Install from Chrome Web Store**](https://chromewebstore.google.com/detail/timezone-converter/phpmfhmlfolhocoefklfafhipdopgdka?authuser=0&hl=pl)
+
+The easiest way to install the extension directly from the official store.
+
 ### From Source (Developer Mode)
 
 1. Clone or download this repository
@@ -31,9 +37,6 @@ GitHub: https://github.com/dZarkX/TimeConvert
 3. Enable "Developer mode" (toggle in top right)
 4. Click "Load unpacked"
 5. Select the project folder
-
-### From Chrome Web Store
-*Coming soon*
 
 ## 🚀 Usage
 
@@ -141,7 +144,26 @@ https://github.com/dZarkX/TimeConvert/issues
 
 MIT License - feel free to use and modify as you wish.
 
-## 🐛 Known Issues
+## � Download & Installation
+
+### 🌐 Official Download
+- **Chrome Web Store**: [https://chromewebstore.google.com/detail/timezone-converter/phpmfhmlfolhocoefklfafhipdopgdka](https://chromewebstore.google.com/detail/timezone-converter/phpmfhmlfolhocoefklfafhipdopgdka?authuser=0&hl=pl)
+
+### 📦 Direct Installation
+1. Visit the Chrome Web Store link above
+2. Click "Add to Chrome" 
+3. Grant necessary permissions
+4. Extension will be automatically installed and activated
+
+### 🛠️ Developer Installation
+For developers who want to modify or contribute:
+1. Clone this repository: `git clone https://github.com/dZarkX/TimeConvert.git`
+2. Open Chrome/Brave and go to `chrome://extensions/`
+3. Enable "Developer mode" (toggle in top right)
+4. Click "Load unpacked"
+5. Select the project folder
+
+## �🐛 Known Issues
 
 - Times without timezone information are not detected (by design)
 - Some ambiguous timezone abbreviations (like IST - India/Ireland/Israel) default to one interpretation
