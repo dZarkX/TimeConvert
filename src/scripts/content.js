@@ -1228,8 +1228,50 @@
     return new Promise((resolve) => {
       // Quick check using flag
       if (contextInvalidated) {
+        resolve(settings);
+        return;
+      }
+
+      try {
+        if (!isExtensionContextValid() || !chrome.storage?.sync) {
+          resolve(settings);
+          return;
+        }
+
+        chrome.storage.sync.get({
+          targetTimezone: 'auto',
+          targetOffset: null,
+          use24Hour: false,
+          autoConvertOnLoad: false,
+          displayMode: 'toggle',
+          resultIncludeUtcOffset: true,
+          resultIncludeDayOffset: true,
+          resultIncludeSourceTz: false,
+          enableDateDetection: false,
+          scanMode: 'auto',
+          highlightColor: '#ffeb3b',
+          highlightTextColor: '#000000',
+          highlightEnabled: true,
+          showOriginal: true,
+          highlightTextOnly: false,
+          maxConversions: 25,
+          ignoredSites: [],
+          enableNlpDetection: false,
+          enableContextTimezone: false
+        }, (items) => {
+          // Check flag first (fastest)
+          if (contextInvalidated) {
+            resolve(settings);
+            return;
+          }
+
+          try {
+            // Check for chrome.runtime.lastError
+            if (chrome.runtime?.lastError) {
+              resolve(settings);
               return;
             }
+
             settings = { ...settings, ...items };
             highlightEnabled = items.highlightEnabled;
             resolve(settings);
