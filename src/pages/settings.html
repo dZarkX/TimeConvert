@@ -166,6 +166,13 @@
               <span class="toggle-slider"></span>
             </label>
           </div>
+          <div class="toggle-setting" style="margin-top: 8px;">
+            <span class="toggle-text" data-i18n="showCountdown">Show countdown to event (e.g. “in 8 hours”)</span>
+            <label class="toggle">
+              <input type="checkbox" id="showCountdown">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
         </div>
 
         <div class="setting-group">
@@ -250,6 +257,7 @@
           </svg>
           <span data-i18n="appearance">Appearance</span>
         </h2>
+        <p class="setting-description" style="margin-bottom: 1rem;" data-i18n="appearanceIntro">Language, highlighting on/off, and colors for times on the page and after you click to see your timezone.</p>
 
         <div class="setting-group">
           <label class="setting-label">
@@ -275,36 +283,7 @@
         </div>
 
         <div class="setting-group">
-          <label class="setting-label" data-i18n="highlightColors">Highlight Colors</label>
-          <p class="setting-description" data-i18n="highlightColorsDesc">Customize how detected times appear on pages
-          </p>
-
-          <div class="color-settings">
-            <div class="color-picker-group">
-              <label data-i18n="bgColor">Background Color</label>
-              <div class="color-input-wrapper">
-                <input type="color" id="highlightColor" value="#ffeb3b">
-                <input type="text" id="highlightColorText" value="#ffeb3b" class="color-text-input">
-              </div>
-            </div>
-
-            <div class="color-picker-group">
-              <label data-i18n="textColor">Text Color</label>
-              <div class="color-input-wrapper">
-                <input type="color" id="highlightTextColor" value="#000000">
-                <input type="text" id="highlightTextColorText" value="#000000" class="color-text-input">
-              </div>
-            </div>
-          </div>
-
-          <div class="preview-box">
-            <span class="preview-label" data-i18n="preview">Preview:</span>
-            <span class="preview-highlight" id="highlightPreview">5:00 PM CET</span>
-          </div>
-        </div>
-
-        <div class="setting-group">
-          <label class="setting-label" data-i18n="highlightBehavior">Highlight Behavior</label>
+          <label class="setting-label" data-i18n="highlightBehavior">Highlight</label>
           <div class="toggle-setting">
             <span class="toggle-text" data-i18n="enableHighlighting">Enable highlighting on pages</span>
             <label class="toggle">
@@ -312,11 +291,7 @@
               <span class="toggle-slider"></span>
             </label>
           </div>
-        </div>
-
-        <div class="setting-group">
-          <label class="setting-label" data-i18n="highlightStyle">Highlight Style</label>
-          <div class="toggle-setting">
+          <div class="toggle-setting" style="margin-top: 8px;">
             <span class="toggle-text" data-i18n="textOnlyHighlight">Text-only highlight (no background)</span>
             <label class="toggle">
               <input type="checkbox" id="highlightTextOnly">
@@ -326,24 +301,72 @@
         </div>
 
         <div class="setting-group">
-          <label class="setting-label" data-i18n="colorPresets">Color Presets</label>
+          <label class="setting-label" data-i18n="highlightColors">Highlight colors (on page)</label>
+          <p class="setting-description" data-i18n="highlightColorsDesc">Customize how detected times appear on pages</p>
+          <div class="color-settings">
+            <div class="color-picker-group">
+              <label data-i18n="bgColor">Background</label>
+              <div class="color-input-wrapper">
+                <input type="color" id="highlightColor" value="#ffeb3b">
+                <input type="text" id="highlightColorText" value="#ffeb3b" class="color-text-input">
+              </div>
+            </div>
+            <div class="color-picker-group">
+              <label data-i18n="textColor">Text</label>
+              <div class="color-input-wrapper">
+                <input type="color" id="highlightTextColor" value="#000000">
+                <input type="text" id="highlightTextColorText" value="#000000" class="color-text-input">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <label class="setting-label" data-i18n="convertedTimeStyle">Converted time (after click)</label>
+          <p class="setting-description" data-i18n="convertedTimeStyleDesc">Colors when the time is shown in your timezone after you click it</p>
+          <div class="color-settings">
+            <div class="color-picker-group">
+              <label data-i18n="convertedBgColor">Background</label>
+              <div class="color-input-wrapper">
+                <input type="color" id="convertedHighlightColor" value="#4CAF50">
+                <input type="text" id="convertedHighlightColorText" value="#4CAF50" class="color-text-input">
+              </div>
+            </div>
+            <div class="color-picker-group">
+              <label data-i18n="convertedTextColor">Text</label>
+              <div class="color-input-wrapper">
+                <input type="color" id="convertedHighlightTextColor" value="#ffffff">
+                <input type="text" id="convertedHighlightTextColorText" value="#ffffff" class="color-text-input">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="preview-box">
+          <span class="preview-label" data-i18n="preview">Preview:</span>
+          <span class="preview-highlight" id="highlightPreview">5:00 PM CET</span>
+        </div>
+
+        <div class="setting-group">
+          <label class="setting-label" data-i18n="colorPresets">Color presets</label>
+          <p class="setting-description" data-i18n="colorPresetsDesc">Apply both on-page and converted colors at once</p>
           <div class="color-presets">
-            <button class="preset-btn" data-bg="#ffeb3b" data-text="#000000" title="Yellow">
+            <button class="preset-btn" data-bg="#ffeb3b" data-text="#000000" data-converted-bg="#4CAF50" data-converted-text="#ffffff" title="Yellow / Green">
               <span style="background: #ffeb3b; color: #000000;">Aa</span>
             </button>
-            <button class="preset-btn" data-bg="#4CAF50" data-text="#ffffff" title="Green">
+            <button class="preset-btn" data-bg="#4CAF50" data-text="#ffffff" data-converted-bg="#388E3C" data-converted-text="#ffffff" title="Green">
               <span style="background: #4CAF50; color: #ffffff;">Aa</span>
             </button>
-            <button class="preset-btn" data-bg="#2196F3" data-text="#ffffff" title="Blue">
+            <button class="preset-btn" data-bg="#2196F3" data-text="#ffffff" data-converted-bg="#1976D2" data-converted-text="#ffffff" title="Blue">
               <span style="background: #2196F3; color: #ffffff;">Aa</span>
             </button>
-            <button class="preset-btn" data-bg="#9C27B0" data-text="#ffffff" title="Purple">
+            <button class="preset-btn" data-bg="#9C27B0" data-text="#ffffff" data-converted-bg="#7B1FA2" data-converted-text="#ffffff" title="Purple">
               <span style="background: #9C27B0; color: #ffffff;">Aa</span>
             </button>
-            <button class="preset-btn" data-bg="#FF5722" data-text="#ffffff" title="Orange">
+            <button class="preset-btn" data-bg="#FF5722" data-text="#ffffff" data-converted-bg="#E64A19" data-converted-text="#ffffff" title="Orange">
               <span style="background: #FF5722; color: #ffffff;">Aa</span>
             </button>
-            <button class="preset-btn" data-bg="#607D8B" data-text="#ffffff" title="Gray">
+            <button class="preset-btn" data-bg="#607D8B" data-text="#ffffff" data-converted-bg="#455A64" data-converted-text="#ffffff" title="Grey">
               <span style="background: #607D8B; color: #ffffff;">Aa</span>
             </button>
           </div>
@@ -508,6 +531,11 @@
         </div>
       </section>
 
+      <!-- Restore defaults (plain button, minimal vertical space) -->
+      <div class="restore-defaults-row">
+        <button type="button" id="resetBtn" class="btn btn-secondary" data-i18n="restoreDefaults">Restore Defaults</button>
+      </div>
+
       <!-- Privacy Section -->
       <section class="settings-section">
         <h2 class="section-title">
@@ -547,6 +575,8 @@
         <div class="setting-group">
           <p class="setting-description" data-i18n="recentUpdates">Recent updates (latest first)</p>
           <div class="about-info" id="changelog">
+            <p><strong>v2.0.2</strong> — Fix: text-only highlight rendering (no broken pill/hover effects). Fix: missing Polish translations for highlight toggles.</p>
+            <p><strong>v2.0</strong> — Material 2 UI redesign (popup & settings), Restore defaults button above Privacy.</p>
             <p><strong>v1.5.1</strong> — NLP & Context Timezone detection (Experimental Features), UI improvements, bug fixes.</p>
             <p><strong>v1.5.0</strong> — Countdown timers for future events with smart pluralization.</p>
             <p><strong>v1.4.0</strong> — Updated product descriptions in all supported languages.</p>
@@ -575,26 +605,21 @@
         </h2>
 
         <div class="about-info">
-          <p><strong>TimeZone Converter</strong> <span id="versionNumber">v1.5.1</span></p>
+          <p><strong>TimeZone Converter</strong> <span id="versionNumber">v2.0.2</span></p>
           <p data-i18n="appDesc">Automatically detects and converts time zones on web pages to your local time.</p>
           <p class="about-features">
             <strong data-i18n="features">Features:</strong>
-          <ul>
-            <li data-i18n="privacyBullet4">The extension only reads page text to find time expressions and
-              highlight/convert them.</li>
-            <li data-i18n="use24HourFormat">Use 24-hour format</li>
-            <li data-i18n="modeToggle">Click to toggle (original ↔ converted)</li>
-            <li data-i18n="highlightColorsDesc">Customize how detected times appear on pages</li>
-          </ul>
+            <ul>
+              <li data-i18n="privacyBullet4">The extension only reads page text to find time expressions and
+                highlight/convert them.</li>
+              <li data-i18n="use24HourFormat">Use 24-hour format</li>
+              <li data-i18n="modeToggle">Click to toggle (original ↔ converted)</li>
+              <li data-i18n="highlightColorsDesc">Customize how detected times appear on pages</li>
+            </ul>
           </p>
         </div>
       </section>
     </main>
-
-    <!-- Footer -->
-    <footer class="settings-footer">
-      <button id="resetBtn" class="btn btn-secondary" data-i18n="restoreDefaults">Restore Defaults</button>
-    </footer>
 
     <!-- Toast notification -->
     <div class="toast" id="toast">

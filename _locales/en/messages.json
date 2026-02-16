@@ -248,9 +248,30 @@
     "textOnlyHighlight":  {
                               "message":  "Text-only highlight (no background)"
                           },
+    "convertedTimeStyle":  {
+                              "message":  "Converted time (after click)"
+                          },
+    "convertedTimeStyleDesc":  {
+                                 "message":  "Colors when the time is shown in your timezone after you click it"
+                             },
+    "convertedBgColor":  {
+                            "message":  "Background (converted)"
+                        },
+    "convertedTextColor":  {
+                              "message":  "Text (converted)"
+                          },
     "colorPresets":  {
-                         "message":  "Color Presets"
+                         "message":  "Color presets"
                      },
+    "colorPresetsDesc":  {
+                             "message":  "Apply both on-page and converted colors at once"
+                         },
+    "appearanceIntro":  {
+                            "message":  "Language, highlighting on/off, and colors for times on the page and after you click to see your timezone."
+                        },
+    "showCountdown":  {
+                          "message":  "Show countdown to event (e.g. \"in 8 hours\")"
+                      },
     "ignoredSites":  {
                          "message":  "Ignored Sites"
                      },

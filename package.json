@@ -9,6 +9,7 @@
     "scripts":  {
                     "test":  "echo \"Error: no test specified\" \u0026\u0026 exit 1",
                     "pack":  "powershell -Command \"Compress-Archive -Path src, _locales, manifest.json, privacy-policy.html -DestinationPath TimeConvert.zip -Force\"",
+                    "pack-firefox":  "node tools/build-firefox.js",
                     "publish-cws":  "npm run pack \u0026\u0026 node tools/publish.js"
                 },
     "repository":  {
@@ -27,6 +28,7 @@
     "homepage":  "https://github.com/dZarkX/TimeConvert#readme",
     "devDependencies":  {
                             "chrome-webstore-upload-cli":  "^3.5.0",
-                            "dotenv":  "^17.3.1"
+                            "dotenv":  "^17.3.1",
+                            "archiver":  "^6.0.1"
                         }
 }

@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const resultIncludeUtcOffset = document.getElementById('resultIncludeUtcOffset');
   const resultIncludeDayOffset = document.getElementById('resultIncludeDayOffset');
   const resultIncludeSourceTz = document.getElementById('resultIncludeSourceTz');
+  const showCountdown = document.getElementById('showCountdown');
   const enableDateDetection = document.getElementById('enableDateDetection');
   const enableNlpDetection = document.getElementById('enableNlpDetection');
   const enableContextTimezone = document.getElementById('enableContextTimezone');
@@ -22,6 +23,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   const highlightPreview = document.getElementById('highlightPreview');
   const highlightEnabled = document.getElementById('highlightEnabled');
   const highlightTextOnly = document.getElementById('highlightTextOnly');
+  const convertedHighlightColor = document.getElementById('convertedHighlightColor');
+  const convertedHighlightColorText = document.getElementById('convertedHighlightColorText');
+  const convertedHighlightTextColor = document.getElementById('convertedHighlightTextColor');
+  const convertedHighlightTextColorText = document.getElementById('convertedHighlightTextColorText');
   const newIgnoredSite = document.getElementById('newIgnoredSite');
   const addIgnoredSite = document.getElementById('addIgnoredSite');
   const ignoredSitesList = document.getElementById('ignoredSitesList');
@@ -40,6 +45,41 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Cache for loaded messages
   let messagesCache = null;
+
+  function setLocalizedContent(el, message) {
+    if (!el || !message) return;
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+      el.placeholder = message;
+      return;
+    }
+
+    // Some strings include basic markup like <strong>...</strong>.
+    // Avoid innerHTML assignment: parse and whitelist only TEXT + STRONG tags.
+    if (/<\s*strong\b/i.test(message)) {
+      try {
+        const parsed = new DOMParser().parseFromString(`<div>${message}</div>`, 'text/html');
+        const container = parsed.body.firstElementChild;
+        const nodes = [];
+        for (const node of Array.from(container.childNodes)) {
+          if (node.nodeType === Node.TEXT_NODE) {
+            nodes.push(document.createTextNode(node.nodeValue || ''));
+          } else if (node.nodeType === Node.ELEMENT_NODE && node.nodeName.toLowerCase() === 'strong') {
+            const strong = document.createElement('strong');
+            strong.textContent = node.textContent || '';
+            nodes.push(strong);
+          } else {
+            // Drop any other nodes for safety.
+          }
+        }
+        el.replaceChildren(...nodes);
+        return;
+      } catch {
+        // fall back to plain text
+      }
+    }
+
+    el.textContent = message;
+  }
 
   // Localization helper
   async function localizeUI() {
@@ -72,11 +112,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const key = el.getAttribute('data-i18n');
       const message = getMsg(key);
       if (message) {
-        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-          el.placeholder = message;
-        } else {
-          el.innerHTML = message; // Use innerHTML for cases like privacyBullet1 which has <strong>
-        }
+        setLocalizedContent(el, message);
       }
     });
 
@@ -103,12 +139,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, 2500);
   }
 
-  // Update preview
+  // Update preview (shows original-state colors only; converted state is in separate UI)
   function updatePreview() {
     if (!highlightPreview) return;
-    highlightPreview.style.backgroundColor = highlightTextOnly.checked ? 'transparent' : highlightColor.value;
-    highlightPreview.style.color = highlightTextColor.value;
-    highlightPreview.style.fontWeight = highlightTextOnly.checked ? 'bold' : 'normal';
+    if (highlightTextOnly.checked) {
+      highlightPreview.style.backgroundColor = 'transparent';
+      highlightPreview.style.color = highlightTextColor.value;
+    } else {
+      highlightPreview.style.backgroundColor = highlightColor.value;
+      highlightPreview.style.color = highlightTextColor.value;
+    }
   }
 
   // Load settings
@@ -122,6 +162,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       resultIncludeUtcOffset: true,
       resultIncludeDayOffset: true,
       resultIncludeSourceTz: false,
+      showCountdown: false,
       enableDateDetection: false,
       enableNlpDetection: false,
       enableContextTimezone: false,
@@ -131,6 +172,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       highlightTextColor: '#000000',
       highlightEnabled: true,
       highlightTextOnly: false,
+      convertedHighlightColor: '#4CAF50',
+      convertedHighlightTextColor: '#ffffff',
       ignoredSites: [],
       preferredLanguage: 'auto'
     }, resolve);
@@ -152,6 +195,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   resultIncludeUtcOffset.checked = settings.resultIncludeUtcOffset;
   resultIncludeDayOffset.checked = settings.resultIncludeDayOffset;
   resultIncludeSourceTz.checked = settings.resultIncludeSourceTz;
+  if (showCountdown) showCountdown.checked = settings.showCountdown === true;
   enableDateDetection.checked = settings.enableDateDetection;
   if (enableNlpDetection) enableNlpDetection.checked = settings.enableNlpDetection;
   if (enableContextTimezone) enableContextTimezone.checked = settings.enableContextTimezone;
@@ -163,6 +207,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   highlightTextColorText.value = settings.highlightTextColor;
   highlightEnabled.checked = settings.highlightEnabled;
   highlightTextOnly.checked = settings.highlightTextOnly;
+  if (convertedHighlightColor) {
+    convertedHighlightColor.value = settings.convertedHighlightColor || '#4CAF50';
+    convertedHighlightColorText.value = settings.convertedHighlightColor || '#4CAF50';
+  }
+  if (convertedHighlightTextColor) {
+    convertedHighlightTextColor.value = settings.convertedHighlightTextColor || '#ffffff';
+    convertedHighlightTextColorText.value = settings.convertedHighlightTextColor || '#ffffff';
+  }
   preferredLanguage.value = settings.preferredLanguage;
 
   updatePreview();
@@ -175,20 +227,29 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Render ignored sites
   function renderIgnoredSites(sites) {
-    ignoredSitesList.innerHTML = '';
+    ignoredSitesList.replaceChildren();
     sites.forEach((site, index) => {
       const item = document.createElement('div');
       item.className = 'ignored-site-item';
-      item.innerHTML = `
-        <span class="site-url">${site}</span>
-        <button class="remove-site" data-index="${index}">Remove</button>
-      `;
+
+      const urlSpan = document.createElement('span');
+      urlSpan.className = 'site-url';
+      urlSpan.textContent = site;
+
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'remove-site';
+      removeBtn.dataset.index = String(index);
+      removeBtn.type = 'button';
+      removeBtn.textContent = 'Remove';
+
+      item.appendChild(urlSpan);
+      item.appendChild(removeBtn);
       ignoredSitesList.appendChild(item);
     });
 
-    document.querySelectorAll('.remove-site').forEach(btn => {
+    ignoredSitesList.querySelectorAll('.remove-site').forEach(btn => {
       btn.addEventListener('click', (e) => {
-        const idx = parseInt(e.target.dataset.index);
+        const idx = parseInt(e.currentTarget.dataset.index);
         const newSites = [...sites];
         newSites.splice(idx, 1);
         chrome.storage.sync.set({ ignoredSites: newSites }, () => {
@@ -213,6 +274,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       resultIncludeUtcOffset: resultIncludeUtcOffset.checked,
       resultIncludeDayOffset: resultIncludeDayOffset.checked,
       resultIncludeSourceTz: resultIncludeSourceTz.checked,
+      showCountdown: showCountdown ? showCountdown.checked : false,
       enableDateDetection: enableDateDetection.checked,
       enableNlpDetection: enableNlpDetection ? enableNlpDetection.checked : false,
       enableContextTimezone: enableContextTimezone ? enableContextTimezone.checked : false,
@@ -222,6 +284,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       highlightTextColor: highlightTextColor.value,
       highlightEnabled: highlightEnabled.checked,
       highlightTextOnly: highlightTextOnly.checked,
+      convertedHighlightColor: convertedHighlightColor?.value || '#4CAF50',
+      convertedHighlightTextColor: convertedHighlightTextColor?.value || '#ffffff',
       preferredLanguage: preferredLanguage.value
     };
 
@@ -240,9 +304,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Event Listeners for auto-save
   [use24Hour, autoConvertOnLoad, displayMode, resultIncludeUtcOffset,
-    resultIncludeDayOffset, resultIncludeSourceTz, enableDateDetection,
+    resultIncludeDayOffset, resultIncludeSourceTz, showCountdown, enableDateDetection,
     enableNlpDetection, enableContextTimezone, scanMode, maxConversions, highlightColor, highlightTextColor,
-    highlightEnabled, highlightTextOnly, timezoneSelect, preferredLanguage].forEach(el => {
+    highlightEnabled, highlightTextOnly, convertedHighlightColor, convertedHighlightTextColor, timezoneSelect, preferredLanguage].forEach(el => {
       if (!el) return;
       el.addEventListener('change', async () => {
         if (el === preferredLanguage) {
@@ -285,13 +349,52 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // Presets
+  if (convertedHighlightColor) {
+    convertedHighlightColor.addEventListener('input', (e) => {
+      convertedHighlightColorText.value = e.target.value;
+      saveSettings();
+    });
+    convertedHighlightColor.addEventListener('change', saveSettings);
+  }
+  if (convertedHighlightColorText) {
+    convertedHighlightColorText.addEventListener('input', (e) => {
+      if (/^#[0-9A-F]{6}$/i.test(e.target.value)) {
+        convertedHighlightColor.value = e.target.value;
+        saveSettings();
+      }
+    });
+  }
+  if (convertedHighlightTextColor) {
+    convertedHighlightTextColor.addEventListener('input', (e) => {
+      convertedHighlightTextColorText.value = e.target.value;
+      saveSettings();
+    });
+    convertedHighlightTextColor.addEventListener('change', saveSettings);
+  }
+  if (convertedHighlightTextColorText) {
+    convertedHighlightTextColorText.addEventListener('input', (e) => {
+      if (/^#[0-9A-F]{6}$/i.test(e.target.value)) {
+        convertedHighlightTextColor.value = e.target.value;
+        saveSettings();
+      }
+    });
+  }
+
+  // Presets (set both on-page and converted colors when data-converted-* present)
   document.querySelectorAll('.preset-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       highlightColor.value = btn.dataset.bg;
       highlightColorText.value = btn.dataset.bg;
       highlightTextColor.value = btn.dataset.text;
       highlightTextColorText.value = btn.dataset.text;
+      if (btn.dataset.convertedBg && convertedHighlightColor) {
+        convertedHighlightColor.value = btn.dataset.convertedBg;
+        convertedHighlightColorText.value = btn.dataset.convertedBg;
+      }
+      if (btn.dataset.convertedText && convertedHighlightTextColor) {
+        convertedHighlightTextColor.value = btn.dataset.convertedText;
+        convertedHighlightTextColorText.value = btn.dataset.convertedText;
+      }
       updatePreview();
       saveSettings();
       showStatus(chrome.i18n.getMessage('settingsSaved') || 'Settings saved');
@@ -325,19 +428,109 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // Inline Test Panel logic (requires a mini version of content script logic)
+  // Inline Test Panel logic - simplified version of content.js detection
   inlineTestRunBtn?.addEventListener('click', () => {
-    // This part is complex because content.js is not a module
-    // For now, let's just show a message or use a simplified version
-    inlineTestStatus.textContent = 'scanning...';
-    // Simplified highlight logic for the surfacing
+    inlineTestStatus.textContent = chrome.i18n.getMessage('scanning') || 'scanning...';
+    inlineTestCount.textContent = '0';
+    
+    // Get colors from current settings
+    const bgColor = highlightColor?.value || '#ffeb3b';
+    const textColor = highlightTextColor?.value || '#000000';
+    const isTextOnly = highlightTextOnly?.checked || false;
+    
+    // Clear previous highlights first
     const surface = inlineTestSurface;
+    const existingHighlights = surface.querySelectorAll('.tz-converter-highlight');
+    existingHighlights.forEach(h => {
+      const parent = h.parentNode;
+      if (parent) {
+        parent.replaceChild(document.createTextNode(h.textContent), h);
+      }
+    });
+    
+    // Simple regex for testing
+    const SIMPLE_PATTERN = /\b(\d{1,2}[:.]\d{2}(?:[:.]\d{2})?\s*(?:am|pm)?\s*[A-Z]{2,5}(?:\s*[+-]\d{1,4})?)\b/gi;
+    
     const walker = document.createTreeWalker(surface, NodeFilter.SHOW_TEXT, null, false);
-    let count = 0;
-    // ... logic would go here ...
-    // But since it's just a preview, we can simulate or use simple regex
-    inlineTestStatus.textContent = 'done';
-    inlineTestCount.textContent = '12'; // Mock for now
+    const textNodes = [];
+    let node;
+    
+    while (node = walker.nextNode()) {
+      textNodes.push(node);
+    }
+    
+    let foundCount = 0;
+    
+    textNodes.forEach(textNode => {
+      const text = textNode.nodeValue;
+      if (!text || !/\d/.test(text)) return;
+      
+      const matches = [...text.matchAll(SIMPLE_PATTERN)];
+      if (matches.length === 0) return;
+      
+      const parent = textNode.parentElement;
+      if (!parent) return;
+      
+      // Skip if already highlighted
+      if (parent.closest('.tz-converter-highlight')) return;
+      
+      // Create document fragment for replacement
+      const fragment = document.createDocumentFragment();
+      let lastIndex = 0;
+      
+      matches.forEach(match => {
+        const [fullMatch] = match;
+        const start = match.index;
+        const end = start + fullMatch.length;
+        
+        // Add text before match
+        if (start > lastIndex) {
+          fragment.appendChild(document.createTextNode(text.substring(lastIndex, start)));
+        }
+        
+        // Create highlight span with user's colors
+        const highlight = document.createElement('span');
+        highlight.className = 'tz-converter-highlight';
+        
+        if (isTextOnly) {
+          highlight.style.cssText = `color: ${textColor}; padding: 2px 4px; cursor: pointer; font-weight: bold;`;
+        } else {
+          highlight.style.cssText = `background-color: ${bgColor}; color: ${textColor}; padding: 2px 4px; border-radius: 3px; cursor: pointer;`;
+        }
+        
+        highlight.textContent = fullMatch;
+        highlight.title = chrome.i18n.getMessage('detectedTime') || 'Detected time!';
+        
+        fragment.appendChild(highlight);
+        lastIndex = end;
+        foundCount++;
+      });
+      
+      // Add remaining text
+      if (lastIndex < text.length) {
+        fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
+      }
+      
+      // Replace text node with highlighted content
+      parent.replaceChild(fragment, textNode);
+    });
+    
+    inlineTestStatus.textContent = chrome.i18n.getMessage('done') || 'done';
+    inlineTestCount.textContent = foundCount.toString();
+  });
+
+  // Clear test highlights
+  inlineTestClearBtn?.addEventListener('click', () => {
+    const surface = inlineTestSurface;
+    const highlights = surface.querySelectorAll('.tz-converter-highlight');
+    highlights.forEach(highlight => {
+      const parent = highlight.parentNode;
+      if (parent) {
+        parent.replaceChild(document.createTextNode(highlight.textContent), highlight);
+      }
+    });
+    inlineTestStatus.textContent = 'idle';
+    inlineTestCount.textContent = '0';
   });
 
   // Finalize

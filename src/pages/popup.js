@@ -205,6 +205,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   };
 
+  function createSvgEl(tag) {
+    return document.createElementNS('http://www.w3.org/2000/svg', tag);
+  }
+
+  function createRescanIcon(spinning) {
+    const svg = createSvgEl('svg');
+    svg.setAttribute('width', '16');
+    svg.setAttribute('height', '16');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('fill', 'none');
+    svg.setAttribute('stroke', 'currentColor');
+    svg.setAttribute('stroke-width', '2');
+    if (spinning) svg.classList.add('spinning');
+
+    const p1 = createSvgEl('path');
+    p1.setAttribute('d', 'M23 4v6h-6');
+    const p2 = createSvgEl('path');
+    p2.setAttribute('d', 'M1 20v-6h6');
+    const p3 = createSvgEl('path');
+    p3.setAttribute('d', 'M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15');
+
+    svg.appendChild(p1);
+    svg.appendChild(p2);
+    svg.appendChild(p3);
+    return svg;
+  }
+
   function renderIgnoredList(sites, currentDomain) {
     if (!ignoredPanel || !ignoredList || !ignoredToggleBtn || !currentDomainEl) return;
 
@@ -222,7 +249,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     ignoredToggleBtn.classList.toggle('active', isIgnored);
 
-    ignoredList.innerHTML = '';
+    ignoredList.replaceChildren();
     if (uniq.length === 0) {
       ignoredList.classList.remove('visible');
       return;
@@ -233,10 +260,19 @@ document.addEventListener('DOMContentLoaded', async () => {
       const row = document.createElement('div');
       row.className = 'ignored-item';
       const removeText = chrome.i18n.getMessage('remove') || 'Remove';
-      row.innerHTML = `
-        <span class="domain">${domain}</span>
-        <button type="button" class="remove" data-domain="${domain}">${removeText}</button>
-      `;
+
+      const domainSpan = document.createElement('span');
+      domainSpan.className = 'domain';
+      domainSpan.textContent = domain;
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'remove';
+      btn.dataset.domain = domain;
+      btn.textContent = removeText;
+
+      row.appendChild(domainSpan);
+      row.appendChild(btn);
       ignoredList.appendChild(row);
     });
 
@@ -306,7 +342,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function rescanPage() {
     rescanBtn.disabled = true;
-    rescanBtn.innerHTML = '<svg class="spinning" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>';
+    rescanBtn.replaceChildren(createRescanIcon(true));
 
     try {
       const { targetTabId, targetUrl } = await getTargetTab();
@@ -330,13 +366,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch { }
 
     rescanBtn.disabled = false;
-    rescanBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>';
+    rescanBtn.replaceChildren(createRescanIcon(false));
   }
 
   function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+    const s = String(text ?? '');
+    return s
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 
   function renderTimes(times) {
@@ -357,10 +397,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     times.forEach((time) => {
       const item = document.createElement('div');
       item.className = 'time-item';
-      item.innerHTML = `
-        <div class="time-converted">${escapeHtml(time.converted)}</div>
-        <div class="time-original">${escapeHtml(time.original)}</div>
-      `;
+
+      const convertedEl = document.createElement('div');
+      convertedEl.className = 'time-converted';
+      convertedEl.textContent = String(time.converted ?? '');
+
+      const originalEl = document.createElement('div');
+      originalEl.className = 'time-original';
+      originalEl.textContent = String(time.original ?? '');
+
+      item.appendChild(convertedEl);
+      item.appendChild(originalEl);
 
       item.addEventListener('click', async () => {
         const { targetTabId } = await getTargetTab();

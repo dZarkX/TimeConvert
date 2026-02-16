@@ -4,6 +4,8 @@ A small browser extension that detects times on web pages and converts them to y
 
 ![Version](https://img.shields.io/badge/version-1.5.0-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
+[![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-Download%20Now-brightgreen)](https://chromewebstore.google.com/detail/timezone-converter/phpmfhmlfolhocoefklfafhipdopgdka?authuser=0&hl=pl)
+[![Firefox Add-ons](https://img.shields.io/badge/Firefox%20Add-ons-Pending%20Review-orange)](https://addons.mozilla.org/en-US/firefox/addon/timezone-converter/)
 
 GitHub: https://github.com/dZarkX/TimeConvert
 
@@ -27,6 +29,16 @@ GitHub: https://github.com/dZarkX/TimeConvert
 
 ## 📦 Installation
 
+### From Chrome Web Store (Recommended)
+🔗 [**Install from Chrome Web Store**](https://chromewebstore.google.com/detail/timezone-converter/phpmfhmlfolhocoefklfafhipdopgdka?authuser=0&hl=pl)
+
+The easiest way to install extension directly from the official store.
+
+### From Firefox Add-ons
+🦊 [**Install from Firefox Add-ons**](https://addons.mozilla.org/en-US/firefox/addon/timezone-converter/) *(Pending review)*
+
+For Firefox users - available soon on Mozilla Add-ons marketplace.
+
 ### From Source (Developer Mode)
 
 1. Clone or download this repository
@@ -34,9 +46,6 @@ GitHub: https://github.com/dZarkX/TimeConvert
 3. Enable "Developer mode" (toggle in top right)
 4. Click "Load unpacked"
 5. Select the project folder
-
-### From Chrome Web Store
-*Coming soon*
 
 ## 🚀 Usage
 
@@ -144,6 +153,49 @@ https://github.com/dZarkX/TimeConvert/issues
 
 MIT License - feel free to use and modify as you wish.
 
+## 🔗 Download & Installation
+
+### 🌐 Official Downloads
+- **Chrome Web Store**: [https://chromewebstore.google.com/detail/timezone-converter/phpmfhmlfolhocoefklfafhipdopgdka](https://chromewebstore.google.com/detail/timezone-converter/phpmfhmlfolhocoefklfafhipdopgdka?authuser=0&hl=pl)
+- **Firefox Add-ons**: [https://addons.mozilla.org/en-US/firefox/addon/timezone-converter/](https://addons.mozilla.org/en-US/firefox/addon/timezone-converter/) *(Pending review)*
+
+### 📦 Direct Installation
+
+#### Chrome/Brave/Edge
+1. Visit Chrome Web Store link above
+2. Click "Add to Chrome" 
+3. Grant necessary permissions
+4. Extension will be automatically installed and activated
+
+#### Firefox
+1. Visit Firefox Add-ons link above *(when available)*
+2. Click "Add to Firefox"
+3. Grant necessary permissions
+4. Extension will be automatically installed and activated
+
+### 🛠️ Developer Installation
+For developers who want to modify or contribute:
+1. Clone this repository: `git clone https://github.com/dZarkX/TimeConvert.git`
+2. Open Chrome/Brave and go to `chrome://extensions/`
+3. Enable "Developer mode" (toggle in top right)
+4. Click "Load unpacked"
+5. Select the project folder
+
+## 🦊 Firefox / AMO Packaging
+
+This repository includes a Firefox (AMO) packaging flow:
+
+- `manifest-firefox.json` (Manifest V2)
+- `src/scripts/background-firefox.js` (Firefox-specific background implementation)
+- `tools/build-firefox.js` (packaging script)
+
+Build the Firefox ZIP package:
+
+1. Install dependencies: `npm install`
+2. Build package: `npm run pack-firefox`
+
+This creates: `TimeConvert-Firefox.zip`
+
 ## 🐛 Known Issues
 
 - Times without timezone information are not detected (by design)
@@ -151,7 +203,16 @@ MIT License - feel free to use and modify as you wish.
 
 ## 📝 Changelog
 
-### v1.5.1 (Current)
+### v2.0 (v2-redesign branch)
+- **NEW**: Material 2 / Material Design 3 UI redesign for popup and settings page
+- **IMPROVED**: Popup and settings use elevation, outlined controls, and consistent Material tokens (light/dark)
+- **IMPROVED**: Restore defaults button moved above Privacy section as a plain inline button (no sticky footer)
+
+### v2.0.2 (Current)
+- **FIXED**: Text-only highlight rendering no longer looks broken (removes pill/hover artifacts when background is transparent)
+- **FIXED**: Missing Polish translations for highlight toggles in settings
+
+### v1.5.1
 - **NEW**: Natural Language Processing (NLP) - Detects time expressions like "in 2 hours", "tomorrow at noon", "end of day"
 - **NEW**: Context Timezone Detection - Guesses timezone from website domain when not specified
 - **NEW**: Experimental Features section in settings with toggles for NLP and Context Timezone
@@ -207,11 +268,3 @@ MIT License - feel free to use and modify as you wish.
 ## 🔒 Privacy Policy
 
 See: [privacy-policy.html](privacy-policy.html)
-
-Git setup (local)
-
-1. Initialize repository: `git init`
-2. Create main branch: `git checkout -b main`
-3. Create development branches: `git branch develop && git branch cleanup`
-
-If you'd like, provide a remote URL and I can add and push branches for you.
