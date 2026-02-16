@@ -240,7 +240,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       removeBtn.className = 'remove-site';
       removeBtn.dataset.index = String(index);
       removeBtn.type = 'button';
-      removeBtn.textContent = 'Remove';
+      removeBtn.textContent = chrome.i18n.getMessage('remove') || 'Remove';
 
       item.appendChild(urlSpan);
       item.appendChild(removeBtn);

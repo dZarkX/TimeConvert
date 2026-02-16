@@ -2,7 +2,7 @@
 
 A small browser extension that detects times on web pages and converts them to your preferred timezone.
 
-![Version](https://img.shields.io/badge/version-1.5.0-green)
+![Version](https://img.shields.io/badge/version-2.0.2-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 [![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-Download%20Now-brightgreen)](https://chromewebstore.google.com/detail/timezone-converter/phpmfhmlfolhocoefklfafhipdopgdka?authuser=0&hl=pl)
 [![Firefox Add-ons](https://img.shields.io/badge/Firefox%20Add-ons-Pending%20Review-orange)](https://addons.mozilla.org/en-US/firefox/addon/timezone-converter/)
