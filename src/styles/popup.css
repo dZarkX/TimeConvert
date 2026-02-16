@@ -1,30 +1,46 @@
-/* Simplified Popup Styles */
+/* ============================================
+   TimeZone Converter - Popup (Material 2 / Material Design 3)
+   v2.0
+   ============================================ */
+
 :root {
   --color-primary: #4CAF50;
-  --color-primary-hover: #45a049;
-  --color-background: #ffffff;
-  --color-surface: #f8f9fa;
-  --color-border: #e0e0e0;
-  --color-text: #333333;
-  --color-text-secondary: #666666;
-  --color-text-muted: #999999;
+  --color-primary-hover: #43a047;
+  --color-background: #fafafa;
+  --color-surface: #ffffff;
+  --color-surface-variant: #f5f5f5;
+  --color-outline: rgba(0, 0, 0, 0.12);
+  --color-outline-variant: rgba(0, 0, 0, 0.08);
+  --color-text: #1c1b1f;
+  --color-text-secondary: #49454f;
+  --color-text-muted: #79747e;
   --spacing-sm: 8px;
   --spacing-md: 12px;
   --spacing-lg: 16px;
-  --radius-md: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
   --radius-full: 9999px;
   --transition: 0.2s ease;
+  /* Material elevation */
+  --elevation-0: none;
+  --elevation-1: 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.08);
+  --elevation-2: 0 2px 4px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.08);
+  --elevation-3: 0 4px 8px rgba(0, 0, 0, 0.08), 0 8px 16px rgba(0, 0, 0, 0.06);
 }
 
-/* Automatic dark mode (system) */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-background: #0f1115;
-    --color-surface: #171a21;
-    --color-border: #2a2f3a;
-    --color-text: #e7eaf0;
-    --color-text-secondary: #b8bfcc;
-    --color-text-muted: #8b95a7;
+    --color-background: #1c1b1f;
+    --color-surface: #2d2d2d;
+    --color-surface-variant: #252525;
+    --color-outline: rgba(255, 255, 255, 0.12);
+    --color-outline-variant: rgba(255, 255, 255, 0.08);
+    --color-text: #e6e1e5;
+    --color-text-secondary: #cac4d0;
+    --color-text-muted: #938f99;
+    --elevation-1: 0 1px 3px rgba(0, 0, 0, 0.2);
+    --elevation-2: 0 2px 6px rgba(0, 0, 0, 0.25);
+    --elevation-3: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
 }
 
@@ -48,14 +64,14 @@ body {
   flex-direction: column;
 }
 
-/* Header */
+/* Header - Material surface */
 .popup-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: var(--spacing-md) var(--spacing-lg);
-  border-bottom: 1px solid var(--color-border);
-  background-color: var(--color-surface);
+  background: var(--color-surface);
+  box-shadow: var(--elevation-1);
 }
 
 .logo {
@@ -79,18 +95,18 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   border: none;
-  border-radius: var(--radius-md);
-  background-color: transparent;
+  border-radius: 50%;
+  background: transparent;
   color: var(--color-text-secondary);
   cursor: pointer;
-  transition: all var(--transition);
+  transition: background var(--transition), color var(--transition);
 }
 
 .icon-btn:hover {
-  background-color: var(--color-border);
+  background: var(--color-outline-variant);
   color: var(--color-text);
 }
 
@@ -100,11 +116,11 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: var(--spacing-md) var(--spacing-lg);
-  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-outline-variant);
 }
 
 .ignored-panel {
-  border-bottom: 1px solid var(--color-border);
   padding: var(--spacing-sm) var(--spacing-lg);
   background: var(--color-background);
 }
@@ -131,24 +147,26 @@ body {
 }
 
 .ignored-toggle {
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-outline);
   background: var(--color-surface);
   color: var(--color-text-secondary);
-  padding: 4px 10px;
+  padding: 6px 14px;
   border-radius: var(--radius-full);
   font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all var(--transition);
+  transition: border-color var(--transition), background var(--transition), color var(--transition);
 }
 
 .ignored-toggle:hover {
-  border-color: var(--color-primary);
+  background: var(--color-surface-variant);
   color: var(--color-text);
 }
 
 .ignored-toggle.active {
-  border-color: rgba(244, 67, 54, 0.45);
-  color: #b91c1c;
+  border-color: rgba(211, 47, 47, 0.5);
+  background: rgba(211, 47, 47, 0.08);
+  color: #c62828;
 }
 
 .ignored-list {
@@ -169,9 +187,9 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: var(--spacing-sm);
-  padding: 6px 10px;
+  padding: 8px 12px;
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-outline-variant);
   border-radius: var(--radius-md);
   font-size: 12px;
 }
@@ -212,11 +230,11 @@ body {
 
 .toggle-slider {
   position: relative;
-  width: 40px;
-  height: 22px;
-  background-color: var(--color-border);
+  width: 44px;
+  height: 24px;
+  background: var(--color-outline);
   border-radius: var(--radius-full);
-  transition: background-color var(--transition);
+  transition: background var(--transition);
 }
 
 .toggle-slider::after {
@@ -224,20 +242,20 @@ body {
   position: absolute;
   top: 2px;
   left: 2px;
-  width: 18px;
-  height: 18px;
-  background-color: white;
+  width: 20px;
+  height: 20px;
+  background: var(--color-surface);
   border-radius: 50%;
   transition: transform var(--transition);
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  box-shadow: var(--elevation-1);
 }
 
 .toggle-control input:checked + .toggle-slider {
-  background-color: var(--color-primary);
+  background: var(--color-primary);
 }
 
 .toggle-control input:checked + .toggle-slider::after {
-  transform: translateX(18px);
+  transform: translateX(20px);
 }
 
 .toggle-label {
@@ -249,23 +267,23 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   border: none;
-  border-radius: var(--radius-md);
-  background-color: transparent;
+  border-radius: 50%;
+  background: transparent;
   color: var(--color-text-secondary);
   cursor: pointer;
-  transition: all var(--transition);
+  transition: background var(--transition), color var(--transition);
 }
 
 .btn-icon:hover {
-  background-color: var(--color-border);
+  background: var(--color-outline-variant);
   color: var(--color-text);
 }
 
 .btn-icon:disabled {
-  opacity: 0.5;
+  opacity: 0.38;
   cursor: not-allowed;
 }
 
@@ -291,17 +309,17 @@ body {
   align-items: center;
   gap: var(--spacing-sm);
   padding: var(--spacing-md) var(--spacing-lg);
-  border-bottom: 1px solid var(--color-border);
+  background: var(--color-background);
 }
 
 .times-status {
   margin-left: auto;
   font-size: 12px;
   color: var(--color-text-muted);
-  padding: 4px 8px;
-  border: 1px solid var(--color-border);
+  padding: 4px 10px;
   border-radius: var(--radius-full);
-  background: var(--color-surface);
+  background: var(--color-surface-variant);
+  border: 1px solid var(--color-outline-variant);
 }
 
 .times-status.ok {
@@ -326,11 +344,12 @@ body {
   min-width: 28px;
   height: 28px;
   padding: 0 var(--spacing-sm);
-  background-color: var(--color-primary);
+  background: var(--color-primary);
   color: white;
   font-size: 12px;
   font-weight: 600;
   border-radius: var(--radius-full);
+  box-shadow: var(--elevation-1);
 }
 
 .times-label {
@@ -372,16 +391,18 @@ body {
 .time-item {
   padding: var(--spacing-md);
   margin-bottom: var(--spacing-sm);
-  background-color: var(--color-surface);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-outline-variant);
   cursor: pointer;
-  transition: all var(--transition);
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+  box-shadow: var(--elevation-0);
 }
 
 .time-item:hover {
+  background: var(--color-surface-variant);
   border-color: var(--color-primary);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: var(--elevation-1);
 }
 
 .time-item:last-child {
@@ -421,8 +442,8 @@ body {
 /* Footer (Support) */
 .popup-footer {
   padding: var(--spacing-md) var(--spacing-lg);
-  border-top: 1px solid var(--color-border);
-  background-color: var(--color-surface);
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-outline-variant);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
@@ -446,33 +467,32 @@ body {
   gap: var(--spacing-sm);
   border: none;
   border-radius: var(--radius-md);
-  padding: 10px 12px;
+  padding: 10px 16px;
   cursor: pointer;
   font-weight: 600;
   font-size: 13px;
-  background-color: #ffdd00;
-  color: #000000;
-  transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition);
+  background: #ffdd00;
+  color: #1c1b1f;
+  transition: background var(--transition), box-shadow var(--transition);
+  box-shadow: var(--elevation-1);
 }
 
 .kofi-btn {
-  background-color: #29abe0;
+  background: #29abe0;
   color: #ffffff;
+  box-shadow: var(--elevation-1);
 }
 
 .support-btn:hover {
-  background-color: #e5c700;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  box-shadow: var(--elevation-2);
 }
 
 .kofi-btn:hover {
-  background-color: #1f94c3;
+  box-shadow: var(--elevation-2);
 }
 
 .support-btn:active {
-  transform: translateY(0);
-  box-shadow: none;
+  box-shadow: var(--elevation-0);
 }
 
 .support-icon {
@@ -487,24 +507,22 @@ body {
   align-items: center;
   justify-content: center;
   gap: var(--spacing-sm);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-outline);
   border-radius: var(--radius-md);
-  padding: 10px 12px;
+  padding: 10px 16px;
   cursor: pointer;
   font-weight: 600;
   font-size: 13px;
-  background-color: transparent;
+  background: var(--color-surface);
   color: var(--color-text);
-  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+  transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
 }
 
 .github-btn:hover {
-  border-color: rgba(127,127,127,0.6);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.10);
+  background: var(--color-surface-variant);
+  box-shadow: var(--elevation-1);
 }
 
 .github-btn:active {
-  transform: translateY(0);
-  box-shadow: none;
+  box-shadow: var(--elevation-0);
 }

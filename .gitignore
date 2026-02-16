@@ -50,3 +50,6 @@ __pycache__/
 # Local memory
 MEMORY.MD
 
+# Cursor
+.cursor/
+

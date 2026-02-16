@@ -203,7 +203,16 @@ This creates: `TimeConvert-Firefox.zip`
 
 ## 📝 Changelog
 
-### v1.5.1 (Current)
+### v2.0 (v2-redesign branch)
+- **NEW**: Material 2 / Material Design 3 UI redesign for popup and settings page
+- **IMPROVED**: Popup and settings use elevation, outlined controls, and consistent Material tokens (light/dark)
+- **IMPROVED**: Restore defaults button moved above Privacy section as a plain inline button (no sticky footer)
+
+### v2.0.2 (Current)
+- **FIXED**: Text-only highlight rendering no longer looks broken (removes pill/hover artifacts when background is transparent)
+- **FIXED**: Missing Polish translations for highlight toggles in settings
+
+### v1.5.1
 - **NEW**: Natural Language Processing (NLP) - Detects time expressions like "in 2 hours", "tomorrow at noon", "end of day"
 - **NEW**: Context Timezone Detection - Guesses timezone from website domain when not specified
 - **NEW**: Experimental Features section in settings with toggles for NLP and Context Timezone

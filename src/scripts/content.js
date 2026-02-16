@@ -985,10 +985,12 @@
           }
           applyHighlightStyle(highlight, false);
 
-          // Add countdown timer
-          const countdown = createCountdownElement(time);
-          if (countdown) {
-            highlight.appendChild(countdown);
+          // Add countdown timer only when enabled (Format result option)
+          if (settings.showCountdown) {
+            const countdown = createCountdownElement(time);
+            if (countdown) {
+              highlight.appendChild(countdown);
+            }
           }
 
           fragment.appendChild(highlight);
@@ -1023,6 +1025,11 @@
       const isConverted = el.dataset.tzShowConverted === 'true';
       applyHighlightStyle(el, isConverted);
 
+      // Remove countdown when option is off
+      if (!settings.showCountdown) {
+        el.querySelectorAll('.tz-countdown').forEach(c => c.remove());
+      }
+
       // Avoid native browser tooltip when using custom tooltip mode
       if (settings.displayMode === 'tooltip') {
         el.removeAttribute('title');
@@ -1030,9 +1037,22 @@
     });
   }
 
-  // Colors for converted time display (fixed green with white text)
-  const CONVERTED_BG_COLOR = '#4CAF50';
-  const CONVERTED_TEXT_COLOR = '#ffffff';
+  const convertedBg = () => settings.convertedHighlightColor || '#4CAF50';
+  const convertedFg = () => settings.convertedHighlightTextColor || '#ffffff';
+
+  function applyTextOnlyOverrides(element) {
+    element.style.setProperty('box-shadow', 'none', 'important');
+    element.style.setProperty('padding', '0', 'important');
+    element.style.setProperty('border-radius', '0', 'important');
+    element.style.setProperty('filter', 'none', 'important');
+  }
+
+  function clearTextOnlyOverrides(element) {
+    element.style.removeProperty('box-shadow');
+    element.style.removeProperty('padding');
+    element.style.removeProperty('border-radius');
+    element.style.removeProperty('filter');
+  }
 
   function applyHighlightStyle(element, isConverted) {
     if (!element) return;
@@ -1040,10 +1060,12 @@
     if (isConverted) {
       if (settings.highlightTextOnly) {
         element.style.setProperty('background-color', 'transparent', 'important');
-        element.style.setProperty('color', CONVERTED_BG_COLOR, 'important');
+        element.style.setProperty('color', convertedFg(), 'important');
+        applyTextOnlyOverrides(element);
       } else {
-        element.style.setProperty('background-color', CONVERTED_BG_COLOR, 'important');
-        element.style.setProperty('color', CONVERTED_TEXT_COLOR, 'important');
+        element.style.setProperty('background-color', convertedBg(), 'important');
+        element.style.setProperty('color', convertedFg(), 'important');
+        clearTextOnlyOverrides(element);
       }
       return;
     }
@@ -1051,9 +1073,11 @@
     if (settings.highlightTextOnly) {
       element.style.setProperty('background-color', 'transparent', 'important');
       element.style.setProperty('color', settings.highlightTextColor, 'important');
+      applyTextOnlyOverrides(element);
     } else {
       element.style.setProperty('background-color', settings.highlightColor, 'important');
       element.style.setProperty('color', settings.highlightTextColor, 'important');
+      clearTextOnlyOverrides(element);
     }
   }
 
@@ -1247,6 +1271,7 @@
           resultIncludeUtcOffset: true,
           resultIncludeDayOffset: true,
           resultIncludeSourceTz: false,
+          showCountdown: false,
           enableDateDetection: false,
           scanMode: 'auto',
           highlightColor: '#ffeb3b',
@@ -1254,6 +1279,8 @@
           highlightEnabled: true,
           showOriginal: true,
           highlightTextOnly: false,
+          convertedHighlightColor: '#4CAF50',
+          convertedHighlightTextColor: '#ffffff',
           maxConversions: 25,
           ignoredSites: [],
           enableNlpDetection: false,

@@ -135,6 +135,9 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
       browser.storage.sync.get({
         highlightColor: '#ffeb3b',
         highlightTextColor: '#000000',
+        convertedHighlightColor: '#4CAF50',
+        convertedHighlightTextColor: '#ffffff',
+        showCountdown: false,
         displayMode: 'toggle',
         timezone: 'auto',
         language: 'auto',
